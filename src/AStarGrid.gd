@@ -1,4 +1,4 @@
-extends Node2D
+extends Grid
 
 
 # Declare member variables here. Examples:
@@ -8,7 +8,9 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$Grid.adjust_screen_to_grid($Camera2D)
-	print($Grid.get_cellv(Vector2(2, 2)))
+	pass # Replace with function body.
 
 
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _process(delta):
+#	pass

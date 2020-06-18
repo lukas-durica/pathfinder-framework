@@ -8,14 +8,20 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "TileMap",
+"class": "Grid",
+"language": "GDScript",
+"path": "res://src/Grid.gd"
+} ]
 _global_script_class_icons={
-
+"Grid": ""
 }
 
 [application]
 
 config/name="pathfinder-framework"
+run/main_scene="res://src/Main.tscn"
 config/icon="res://icon.png"
 
 [display]
