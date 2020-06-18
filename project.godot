@@ -17,3 +17,8 @@ _global_script_class_icons={
 
 config/name="pathfinder-framework"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/width=1280
+window/size/height=960

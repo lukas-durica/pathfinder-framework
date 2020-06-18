@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/grid_lines.png-4054c269e394c117cd7e8cb50ae0c046.stex"
+path="res://.import/obstacle.png-a1cdb6d6d374d8faaacd463aa2ff95af.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://data/textures/grid_parts/grid_lines.png"
-dest_files=[ "res://.import/grid_lines.png-4054c269e394c117cd7e8cb50ae0c046.stex" ]
+source_file="res://data/textures/grid_parts/tmp2/obstacle.png"
+dest_files=[ "res://.import/obstacle.png-a1cdb6d6d374d8faaacd463aa2ff95af.stex" ]
 
 [params]
 
