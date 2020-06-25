@@ -13,9 +13,21 @@ _global_script_classes=[ {
 "class": "Grid",
 "language": "GDScript",
 "path": "res://src/Grid.gd"
+}, {
+"base": "Reference",
+"class": "MinBinaryHeap",
+"language": "GDScript",
+"path": "res://src/data_strunctures/MinBinaryHeap.gd"
+}, {
+"base": "Reference",
+"class": "MinBinaryHeapPoolArray",
+"language": "GDScript",
+"path": "res://src/data_strunctures/MinBinaryHeapPoolArray.gd"
 } ]
 _global_script_class_icons={
-"Grid": ""
+"Grid": "",
+"MinBinaryHeap": "",
+"MinBinaryHeapPoolArray": ""
 }
 
 [application]

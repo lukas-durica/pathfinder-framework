@@ -2,11 +2,16 @@
 
 importer="texture"
 type="StreamTexture"
-valid=false
+path="res://.import/path.png-7c7a0a00d7721c30ba0c864a87442124.stex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
-source_file="res://misc/pseudocodes/a_star/AStar.png"
+source_file="res://data/textures/grid_parts/path.png"
+dest_files=[ "res://.import/path.png-7c7a0a00d7721c30ba0c864a87442124.stex" ]
+
 [params]
 
 compress/mode=0
