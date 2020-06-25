@@ -2,7 +2,8 @@
 
 [ext_resource path="res://src/Grid.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/AStarGrid.gd" type="Script" id=2]
-[ext_resource path="res://data/tilesets/AStarGrid.tres" type="TileSet" id=3]
+[ext_resource path="res://data/tilesets/Basic.tres" type="TileSet" id=3]
+
 
 [node name="AStarGrid" instance=ExtResource( 1 )]
 tile_set = ExtResource( 3 )

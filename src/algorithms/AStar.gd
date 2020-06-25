@@ -1,4 +1,4 @@
-extends Node2D
+extends Reference
 
 
 # Declare member variables here. Examples:
