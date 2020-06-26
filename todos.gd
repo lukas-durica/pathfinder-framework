@@ -1,3 +1,4 @@
+#add early exit to bfs
 #create nomenclature
 #tile - type of the cell
 #cell - instance of the tile with position (int)
