@@ -11,41 +11,20 @@ onready var start = $Start
 onready var goal = $Goal
 
 func _ready():
-	adjust_screen_to_grid()
+	
 	var bfs = BreadthFirstSearch.new()
 	bfs.find_path(self, world_to_map(start.position), 
 			world_to_map(goal.position))
 	
 # adjusting the size of the screen to the size of the grid
-func adjust_screen_to_grid():
-	
-	# the size of the screen
-	var screen_size : = get_viewport().get_visible_rect().size
-	
-	
-	print("rect size: ", $VBoxContainer.rect_size * $VBoxContainer.rect_scale)
-	
-	# size of the rectangle enclosing the used (non-empty) tiles of the map and
-	# size of the scaled gui 
-	var rect_size = get_used_rect().end * cell_size + Vector2(
-			$VBoxContainer.rect_size.x * $VBoxContainer.rect_scale.x, 0.0)
-	
-	# computing the ratio vector of the screen size and rectangle size
-	var ratio_vec =  rect_size / screen_size
-	
-	# getting the greater ratio size
-	camera_zoom = max(ratio_vec.x, ratio_vec.y)
-	
-		
-	# and applying it the zoom to the camera and zooming sizes proportionally
-	$Camera2D.zoom *= camera_zoom
-	
-	# move gui to the position next to grid
-	$VBoxContainer.rect_position.x = get_used_rect().end.x * cell_size.x
+
 	
 # 4 directional
-func get_neighbors(vertex : Vector2) -> Array:
+func get_neighbors(vertex : Vector2, eight_directional : = false) -> Array:
 	var directions = [Vector2.LEFT, Vector2.UP, Vector2.RIGHT, Vector2.DOWN]
+	if eight_directional:
+		directions += [Vector2.LEFT + Vector2.UP, Vector2.UP + Vector2.RIGHT, 
+				Vector2.RIGHT + Vector2.DOWN, Vector2.DOWN + Vector2.LEFT]
 	var neighbors = []
 	
 	for direction in directions:
@@ -70,6 +49,7 @@ func _input(event : InputEvent):
 		
 		#since the mouse position is also based on camera zoom we need to 
 		#adjust the position
+		print("event.position: ", event.position)
 		var cell_pos = world_to_map(event.position * camera_zoom)
 		var cell = get_cellv(cell_pos)
 		
