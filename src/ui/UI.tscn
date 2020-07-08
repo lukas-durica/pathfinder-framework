@@ -1,17 +1,29 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://data/textures/buttons/toolboard.png" type="Texture" id=1]
 [ext_resource path="res://data/textures/buttons/play.png" type="Texture" id=2]
 [ext_resource path="res://data/textures/buttons/play_glow.png" type="Texture" id=3]
+[ext_resource path="res://data/textures/buttons/pause.png" type="Texture" id=4]
+[ext_resource path="res://data/textures/buttons/pause_glow.png" type="Texture" id=5]
+[ext_resource path="res://data/textures/buttons/stop.png" type="Texture" id=6]
+[ext_resource path="res://data/textures/buttons/stop_glow.png" type="Texture" id=7]
+[ext_resource path="res://data/textures/buttons/rewdown.png" type="Texture" id=8]
+[ext_resource path="res://data/textures/buttons/rewup.png" type="Texture" id=9]
+[ext_resource path="res://data/textures/buttons/rewdown_glow.png" type="Texture" id=10]
+[ext_resource path="res://data/textures/buttons/rewup_glow.png" type="Texture" id=11]
+[ext_resource path="res://src/ui/UI.gd" type="Script" id=12]
 
-[node name="UI" type="Control"]
+[node name="UserInterface" type="CanvasLayer"]
+script = ExtResource( 12 )
+
+[node name="UIRoot" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="NinePatchRect" type="NinePatchRect" parent="."]
+[node name="NinePatchRect" type="NinePatchRect" parent="UIRoot"]
 margin_right = 1280.0
 margin_bottom = 960.0
 texture = ExtResource( 1 )
@@ -19,7 +31,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="UIRoot"]
 margin_right = 1024.0
 margin_bottom = 1024.0
 rect_scale = Vector2( 0.05, 0.05 )
@@ -27,9 +39,48 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureButton" type="TextureButton" parent="HBoxContainer"]
+[node name="Run" type="TextureButton" parent="UIRoot/HBoxContainer"]
 margin_right = 1024.0
 margin_bottom = 1024.0
-toggle_mode = true
+hint_tooltip = "Run"
 texture_normal = ExtResource( 2 )
-texture_pressed = ExtResource( 3 )
+texture_pressed = ExtResource( 2 )
+texture_hover = ExtResource( 3 )
+
+[node name="Pause" type="TextureButton" parent="UIRoot/HBoxContainer"]
+margin_left = 1028.0
+margin_right = 2052.0
+margin_bottom = 1024.0
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 4 )
+texture_hover = ExtResource( 5 )
+
+[node name="Stop" type="TextureButton" parent="UIRoot/HBoxContainer"]
+margin_left = 2056.0
+margin_right = 3080.0
+margin_bottom = 1024.0
+texture_normal = ExtResource( 6 )
+texture_pressed = ExtResource( 6 )
+texture_hover = ExtResource( 7 )
+
+[node name="PreviousStep" type="TextureButton" parent="UIRoot/HBoxContainer"]
+visible = false
+margin_left = 3084.0
+margin_right = 4108.0
+margin_bottom = 1024.0
+texture_normal = ExtResource( 8 )
+texture_pressed = ExtResource( 8 )
+texture_hover = ExtResource( 10 )
+
+[node name="NextStep" type="TextureButton" parent="UIRoot/HBoxContainer"]
+margin_left = 3084.0
+margin_right = 4108.0
+margin_bottom = 1024.0
+texture_normal = ExtResource( 9 )
+texture_pressed = ExtResource( 9 )
+texture_hover = ExtResource( 11 )
+[connection signal="pressed" from="UIRoot/HBoxContainer/Run" to="." method="_on_Run_pressed"]
+[connection signal="pressed" from="UIRoot/HBoxContainer/Pause" to="." method="_on_Pause_pressed"]
+[connection signal="pressed" from="UIRoot/HBoxContainer/Stop" to="." method="_on_Stop_pressed"]
+[connection signal="pressed" from="UIRoot/HBoxContainer/PreviousStep" to="." method="_on_PreviousStep_pressed"]
+[connection signal="pressed" from="UIRoot/HBoxContainer/NextStep" to="." method="_on_NextStep_pressed"]

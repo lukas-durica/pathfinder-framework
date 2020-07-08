@@ -12,7 +12,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "BreadthFirstSearch",
 "language": "GDScript",
-"path": "res://src/algorithms/BreadthFirstSearch.gd"
+"path": "res://src/algorithms/BreadthFirstSearchDebug.gd"
 }, {
 "base": "TileMap",
 "class": "Grid",
@@ -23,11 +23,17 @@ _global_script_classes=[ {
 "class": "MinBinaryHeap",
 "language": "GDScript",
 "path": "res://src/data_strunctures/MinBinaryHeap.gd"
+}, {
+"base": "CanvasLayer",
+"class": "UserInteraface",
+"language": "GDScript",
+"path": "res://src/ui/UI.gd"
 } ]
 _global_script_class_icons={
 "BreadthFirstSearch": "",
 "Grid": "",
-"MinBinaryHeap": ""
+"MinBinaryHeap": "",
+"UserInteraface": ""
 }
 
 [application]
