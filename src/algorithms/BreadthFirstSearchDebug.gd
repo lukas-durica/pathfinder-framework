@@ -1,104 +1,91 @@
 extends Reference
 """
-Breadth First Search explores equally in all directions. This is an incredibly 
-useful algorithm, not only for regular path finding, but also for procedural map
-generation, flow field pathfinding, distance maps, and other types of map 
-analysis.
-Check for more at:
-https://www.redblobgames.com/pathfinding/a-star/introduction.html#breadth-first-search
+Comments of the algorithm is in BreadthFirstSearch.gd
+This class is used for debug (learning) purposes. It colors the cells. It is 
+slower than BreadthFirstSearch.
+Two modes (alaways use init() method before the use):
+	(1) For finding path instantly (find_path())
+	(2) For stepping the algorithm (step())
 """
-#add start to the open list, as this will be first vertex to expand by 
-#looking at its neighbors
-# open is a data structure for neighbors that have not yet been visited
-# Array will be used in FIFO manner, First In (Array.push_back()) First Out 
-# (Array.front())
-var open : = []
+class_name BreadthFirstSearchDebug
 
-# use dictionary for closed list, as it is impelemented as hash table
-# closed is the list of the visited/expanded vertex (node), every vertex will be 
-# expanded only once
-# as a key use actual vertex and as a value use the priour/previous vertex to 
-# the actual vertex
-var closed : = {}
+var open_debug : = []
 
-# a variable needed to step the algorithm
-var start_step := Vector2.INF
-# a variable needed to step the algorithm
-var goal_step := Vector2.INF
+var closed_debug : = {}
 
-var graph
+var start_debug := Vector2.INF
 
-class_name BreadthFirstSearch
+var goal_debug := Vector2.INF
+
+var graph_debug = null
 
 var is_initialized : = false
 
-# for debug purposes, will use colors
-func find_path_debug(graph, start : Vector2, goal : Vector2, step : = false) \
-		-> Array:
-	open.push_back(start)
-	goal_step = goal
-	#add start to closed there is no previous vertex from it came from
-	closed[start] = null
+func init(graph, start : Vector2, goal : Vector2):
+	graph_debug = graph
+	start_debug = start
+	goal_debug = goal
 	
-	while not open.empty():
-		if step_debug(graph):
-			return reconstruct_path_debug(graph, goal, closed)
+	open_debug.push_back(start)
+	closed_debug[start] = null
+	is_initialized = true
+
+func find_path() \
+		-> Array:
+	if not is_initialized:
+		show_error()
+		return Array()
+	
+	while not open_debug.empty():
+		if step():
+			return reconstruct_path()
 
 	return Array()
 
-#reconstructing path, from the goal to the start
-static func reconstruct_path_debug(graph, goal : Vector2, 
-			closed : Dictionary) -> Array:
+func reconstruct_path() -> Array:
 	var path : = []
-	var current = goal
-	# if this cell is not start (only start has no previous cell)
+	var current = goal_debug
+	
 	while not current == null:
-		#set color to it
-		graph.set_cellv(current, graph.PATH)
-		
-		#add tile to our path
+		#set color to the cell as path
+		graph_debug.set_cellv(current, graph_debug.PATH)
 		path.push_back(current)
+		current = closed_debug[current]
 		
-		#and set current the previous vertex
-		current = closed[current]
-		
-	#add the start to the path
 	path.push_back(current)
-	#the path is oriented from the goal to the start so it needs to be reversed
 	path.invert()
 	return path
 
-#needed only for stepping
-func init(graph, start : Vector2, goal : Vector2):
-	open_debug.push_back(start)
-	goal_debug = goal
-	#add start to closed there is no previous vertex from it came from
-	closed_debug[start] = null
-
-func step_debug(graph):
-	# get node from FIFO stack
-	# the node will be now expanded by search for its neighbors
-	var current = open_debug.front()
+#stepping the algorithm
+func step() -> bool:
+	if not is_initialized:
+		show_error()
+		return false
 	
-	#if goal was found, break the loop, i.e. early exit
+	var current = open_debug.front()
 	if current == goal_debug:
-		return reconstruct_path_debug(grap)
+		return true
+	
 	#set color as closed
-	graph.set_cellv(current, graph.CLOSED)
-	#remove actual vertex
+	graph_debug.set_cellv(current, graph_debug.CLOSED)
 	open_debug.pop_front()
-		
-	# iterate through valid neighbors
-	for neighbor in graph.get_neighbors(current):
-			
-		# if the neighbor is not already in closed
-		if not closed_debug.has(neighbor):
-			#add it to FIFO stack
+	for neighbor in graph_debug.get_neighbors(current):
+		if not neighbor in closed_debug:
 			open_debug.push_back(neighbor)
-				
 			#set color to it
-			graph.set_cellv(neighbor, graph.OPEN)
-				
-			#assign current node as the previous node to neighbor
+			graph_debug.set_cellv(neighbor, graph_debug.OPEN)
 			closed_debug[neighbor] = current
+	return false
 
+#reset the algorithm
+func reset():
+	open_debug.clear()
+	closed_debug.clear()
+	start_debug = Vector2.INF
+	goal_debug = Vector2.INF
+	graph_debug = null
+	is_initialized = false
+
+func show_error():
+	push_error("Breadth First Search was not initialized. " + \
+			"Initialization is needed in order to step the algorithm.")

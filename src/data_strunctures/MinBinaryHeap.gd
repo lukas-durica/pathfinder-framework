@@ -18,7 +18,7 @@ must be recursively true for all nodes in Binary Tree. This is known as the heap
 (order) property. Max Binary Heap is similar to MinHeap.
 
 # usage create pair of value/priority and :
-# insert_key({val = 8, cell = start})
+# insert_key({value = 8, vertex = start})
 
 For more information check:
 https://www.geeksforgeeks.org/binary-heap/
@@ -75,16 +75,18 @@ func min_heapify(i : int):
 	# then check if value at the smallest_value_index is greater than the child
 	# if so remember the index as the smallest_value_index
 	if left_child_index < heap_array.size() and \
-			heap_array[left_child_index].val < heap_array[smallest_value_index].val:
+			heap_array[left_child_index].value \
+			< heap_array[smallest_value_index].value:
 		smallest_value_index = left_child_index
 	#same for the right children
 	if right_child_index < heap_array.size() and \
-			heap_array[right_child_index].val < heap_array[smallest_value_index].val:
+			heap_array[right_child_index].value \
+			< heap_array[smallest_value_index].value:
 		smallest_value_index = right_child_index
 	#if and of children has smaller value swap them and then continue with 
 	#the node at child index with the former smallest value
 	if smallest_value_index != i:
-		swap_values_at(i, smallest_value_index)
+		swap_nodes_at(i, smallest_value_index)
 		min_heapify(smallest_value_index)
 
 
@@ -98,8 +100,8 @@ func decreaseKey(_i : int, _new_val : int):
 #Inserting a new key takes O(Logn) time. We add a new key at the end of the 
 #tree. IF new key is greater than its parent, then we don’t need to do 
 #anything. Otherwise, we need to traverse up to fix the violated heap property.
-#Insert anonymous structure: 
-	# insert_key({val = 8, cell = start})
+#Insert anonymous structure e.g.: 
+	# insert_key({value = 8, vertex = start})
 func insert_key(k):
 	#First insert the new key at the end 
 	heap_array.push_back(k)
@@ -110,8 +112,8 @@ func insert_key(k):
 	#Now fix the min heap property if it is violated
 	#Until index is not root (0) and parent has greater value then the actual node
 	#swap those values (structures) and continue with the parent node
-	while i != 0 and heap_array[parent_index(i)].val > heap_array[i].val:
-		swap_values_at(i, parent_index(i))
+	while i != 0 and heap_array[parent_index(i)].value > heap_array[i].value:
+		swap_nodes_at(i, parent_index(i))
 		i = parent_index(i)
 
 #Not needed, if do implement by moving fartest right node, chceck here:
@@ -132,7 +134,7 @@ func left_index(i : int) -> int:
 func right_index(i : int) -> int:
 	return (2 * i + 2)
 # will swap values at given indices
-func swap_values_at(x : int, y : int):
+func swap_nodes_at(x : int, y : int):
 	var tmp = heap_array[x]
 	heap_array[x] = heap_array[y]
 	heap_array[y] = tmp

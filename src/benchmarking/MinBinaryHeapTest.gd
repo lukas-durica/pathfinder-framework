@@ -1,10 +1,5 @@
 extends Node
 
-#const NUMBER_OF_ELEMENTS = 1200
-
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
 
 
 # Called when the node enters the scene tree for the first time.

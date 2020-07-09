@@ -1,38 +1,47 @@
 extends Node2D
 
-const GUI_FACTOR = 1.13
+# use gui zoom factor for adjusting the camera zoom with respect to GUI to avoid
+# overlap with the grid, just cosmetic treatment
+const GUI_ZOOM_FACTOR = 1.13
 
+# camera is used for moving (pressing mouse wheel) and zooming (
+# scrolling mouse wheel) on the grid
 onready var camera = $Camera
 
+# the playground
 onready var grid = $Grid
 
-var algorithm : Reference
+# start node, can be dragged during editor or set during the runtime 
+# (left mouse button)
+onready var start = $Start
+
+# goal node, can be dragged during editor or set during the runtime
+# (right mouse button)
+onready var goal = $Goal
+
+# the algorithm for search the path
+var algorithm := BreadthFirstSearchDebug.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	adjust_screen_to_grid()
+	#adjusting the camera zoom to the size of the grid
+	adjust_camera_to_grid()
 	#User interface is invisible due to work with the grid in the editor
 	$UserInterface/UIRoot.visible = true
+	#BreadthFirstSearch.find_path(grid, grid.to_vertex(start.position), 
+	#		grid.to_vertex(goal.position))
+	print(grid.to_vertex(goal.position))
+	var path = AStarRedBlob.find_path(grid, grid.to_vertex(start.position), 
+			grid.to_vertex(goal.position))
+	print(path)
+	for cell in path:
+		grid.set_cellv(cell, Grid.PATH)
 	
-	algorithm = BreadthFirstSearch.new()
-	
-	
-	
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-func adjust_screen_to_grid():
-	
-	# setting camera reference to grid, it uses camera.zoom ratio
-	grid.camera = camera
+func adjust_camera_to_grid():
 	
 	# the size of the screen
 	var screen_size : = get_viewport().get_visible_rect().size
-	
-	
-	#print("rect size: ", $VBoxContainer.rect_size * $VBoxContainer.rect_scale)
-	
+		
 	# size of the rectangle enclosing the used (non-empty) tiles of the map 
 	var rect_size = grid.get_used_rect().size * grid.cell_size 
 	
@@ -40,38 +49,81 @@ func adjust_screen_to_grid():
 	var ratio_vec =  rect_size / screen_size
 	 
 	# getting the greater ratio size
-	camera.zoom_ratio = max(ratio_vec.x, ratio_vec.y)
+	camera.zoom_factor = max(ratio_vec.x, ratio_vec.y)
 	
 	#adjusting zoom_ratio in respect to gui
-	camera.zoom_ratio *= GUI_FACTOR
+	camera.zoom_factor *= GUI_ZOOM_FACTOR
 	
-	#zoom camera to ration factior	
+	#zoom camera to the zoom_ration
 	camera.zoom(0)
 	
-	#set camera position to he center of the grid
+	#set camera position to the center of the grid
 	camera.position = (grid.get_used_rect().position + 
 			grid.get_used_rect().size / 2.0) * grid.cell_size
+
+# set the start position and goal position in the runtime, but only until the
+# algorithm is initialized
+func _input(event : InputEvent):
 	
+	if not algorithm.is_initialized and event is InputEventMouseButton \
+			and event.pressed:
+		
+		# get mouse position to the grid (vertex) position
+		var cell_pos = grid.to_vertex(get_global_mouse_position())
+		
+		# if the cell is free, it can be assigned as start/goal
+		if grid.is_cell_free(cell_pos):
+			if event.button_index == BUTTON_LEFT:
+				# cell position to world/global position and add halfcell size
+				# offset to it
+				start.position = grid.map_to_world(cell_pos) \
+						+ grid.cell_size / 2.0
+			elif event.button_index == BUTTON_RIGHT:
+				goal.position = grid.map_to_world(cell_pos) \
+						+ grid.cell_size / 2.0
+						
+# validate start and goal position and initialize the algorithm
+func set_up_algorithm() -> bool:
+	#from global/world position to vertex/grid position
+	var start_position = grid.to_vertex(start.position)
+	var goal_position = grid.to_vertex(goal.position)
 	
+	if grid.is_cell_free(start_position) and grid.is_cell_free(goal_position):
+			algorithm.init(grid, start_position, goal_position)
+			return true
+	elif not grid.is_cell_free(start_position):
+		push_error("Start position is not free!")
+		return false
+	else:
+		push_error("Goal position is not free!")
+		return false
+
+# run algorithm instantly
 func run():
 	grid.reset()
-	var start_position = grid.to_vertex(grid.start.position)
-	var goal_position = grid.to_vertex(grid.goal.position)
-	if grid.is_cell_valid(start_position) and grid.is_cell_valid(goal_position):
-		algorithm.find_path_debug(grid, start_position, goal_position)
+	algorithm.reset()
+	if set_up_algorithm():
+		algorithm.find_path()
 func pause():
 	pass
+
+# reset grid and algorithm
 func stop():
-	grid.clear()
-	pass
+	grid.reset()
+	algorithm.reset()
 func previous_step():
 	pass
+	
+# step the algorithm
 func next_step():
-	if grid.is_cell_valid(start_position) and grid.is_cell_valid(goal_position):
-		bfs.find_path_debug(grid, start_position, goal_position, true)
+	#if the algorithm is not initialized, then initialize it, step it otherwise
+	if not algorithm.is_initialized:
+		if set_up_algorithm():
+			algorithm.step()
+	else:
+		algorithm.step()
 
-
-
+# chceck which button was pressed and run the appropriate method
 func _on_UserInterface_button_pressed(id : int):
 	match id:
 		UserInteraface.RUN:
@@ -86,5 +138,4 @@ func _on_UserInterface_button_pressed(id : int):
 			next_step()
 		_:
 			push_warning("ButtonId is not valid!")
-		
-			
+	

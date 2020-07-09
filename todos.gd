@@ -4,5 +4,15 @@
 #cell - instance of the tile with position (int)
 #vertex - Vector2, Vector3 (cell position) Vector2(int, int)
 #path - trasa
+#position
+#global position
+#vertex position
 # 
-#presunut funkciu adjusting camera to grid do Gridu?
+#
+#implement A* Godot
+
+#TODO implement:
+#Dijkstra’s Algorithm
+#Greedy Best-First Search
+#A*
+
