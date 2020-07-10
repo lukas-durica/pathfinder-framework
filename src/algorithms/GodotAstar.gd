@@ -14,15 +14,16 @@ func _ready():
 			a_star.add_point(cell_id, cell)
 			already_added[cell] = cell_id
 			for neighbor in grid.get_neighbors(cell):
-				if not neighbor in already_added:
-					var neighbor_id
-					if neighbor in open:
-						neighbor_id = open[neighbor]
-					else:
-						neighbor_id = a_star.get_available_point_id()
-						open[neighbor] = neighbor_id
-					a_star.add_point(neighbor_id, neighbor)
-					a_star.connect_points(cell_id, neighbor_id)
+				if not grid.is_cell_obstacle(neighbor): 
+					if not neighbor in already_added:
+						var neighbor_id
+						if neighbor in open:
+							neighbor_id = open[neighbor]
+						else:
+							neighbor_id = a_star.get_available_point_id()
+							open[neighbor] = neighbor_id
+						a_star.add_point(neighbor_id, neighbor)
+						a_star.connect_points(cell_id, neighbor_id)
 	print("count: ", a_star.get_point_count())
 	
 	
