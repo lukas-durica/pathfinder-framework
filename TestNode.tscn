@@ -5,5 +5,4 @@
 [node name="Node" type="Node"]
 script = ExtResource( 1 )
 
-[node name="Line2D" type="Line2D" parent="."]
-points = PoolVector2Array( 649.546, 431.638, 884.449, 259.893, 977.524, 123.605, 134.31, 95.9041, 577.524, 331.915, 650.654, 345.212, 639.573, 415.018, 275.031, 91.472 )
+[node name="Node2D" type="Node2D" parent="."]

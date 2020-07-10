@@ -40,7 +40,6 @@ func zoom(direction):
 	zoom_factor = clamp(zoom_factor + ZOOM_SENSITIVITY * direction * zoom_factor, 
 			MIN_ZOOM, MAX_ZOOM)
 	zoom = Vector2.ONE * zoom_factor
-	print("zoom_factor: ", zoom_factor)
 
 
 func move(direction):

@@ -1,26 +1,28 @@
 extends Node2D
 
+class_name GridBasedAlgorithm
+
 # use gui zoom factor for adjusting the camera zoom with respect to GUI to avoid
 # overlap with the grid, just cosmetic treatment
-const GUI_ZOOM_FACTOR = 1.13
+const GUI_ZOOM_FACTOR : = 1.13
 
 # camera is used for moving (pressing mouse wheel) and zooming (
 # scrolling mouse wheel) on the grid
-onready var camera = $Camera
+onready var camera : Camera2D = $Camera
 
 # the playground
-onready var grid = $Grid
+onready var grid : Grid = $Grid
 
 # start node, can be dragged during editor or set during the runtime 
 # (left mouse button)
-onready var start = $Start
+onready var start : Sprite = $Start
 
 # goal node, can be dragged during editor or set during the runtime
 # (right mouse button)
-onready var goal = $Goal
+onready var goal : Sprite = $Goal
 
 # the algorithm for search the path
-var algorithm := BreadthFirstSearchDebug.new()
+var algorithm : = BreadthFirstSearchDebug.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -30,12 +32,13 @@ func _ready():
 	$UserInterface/UIRoot.visible = true
 	#BreadthFirstSearch.find_path(grid, grid.to_vertex(start.position), 
 	#		grid.to_vertex(goal.position))
-	print(grid.to_vertex(goal.position))
-	var path = AStarRedBlob.find_path(grid, grid.to_vertex(start.position), 
-			grid.to_vertex(goal.position))
-	print(path)
-	for cell in path:
-		grid.set_cellv(cell, Grid.PATH)
+	#var time_start = OS.get_ticks_usec()
+	#var path = AStarRedBlob.find_path(grid, grid.to_vertex(start.position), 
+	#		grid.to_vertex(goal.position))
+	#var elapsed = OS.get_ticks_usec() - time_start
+	#print("red blob: ", path)
+	#for cell in path:
+	#	grid.set_cellv(cell, Grid.PATH)
 	
 func adjust_camera_to_grid():
 	
@@ -76,6 +79,7 @@ func _input(event : InputEvent):
 			if event.button_index == BUTTON_LEFT:
 				# cell position to world/global position and add halfcell size
 				# offset to it
+				
 				start.position = grid.map_to_world(cell_pos) \
 						+ grid.cell_size / 2.0
 			elif event.button_index == BUTTON_RIGHT:
@@ -87,7 +91,6 @@ func set_up_algorithm() -> bool:
 	#from global/world position to vertex/grid position
 	var start_position = grid.to_vertex(start.position)
 	var goal_position = grid.to_vertex(goal.position)
-	
 	if grid.is_cell_free(start_position) and grid.is_cell_free(goal_position):
 			algorithm.init(grid, start_position, goal_position)
 			return true

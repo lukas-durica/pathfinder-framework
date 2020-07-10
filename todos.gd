@@ -8,7 +8,8 @@
 #global position
 #vertex position
 # 
-#
+#set_up_algorithm change to validate position and return anonymous structute 
+#{start = Vector2, goal = Vector2}
 #implement A* Godot
 
 #TODO implement:
