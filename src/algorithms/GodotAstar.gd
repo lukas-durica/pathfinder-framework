@@ -10,7 +10,11 @@ func _ready():
 	print(grid.get_used_cells())
 	for cell in grid.get_used_cells():
 		if not grid.is_cell_obstacle(cell):
-			var cell_id = a_star.get_available_point_id()
+			var cell_id 
+			if cell in open:
+				cell_id = open[cell]
+			else:
+				cell_id = a_star.get_available_point_id()
 			a_star.add_point(cell_id, cell)
 			already_added[cell] = cell_id
 			for neighbor in grid.get_neighbors(cell):
