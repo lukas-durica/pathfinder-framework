@@ -20,12 +20,15 @@ static func find_path(graph, start : Vector2, goal : Vector2) -> Array:
 	var cost_so_far = {}
 	came_from[start] = null
 	cost_so_far[start] = 0
+	var time_start = OS.get_ticks_usec()
 
+	
 	while not frontier.empty():
 		var current = frontier.extractMin().vertex
 		if current == goal:
 			return reconstruct_path(goal, came_from)
-	
+			var elapsed = OS.get_ticks_usec() - time_start
+			print("RedBlob AStar: ", elapsed)
 		for neighbor in graph.get_neighbors(current):
 			var new_cost = cost_so_far[current] \
 				+ graph.get_cost(current, neighbor)

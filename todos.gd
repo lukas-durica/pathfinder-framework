@@ -7,7 +7,9 @@
 #position
 #global position
 #vertex position
-# 
+# grid podmnozina graph
+# vytvorit gridbasedalgorithm, z toho vydedit algortmy
+# GridBasedAlgorithm premenovat na GridBasedInterface?
 #set_up_algorithm change to validate position and return anonymous structute 
 #{start = Vector2, goal = Vector2}
 #implement A* Godot

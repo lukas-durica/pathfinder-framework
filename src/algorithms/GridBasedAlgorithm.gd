@@ -8,7 +8,7 @@ const GUI_ZOOM_FACTOR : = 1.13
 
 # camera is used for moving (pressing mouse wheel) and zooming (
 # scrolling mouse wheel) on the grid
-onready var camera : Camera2D = $Camera
+onready var camera : BasicCamera = $Camera
 
 # the playground
 onready var grid : Grid = $Grid
@@ -22,7 +22,7 @@ onready var start : Sprite = $Start
 onready var goal : Sprite = $Goal
 
 # the algorithm for search the path
-var algorithm : = BreadthFirstSearchDebug.new()
+var algorithm : = GodotAStar.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -30,16 +30,19 @@ func _ready():
 	adjust_camera_to_grid()
 	#User interface is invisible due to work with the grid in the editor
 	$UserInterface/UIRoot.visible = true
-	#BreadthFirstSearch.find_path(grid, grid.to_vertex(start.position), 
-	#		grid.to_vertex(goal.position))
-	#var time_start = OS.get_ticks_usec()
-	#var path = AStarRedBlob.find_path(grid, grid.to_vertex(start.position), 
-	#		grid.to_vertex(goal.position))
-	#var elapsed = OS.get_ticks_usec() - time_start
-	#print("red blob: ", path)
-	#for cell in path:
-	#	grid.set_cellv(cell, Grid.PATH)
-	
+	set_up_algorithm()
+	var time_start = OS.get_ticks_usec()
+	var path = algorithm.find_path()
+	var elapsed = OS.get_ticks_usec() - time_start
+	print(path.size())
+	print("Godot AStar: ", elapsed)
+	grid.reset()
+	time_start = OS.get_ticks_usec()
+	AStarRedBlob.find_path(grid, grid.to_vertex(start.position), 
+			grid.to_vertex(goal.position))
+	elapsed = OS.get_ticks_usec() - time_start
+	print("RedBlob AStar: ", elapsed)
+	grid.reset()
 func adjust_camera_to_grid():
 	
 	# the size of the screen
@@ -106,7 +109,9 @@ func run():
 	grid.reset()
 	algorithm.reset()
 	if set_up_algorithm():
-		algorithm.find_path()
+		var path = algorithm.find_path()
+		for vertex in path:
+			grid.set_cellv(vertex, Grid.PATH)
 func pause():
 	pass
 
