@@ -30,19 +30,7 @@ func _ready():
 	adjust_camera_to_grid()
 	#User interface is invisible due to work with the grid in the editor
 	$UserInterface/UIRoot.visible = true
-	set_up_algorithm()
-	var time_start = OS.get_ticks_usec()
-	var path = algorithm.find_path()
-	var elapsed = OS.get_ticks_usec() - time_start
-	print(path.size())
-	print("Godot AStar: ", elapsed)
-	grid.reset()
-	time_start = OS.get_ticks_usec()
-	AStarRedBlob.find_path(grid, grid.to_vertex(start.position), 
-			grid.to_vertex(goal.position))
-	elapsed = OS.get_ticks_usec() - time_start
-	print("RedBlob AStar: ", elapsed)
-	grid.reset()
+	MapLoader.load_map(grid)
 func adjust_camera_to_grid():
 	
 	# the size of the screen
@@ -82,6 +70,7 @@ func _input(event : InputEvent):
 			if event.button_index == BUTTON_LEFT:
 				# cell position to world/global position and add halfcell size
 				# offset to it
+				print(cell_pos)
 				
 				start.position = grid.map_to_world(cell_pos) \
 						+ grid.cell_size / 2.0
