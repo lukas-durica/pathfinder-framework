@@ -31,6 +31,7 @@ func init(graph, start : Vector2, goal : Vector2):
 						a_star.add_point(neighbor_id, neighbor)
 						a_star.connect_points(cell_id, neighbor_id)
 	is_initialized = true
+
 func find_path() -> PoolVector2Array:
 	if start in added_points and goal in added_points:
 		var start_id = added_points[start]
