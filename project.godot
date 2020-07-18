@@ -9,10 +9,15 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "GridBasedAlgorithm",
+"class": "AStarGodot",
+"language": "GDScript",
+"path": "res://src/algorithms/GodotAStar.gd"
+}, {
 "base": "Reference",
 "class": "AStarRedBlob",
 "language": "GDScript",
-"path": "res://src/algorithms/AStar.gd"
+"path": "res://src/algorithms/AStarRedBlob.gd"
 }, {
 "base": "Reference",
 "class": "BreadthFirstSearch",
@@ -45,6 +50,7 @@ _global_script_classes=[ {
 "path": "res://src/ui/UI.gd"
 } ]
 _global_script_class_icons={
+"AStarGodot": "",
 "AStarRedBlob": "",
 "BreadthFirstSearch": "",
 "BreadthFirstSearchDebug": "",

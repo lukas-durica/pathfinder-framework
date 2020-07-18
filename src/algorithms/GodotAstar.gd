@@ -1,5 +1,7 @@
 extends GridBasedAlgorithm
 
+class_name AStarGodot
+
 func _ready():
 	var start_position = grid.to_vertex(start.position)
 	var goal_position = grid.to_vertex(goal.position)
@@ -28,7 +30,6 @@ func _ready():
 							open[neighbor] = neighbor_id
 						a_star.add_point(neighbor_id, neighbor)
 						a_star.connect_points(cell_id, neighbor_id)
-	print("count: ", a_star.get_point_count())
 	
 	
 	
@@ -36,12 +37,7 @@ func _ready():
 		if start_position in already_added and goal_position in already_added:
 			var start_id = already_added[start_position]
 			var goal_id = already_added[goal_position]
-			print("id_start: ", start_id)
-			print("id_goal: ", goal_id)
-			print("connections: ", a_star.get_point_connections(start_id))
 			var path = a_star.get_point_path(start_id, goal_id)
-			print("astar: ", path)
-			print("get_id_path ", a_star.get_id_path(start_id, goal_id))
 		elif not start_position in already_added:
 			push_error("Start position is not in already_added")
 		else:
