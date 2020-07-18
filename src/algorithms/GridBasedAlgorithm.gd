@@ -8,7 +8,7 @@ const GUI_ZOOM_FACTOR : = 1.13
 
 # camera is used for moving (pressing mouse wheel) and zooming (
 # scrolling mouse wheel) on the grid
-onready var camera : Camera2D = $Camera
+onready var camera : BasicCamera = $Camera
 
 # the playground
 onready var grid : Grid = $Grid
@@ -22,7 +22,7 @@ onready var start : Sprite = $Start
 onready var goal : Sprite = $Goal
 
 # the algorithm for search the path
-var algorithm : = BreadthFirstSearchDebug.new()
+var algorithm : = GodotAStar.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -30,16 +30,7 @@ func _ready():
 	adjust_camera_to_grid()
 	#User interface is invisible due to work with the grid in the editor
 	$UserInterface/UIRoot.visible = true
-	#BreadthFirstSearch.find_path(grid, grid.to_vertex(start.position), 
-	#		grid.to_vertex(goal.position))
-	#var time_start = OS.get_ticks_usec()
-	#var path = AStarRedBlob.find_path(grid, grid.to_vertex(start.position), 
-	#		grid.to_vertex(goal.position))
-	#var elapsed = OS.get_ticks_usec() - time_start
-	#print("red blob: ", path)
-	#for cell in path:
-	#	grid.set_cellv(cell, Grid.PATH)
-	
+	MapLoader.load_map(grid)
 func adjust_camera_to_grid():
 	
 	# the size of the screen
@@ -79,6 +70,7 @@ func _input(event : InputEvent):
 			if event.button_index == BUTTON_LEFT:
 				# cell position to world/global position and add halfcell size
 				# offset to it
+				print(cell_pos)
 				
 				start.position = grid.map_to_world(cell_pos) \
 						+ grid.cell_size / 2.0
@@ -106,7 +98,9 @@ func run():
 	grid.reset()
 	algorithm.reset()
 	if set_up_algorithm():
-		algorithm.find_path()
+		var path = algorithm.find_path()
+		for vertex in path:
+			grid.set_cellv(vertex, Grid.PATH)
 func pause():
 	pass
 

@@ -6,15 +6,11 @@ enum {RUN, PAUSE, STOP, PREVIOUS_STEP, NEXT_STEP}
 
 signal button_pressed(id)
 
-
-
 func _on_Run_pressed():
 	emit_signal("button_pressed", RUN)
 
-
 func _on_Pause_pressed():
 	emit_signal("button_pressed", PAUSE)
-
 
 func _on_Stop_pressed():
 	emit_signal("button_pressed", STOP)

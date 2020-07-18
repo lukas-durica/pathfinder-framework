@@ -9,34 +9,33 @@ Two modes (alaways use init() method before the use):
 """
 class_name BreadthFirstSearchDebug
 
-var open_debug : = []
+var open : = []
 
-var closed_debug : = {}
+var closed : = {}
 
-var start_debug := Vector2.INF
+var start := Vector2.INF
 
-var goal_debug := Vector2.INF
+var goal := Vector2.INF
 
-var graph_debug = null
+var graph = null
 
 var is_initialized : = false
 
 func init(graph, start : Vector2, goal : Vector2):
-	graph_debug = graph
-	start_debug = start
-	goal_debug = goal
+	self.graph = graph
+	self.start = start
+	self.goal = goal
 	
-	open_debug.push_back(start)
-	closed_debug[start] = null
+	open.push_back(start)
+	closed[start] = null
 	is_initialized = true
 
-func find_path() \
-		-> Array:
+func find_path() -> Array:
 	if not is_initialized:
 		show_error()
 		return Array()
 	
-	while not open_debug.empty():
+	while not open.empty():
 		if step():
 			return reconstruct_path()
 
@@ -44,13 +43,13 @@ func find_path() \
 
 func reconstruct_path() -> Array:
 	var path : = []
-	var current = goal_debug
+	var current = goal
 	
 	while not current == null:
 		#set color to the cell as path
-		graph_debug.set_cellv(current, graph_debug.PATH)
+		graph.set_cellv(current, graph.PATH)
 		path.push_back(current)
-		current = closed_debug[current]
+		current = closed[current]
 		
 	path.push_back(current)
 	path.invert()
@@ -62,28 +61,28 @@ func step() -> bool:
 		show_error()
 		return false
 	
-	var current = open_debug.front()
-	if current == goal_debug:
+	var current = open.front()
+	if current == goal:
 		return true
-	
+
+	open.pop_front()
 	#set color as closed
-	graph_debug.set_cellv(current, graph_debug.CLOSED)
-	open_debug.pop_front()
-	for neighbor in graph_debug.get_neighbors(current):
-		if not neighbor in closed_debug:
-			open_debug.push_back(neighbor)
+	graph.set_cellv(current, graph.CLOSED)
+	for neighbor in graph.get_neighbors(current):
+		if not neighbor in closed:
+			open.push_back(neighbor)
 			#set color to it
-			graph_debug.set_cellv(neighbor, graph_debug.OPEN)
-			closed_debug[neighbor] = current
+			graph.set_cellv(neighbor, graph.OPEN)
+			closed[neighbor] = current
 	return false
 
 #reset the algorithm
 func reset():
-	open_debug.clear()
-	closed_debug.clear()
-	start_debug = Vector2.INF
-	goal_debug = Vector2.INF
-	graph_debug = null
+	open.clear()
+	closed.clear()
+	start = Vector2.INF
+	goal = Vector2.INF
+	graph = null
 	is_initialized = false
 
 func show_error():

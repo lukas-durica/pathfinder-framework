@@ -4,6 +4,8 @@ Zoom - Scrolling the wheel
 Movement - pressing the wheel and moving
 """
 
+class_name BasicCamera
+
 const MIN_ZOOM = 0.4
 const MAX_ZOOM = INF
 const ZOOM_SENSITIVITY = 0.1

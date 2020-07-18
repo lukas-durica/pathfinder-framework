@@ -6,7 +6,7 @@ enum {NONE = -1, FREE, OBSTACLE, OPEN, CLOSED, PATH}
 
 
 # wold/global position to grid/vertex position
-func to_vertex(world_position) -> Vector2:
+func to_vertex(world_position : Vector2) -> Vector2:
 	return world_to_map(world_position)
 
 # get neighbors of a given cell
