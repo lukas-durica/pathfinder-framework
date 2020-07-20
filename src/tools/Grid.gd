@@ -48,4 +48,10 @@ func reset():
 			set_cellv(vertex, FREE)
 			
 func get_cost(current, neighbor):
-	return 1
+	var md = get_manhattan_distance(current, neighbor)
+	if md == 1:
+		return 10
+	elif md == 2:
+		return 14
+	else:
+		push_warning("get cost is not valid")

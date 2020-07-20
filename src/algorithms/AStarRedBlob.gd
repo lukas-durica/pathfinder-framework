@@ -1,4 +1,4 @@
-extends Reference
+extends GridBasedAlgorithm
 """
 A* is a modification of Dijkstra’s Algorithm that is optimized for a single 
 destination. Dijkstra’s Algorithm can find paths to all locations; A* finds 
@@ -8,11 +8,35 @@ Check for more at:
 www.redblobgames.com/pathfinding/a-star/introduction.html#astar
 and even more on implementation of A* here:
 www.redblobgames.com/pathfinding/a-star/implementation.html#algorithm
-"""
+	
+
+	RedBlob Implementation notes:
+	I eliminate the check for a node being in the frontier with a higher cost. 
+	By not checking, I end up with duplicate elements in the frontier. The 
+	algorithm still works. It will revisit some locations more than necessary 
+	(but rarely, in my experience, as long as the heuristic is admissible). The 
+	code is simpler and it allows me to use a simpler and faster priority queue 
+	that does not support the decrease-key operation. The paper “Priority Queues
+	and Dijkstra’s Algorithm” suggests that this approach is faster in practice.
+	
+	Instead of storing both a “closed set” and an “open set”, I have a visited 
+	flag that tells me whether it’s in either of those sets. This simplifies the
+	code further.
+	
+	I don’t need to store a separate open or closed set explicitly because the 
+	set is implicit in the keys of the came_from and cost_so_far tables. Since 
+	we always want one of those two tables, there’s no need to store the 
+	open/closed sets separately.
+	
+	I use hash tables instead of arrays of node objects. This eliminates the 
+	rather expensive initialize step that many other implementations have. For 
+	large game maps, the initialization of those arrays is often slower than 
+	the rest of A*.
+	"""
 
 class_name AStarRedBlob
 
-static func find_path(graph, start : Vector2, goal : Vector2) -> Array:
+func find_path(graph, start : Vector2, goal : Vector2) -> Array:
 
 	var frontier = MinBinaryHeap.new()
 	frontier.insert_key({value = 0, vertex = start})
@@ -28,7 +52,6 @@ static func find_path(graph, start : Vector2, goal : Vector2) -> Array:
 		if current == goal:
 			return reconstruct_path(goal, came_from)
 			var elapsed = OS.get_ticks_usec() - time_start
-			print("RedBlob AStar: ", elapsed)
 		for neighbor in graph.get_neighbors(current):
 			var new_cost = cost_so_far[current] \
 				+ graph.get_cost(current, neighbor)
@@ -41,7 +64,7 @@ static func find_path(graph, start : Vector2, goal : Vector2) -> Array:
 	
 	return Array()
 
-static func reconstruct_path(goal : Vector2, came_from : Dictionary) -> Array:
+func reconstruct_path(goal : Vector2, came_from : Dictionary) -> Array:
 	var path : = []
 	var current = goal
 	# if this cell is not start (only start has no previous cell)
