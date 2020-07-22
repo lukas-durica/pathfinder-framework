@@ -22,7 +22,7 @@ onready var start : Sprite = $Start
 onready var goal : Sprite = $Goal
 
 # the algorithm for search the path
-
+var algorithm
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -59,8 +59,7 @@ func adjust_camera_to_grid():
 # algorithm is initialized
 func _input(event : InputEvent):
 	
-	if not algorithm.is_initialized and event is InputEventMouseButton \
-			and event.pressed:
+	if event is InputEventMouseButton and event.pressed:
 		
 		# get mouse position to the grid (vertex) position
 		var cell_pos = grid.to_vertex(get_global_mouse_position())
@@ -84,7 +83,7 @@ func set_up_algorithm() -> bool:
 	var start_position = grid.to_vertex(start.position)
 	var goal_position = grid.to_vertex(goal.position)
 	if grid.is_cell_free(start_position) and grid.is_cell_free(goal_position):
-			algorithm.init(grid, start_position, goal_position)
+			#algorithm.init(grid, start_position, goal_position)
 			return true
 	elif not grid.is_cell_free(start_position):
 		push_error("Start position is not free!")
@@ -96,7 +95,7 @@ func set_up_algorithm() -> bool:
 # run algorithm instantly
 func run():
 	grid.reset()
-	algorithm.reset()
+	#algorithm.reset()
 	if set_up_algorithm():
 		var path = algorithm.find_path()
 		for vertex in path:
@@ -106,8 +105,9 @@ func pause():
 
 # reset grid and algorithm
 func stop():
-	grid.reset()
-	algorithm.reset()
+	pass
+	#grid.reset()
+	#algorithm.reset()
 func previous_step():
 	pass
 	

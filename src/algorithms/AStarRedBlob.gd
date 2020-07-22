@@ -36,7 +36,7 @@ www.redblobgames.com/pathfinding/a-star/implementation.html#algorithm
 
 class_name AStarRedBlob
 
-func find_path(graph, start : Vector2, goal : Vector2) -> Array:
+func _find_path(start: Vector2, goal : Vector2) -> Array:
 
 	var frontier = MinBinaryHeap.new()
 	frontier.insert_key({value = 0, vertex = start})

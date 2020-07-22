@@ -1,6 +1,6 @@
 """
 code and comments are from:
-https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
+https://www.geeksforgeeks.org/a-search-algorithm/
 
 
 """
@@ -20,13 +20,13 @@ class AStarNode:
 	func equals(other_node):
 		return position == other_node.position
 
-func init(graph):
+func _initialize(graph):
 	pass
 
-func find_path(graph, start : Vector2, goal : Vector2) -> Array:
+func _find_path(start : Vector2, goal : Vector2) -> Array:
+	
 	var start_node = AStarNode.new()
 	start_node.position = start
-	start_node.f = graph.get_manhattan_distance(start, goal)
 	
 	var goal_node = AStarNode.new()
 	goal_node.position = goal
@@ -38,37 +38,54 @@ func find_path(graph, start : Vector2, goal : Vector2) -> Array:
 	# been explored already and included in the open list, if this was the case).
 	var closed_list = []
 	
+	# put the starting node on the open list
 	open_list.push_back(start_node)
-	
+	#  while the open list is not empty
 	while not open_list.empty():
-		var current_node = open_list[0]
-		var current_index = 0
+		#find the node with the least f on the open list
+		var min_index = 0
 		var index = 0
+		
+		var current_node = open_list[min_index]
+		
 		for item in open_list:
 			if item.f < current_node.f:
 				current_node = item
-				current_index = index
+				min_index = index
 			index += 1
 	
-		open_list.remove(current_index)
-		closed_list.append(current_node.position)
+		#pop current node off the open list
+		open_list.remove(min_index)
+		
+		
 		
 		if current_node == goal_node:
 			return reconstruct_path(current_node)
 		
-		for neighbor in graph.get_neighbors(current_node):
-			if neighbor.position in closed_list:
+		for neighbor_position in graph.get_neighbors(current_node):
+			if neighbor_position in closed_list:
 				continue
+			# One important aspect of A* is f = g + h. The f, g, and h variables
+			# are calculated every time we create a new vertex.
+			# F is the total cost of the vertex.
+			# G is the distance between the current vertex and the start.
+			# H is the heuristic — estimated distance from the current vertex to
+			# the end.
+			var neighbor = AStarNode.new()
 			neighbor.g = current_node.g + 1
-			neighbor.h = graph.get_manhattan_distance(neighbor.position, goal)
+			neighbor.h = graph.get_manhattan_distance(neighbor, goal)
 			neighbor.f = neighbor.g + neighbor.h
+			neighbor.parent = current_node
 			
+			index = 0
 			for open_node in open_list:
-				if open_node.position == neighbor.position and neighbor.g > open_node.g:
-					continue
+				if open_node.position == neighbor.position and neighbor.g < \
+						open_node.g:
+					open_node[index] = neighbor
+				index += 1
 			
 			open_list.push_back(neighbor)
-		
+		closed_list.append(current_node)
 	return Array()
 
 
@@ -80,12 +97,7 @@ func reconstruct_path(current_node):
 		current = current.parent
 	path.invert()
 	return path
-# One important aspect of A* is f = g + h. The f, g, and h variables are in our 
-# Node class and get calculated every time we create a new vertex. Quickly I’ll 
-# go over what these variables mean.
-# F is the total cost of the vertex.
-# G is the distance between the current vertex and the start.
-# H is the heuristic — estimated distance from the current vertex to the end.
+
 
 
 #1. Add the starting square (or node) to the open list.

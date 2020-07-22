@@ -4,15 +4,18 @@ class_name Grid
 
 enum {NONE = -1, FREE, OBSTACLE, OPEN, CLOSED, PATH}
 
+#eight way directional movement
+export var is_8_directional : = false
+
 
 # wold/global position to grid/vertex position
 func to_vertex(world_position : Vector2) -> Vector2:
 	return world_to_map(world_position)
 
 # get neighbors of a given cell
-func get_neighbors(vertex : Vector2, eight_directional : = false) -> Array:
+func get_neighbors(vertex : Vector2) -> Array:
 	var directions = [Vector2.LEFT, Vector2.UP, Vector2.RIGHT, Vector2.DOWN]
-	if eight_directional:
+	if is_8_directional:
 		directions += [Vector2.LEFT + Vector2.UP, Vector2.UP + Vector2.RIGHT, 
 				Vector2.RIGHT + Vector2.DOWN, Vector2.DOWN + Vector2.LEFT]
 	var neighbors = []
@@ -26,7 +29,7 @@ func get_neighbors(vertex : Vector2, eight_directional : = false) -> Array:
 	
 # manhattan distance between two vertexes
 func get_manhattan_distance(vertex_a : Vector2, vertex_b: Vector2) -> int:
-	return int(abs(vertex_a.x - vertex_b.x) + abs(vertex_a.y - vertex_b.y))
+	return int(abs(vertex_a.x - vertex_b.x) + abs(vertex_a.y - vertex_b.y)) * 10
 	
 # whether the cell at given vertex exists
 func is_cell_valid(vertex : Vector2) -> bool:

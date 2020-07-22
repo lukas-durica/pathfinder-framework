@@ -1,4 +1,4 @@
-extends Reference
+extends GridBasedAlgorithm
 """
 Breadth First Search explores equally in all directions. This is an incredibly 
 useful algorithm, not only for regular path finding, but also for procedural map
@@ -10,7 +10,10 @@ www.redblobgames.com/pathfinding/a-star/introduction.html#breadth-first-search
 
 class_name BreadthFirstSearch
 
-static func find_path(graph, start : Vector2, goal : Vector2) -> Array:
+func _initialize(graph):
+	pass
+
+func _find_path(start : Vector2, goal : Vector2) -> Array:
 	#add start to the open list, as this will be first vertex to expand by 
 	#looking at its neighbors
 	# open is a data structure for neighbors that have not yet been visited
@@ -60,7 +63,7 @@ static func find_path(graph, start : Vector2, goal : Vector2) -> Array:
 		
 		
 #reconstructing path, from the goal to the start
-static func reconstruct_path(goal : Vector2, closed : Dictionary) -> Array:
+func reconstruct_path(goal : Vector2, closed : Dictionary) -> Array:
 	var path : = []
 	var current = goal
 	# if this cell is not start (only start has no previous cell)

@@ -2,8 +2,19 @@ extends Reference
 
 class_name GridBasedAlgorithm
 
-func init(graph):
+var graph
+
+func initialize(graph):
+	self.graph = graph
+	_initialize(graph)
+
+func find_path(start : Vector2, goal : Vector2):
+	_find_path(start, goal)
+
+# virtual functions
+func _initialize(graph):
 	pass
 
-func find_path(graph, start : Vector2, goal : Vector2):
+# virtual functions
+func _find_path(start : Vector2, goal : Vector2):
 	pass
