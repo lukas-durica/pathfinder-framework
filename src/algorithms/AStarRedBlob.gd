@@ -1,9 +1,5 @@
 extends GridBasedAlgorithm
 """
-A* is a modification of Dijkstra’s Algorithm that is optimized for a single 
-destination. Dijkstra’s Algorithm can find paths to all locations; A* finds 
-paths to one location, or the closest of several locations. It prioritizes paths
-that seem to be leading closer to a goal.
 Check for more at:
 www.redblobgames.com/pathfinding/a-star/introduction.html#astar
 and even more on implementation of A* here:
@@ -51,7 +47,6 @@ func _find_path(start: Vector2, goal : Vector2) -> Array:
 		var current = frontier.extractMin().vertex
 		if current == goal:
 			return reconstruct_path(goal, came_from)
-			var elapsed = OS.get_ticks_usec() - time_start
 		for neighbor in graph.get_neighbors(current):
 			var new_cost = cost_so_far[current] \
 				+ graph.get_cost(current, neighbor)
@@ -70,7 +65,7 @@ func reconstruct_path(goal : Vector2, came_from : Dictionary) -> Array:
 	# if this cell is not start (only start has no previous cell)
 	# and if there is no path to goal, than there is no previous cell for
 	# goal
-	while not current == null:		
+	while not current == null:
 		#add tile to our path
 		path.push_back(current)
 	

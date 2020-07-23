@@ -1,3 +1,7 @@
+"""
+This algortihm uses Godot's Astar
+"""
+
 extends GridBasedAlgorithm
 
 class_name AStarGodot

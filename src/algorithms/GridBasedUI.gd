@@ -22,16 +22,14 @@ onready var start : Sprite = $Start
 onready var goal : Sprite = $Goal
 
 # the algorithm for search the path
-var algorithm : Reference
+var algorithm = AStarGodot.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	#adjusting the camera zoom to the size of the grid
 	adjust_camera_to_grid()
-	#User interface is invisible due to work with the grid in the editor
-	$UserInterface/UIRoot.visible = true
 	#MapLoader.load_map(grid)
-	algorithm.initialize(grid)
+
 func adjust_camera_to_grid():
 	
 	# the size of the screen
@@ -56,9 +54,12 @@ func adjust_camera_to_grid():
 	camera.position = (grid.get_used_rect().position + 
 			grid.get_used_rect().size / 2.0) * grid.cell_size
 
+
 # set the start position and goal position in the runtime, but only until the
 # algorithm is initialized
-func _input(event : InputEvent):
+# process this input as unhadled due to higher priority of the UserInterface
+
+func _unhandled_input(event):
 	
 	if event is InputEventMouseButton and event.pressed:
 		
@@ -89,6 +90,7 @@ func run():
 		var time_start = OS.get_ticks_usec()
 		var path = algorithm.find_path(start_position, goal_position)
 		print("Elapsed time: ", OS.get_ticks_usec() - time_start)
+		print("Path size: ", path.size())
 		for vertex in path:
 			grid.set_cellv(vertex, Grid.PATH)
 
@@ -110,8 +112,6 @@ func _on_UserInterface_button_pressed(id : int):
 #			next_step()
 		_:
 			push_warning("ButtonId is not valid!")
-	
-
 
 func _on_UserInterface_menu_item_pressed(id):
 	match id:
@@ -120,5 +120,5 @@ func _on_UserInterface_menu_item_pressed(id):
 		Algorithm.A_STAR_GODOT:
 			algorithm = AStarGodot.new()
 		Algorithm.A_STAR_REDBLOB:
-			algorithm = AStarRedBlob
-	algorithm.init(grid)
+			algorithm = AStarRedBlob.new()
+	algorithm.initialize(grid)

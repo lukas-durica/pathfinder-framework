@@ -1,6 +1,6 @@
 [gd_scene load_steps=15 format=2]
 
-[ext_resource path="res://data/textures/buttons/toolboard.png" type="Texture" id=1]
+[ext_resource path="res://data/textures/buttons/toolboard_thin.png" type="Texture" id=1]
 [ext_resource path="res://data/textures/buttons/play.png" type="Texture" id=2]
 [ext_resource path="res://data/textures/buttons/play_glow.png" type="Texture" id=3]
 [ext_resource path="res://data/textures/buttons/pause.png" type="Texture" id=4]
@@ -21,13 +21,16 @@ script = ExtResource( 12 )
 [node name="UIRoot" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_right = -1280.0
+margin_bottom = -960.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="NinePatchRect" type="NinePatchRect" parent="UIRoot"]
-margin_right = 1280.0
-margin_bottom = 960.0
+[node name="TextureRect" type="TextureRect" parent="UIRoot"]
+margin_right = 2563.5
+margin_bottom = 93.5
+rect_scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -43,7 +46,7 @@ __meta__ = {
 
 [node name="Run" type="TextureButton" parent="UIRoot/HBoxContainer"]
 margin_right = 1024.0
-margin_bottom = 1030.0
+margin_bottom = 1024.0
 hint_tooltip = "Run"
 texture_normal = ExtResource( 2 )
 texture_pressed = ExtResource( 2 )
@@ -52,7 +55,7 @@ texture_hover = ExtResource( 3 )
 [node name="Pause" type="TextureButton" parent="UIRoot/HBoxContainer"]
 margin_left = 1028.0
 margin_right = 2052.0
-margin_bottom = 1030.0
+margin_bottom = 1024.0
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 4 )
 texture_hover = ExtResource( 5 )
@@ -60,7 +63,7 @@ texture_hover = ExtResource( 5 )
 [node name="Stop" type="TextureButton" parent="UIRoot/HBoxContainer"]
 margin_left = 2056.0
 margin_right = 3080.0
-margin_bottom = 1030.0
+margin_bottom = 1024.0
 texture_normal = ExtResource( 6 )
 texture_pressed = ExtResource( 6 )
 texture_hover = ExtResource( 7 )
@@ -77,7 +80,7 @@ texture_hover = ExtResource( 10 )
 [node name="NextStep" type="TextureButton" parent="UIRoot/HBoxContainer"]
 margin_left = 3084.0
 margin_right = 4108.0
-margin_bottom = 1030.0
+margin_bottom = 1024.0
 texture_normal = ExtResource( 9 )
 texture_pressed = ExtResource( 9 )
 texture_hover = ExtResource( 11 )
@@ -85,7 +88,7 @@ texture_hover = ExtResource( 11 )
 [node name="Menu" type="TextureButton" parent="UIRoot/HBoxContainer"]
 margin_left = 4112.0
 margin_right = 5136.0
-margin_bottom = 1030.0
+margin_bottom = 1024.0
 texture_normal = ExtResource( 13 )
 texture_pressed = ExtResource( 14 )
 

@@ -1,8 +1,12 @@
 """
-code and comments are from:
+A* is a modification of Dijkstra’s Algorithm that is optimized for a single 
+destination. Dijkstra’s Algorithm can find paths to all locations; A* finds 
+paths to one location, or the closest of several locations. It prioritizes paths
+that seem to be leading closer to a goal.
+chceck for more:
 https://www.geeksforgeeks.org/a-search-algorithm/
-
-
+veral locations. It prioritizes paths
+that seem to be leading closer to a goal.
 """
 
 extends GridBasedAlgorithm
@@ -16,9 +20,6 @@ class AStarNode:
 	var g : = 0
 	var h : = 0
 	var f : = 0
-	
-	func equals(other_node):
-		return position == other_node.position
 
 func _initialize(graph):
 	pass
@@ -56,39 +57,67 @@ func _find_path(start : Vector2, goal : Vector2) -> Array:
 		#pop current node off the open list
 		open_list.remove(min_index)
 		
+		# if the goal was reached reconstruct path
 		if current_node.position == goal_node.position:
 			return reconstruct_path(current_node)
 		
+		# get all neighbors of current node
 		for neighbor_position in graph.get_neighbors(current_node.position):
+			
+			# if the neighbor is closed list, jump to next neighbor
 			if neighbor_position in closed_list:
 				continue
-			# One important aspect of A* is f = g + h. The f, g, and h variables
-			# are calculated every time we create a new vertex.
-			# F is the total cost of the vertex.
-			# G is the distance between the current vertex and the start.
-			# H is the heuristic — estimated distance from the current vertex to
-			# the end.
+			
+			#create AstarNode and assign position
 			var neighbor = AStarNode.new()
 			neighbor.position = neighbor_position
+			
+			# One important aspect of A* is f = g + h. The f, g, and h variables
+			# are calculated every time we create a new node.
+			# G is the distance (cost) between the current node and the start.
+			# H is the heuristic — estimated distance from the current node to
+			# the end.
+			# F is the total cost of the node. F = G + H
+			
+			# get cost form the start of the current node and add the cost
+			# of the movement between current node and neighbor (e.g. 
+			# horizontal/vertical - 10, diagonal - 14)
 			neighbor.g = current_node.g + graph.get_cost(current_node.position, 
 					neighbor_position)
-
+			
+			# compute manhattan distance for a given neighbor to goal, more info
+			# here: www.quora.com/What-is-Manhattan-Distance
 			neighbor.h = graph.get_manhattan_distance(neighbor.position, goal)
+			
+			# the sum of the cost from the beginning to neighbor and estimated
+			# cost to the goal is the cost of the current node
 			neighbor.f = neighbor.g + neighbor.h
+			
+			# set current node as the parent for neighbor
 			neighbor.parent = current_node
 			
 			index = 0
 			var is_in_open_list = false
+			
+			# chceck if the neighbor is already in open list 
 			for open_node in open_list:
 				if open_node.position == neighbor.position:
-					if neighbor.g < open_node.g:
-						open_node[index] = neighbor
 					is_in_open_list = true
+					# the neighbor is already in open list 
+					# check if the its cost from the start is lower than node 
+					# that is alrady in open list.
+					if neighbor.g < open_node.g:
+						# if so, it means that this is shorter way to this 
+						# neighbor and replace it with actual node
+						open_list[index] = neighbor
 					break
 				index += 1
+			# if the neighbor is already in open list but cost lower, just skip 
 			if is_in_open_list:
 				continue
+			# if the neighbor is not in open list add it to it
 			open_list.push_back(neighbor)
+		# add processed current node to the closed list
 		closed_list.append(current_node.position)
 	return Array()
 
@@ -96,35 +125,14 @@ func _find_path(start : Vector2, goal : Vector2) -> Array:
 func reconstruct_path(current_node) -> Array:
 	var path = []
 	var current = current_node
+	# if this cell is not start (only start has no previous cell)
 	while current != null:
+		#add vertex to our path
 		path.append(current.position)
+		
+		#set its parent as current
 		current = current.parent
+		
+	#the path is oriented from the goal to the start so it needs to be reversed
 	path.invert()
 	return path
-
-
-
-#1. Add the starting square (or node) to the open list.
-#2. Repeat the following:
-#A) Look for the lowest F cost square on the open list. We refer to this as the 
-#current square.
-#B). Switch it to the closed list.
-#C) For each of the 8 squares adjacent to this current square …
-#If it is not walkable or if it is on the closed list, ignore it. Otherwise do 
-#the following.
-#If it isn’t on the open list, add it to the open list. Make the current square 
-#the parent of this square. Record the F, G, and H costs of the square.
-#If it is on the open list already, check to see if this path to that square is 
-#better, using G cost as the measure. A lower G cost means that this is a better
-#path. If so, change the parent of the square to the current square, and 
-#recalculate the G and F scores of the square. If you are keeping your open 
-#list sorted by F score, you may need to resort the list to account for the 
-#change.
-#D) Stop when you:
-#Add the target square to the closed list, in which case the path has been 
-#found, or
-#Fail to find the target square, and the open list is empty. In this case,
-#there is no path.
-#3. Save the path. Working backwards from the target square, go from each 
-#square to its parent square until you reach the starting square. That is your 
-#path.
