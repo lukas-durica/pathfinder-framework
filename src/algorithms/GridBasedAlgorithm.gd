@@ -8,8 +8,8 @@ func initialize(graph):
 	self.graph = graph
 	_initialize(graph)
 
-func find_path(start : Vector2, goal : Vector2):
-	_find_path(start, goal)
+func find_path(start : Vector2, goal : Vector2) -> Array:
+	return _find_path(start, goal)
 
 # virtual functions
 func _initialize(graph):

@@ -27,7 +27,7 @@ func _initialize(graph):
 						a_star.add_point(neighbor_id, neighbor)
 						a_star.connect_points(cell_id, neighbor_id)
 	
-func _find_path(start : Vector2, goal : Vector2) -> Array:
+func _find_path(start : Vector2, goal : Vector2):
 	var start_id = a_star.get_closest_point(start)
 	var goal_id = a_star.get_closest_point(goal)
 	return a_star.get_point_path(start_id, goal_id)

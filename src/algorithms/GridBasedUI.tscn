@@ -23,3 +23,4 @@ position = Vector2( 1056, 800 )
 
 [node name="Camera" parent="." instance=ExtResource( 5 )]
 [connection signal="button_pressed" from="UserInterface" to="." method="_on_UserInterface_button_pressed"]
+[connection signal="menu_item_pressed" from="UserInterface" to="." method="_on_UserInterface_menu_item_pressed"]

@@ -11,7 +11,7 @@ extends GridBasedAlgorithm
 class_name AStarDefault
 
 class AStarNode:
-	var parent : = Vector2.INF
+	var parent = null
 	var position : = Vector2.INF
 	var g : = 0
 	var h : = 0
@@ -24,10 +24,9 @@ func _initialize(graph):
 	pass
 
 func _find_path(start : Vector2, goal : Vector2) -> Array:
-	
+	# create AstarNode and set position to it
 	var start_node = AStarNode.new()
 	start_node.position = start
-	
 	var goal_node = AStarNode.new()
 	goal_node.position = goal
 	#  consists of nodes that have been visited but not expanded (meaning that 
@@ -53,16 +52,14 @@ func _find_path(start : Vector2, goal : Vector2) -> Array:
 				current_node = item
 				min_index = index
 			index += 1
-	
+		
 		#pop current node off the open list
 		open_list.remove(min_index)
 		
-		
-		
-		if current_node == goal_node:
+		if current_node.position == goal_node.position:
 			return reconstruct_path(current_node)
 		
-		for neighbor_position in graph.get_neighbors(current_node):
+		for neighbor_position in graph.get_neighbors(current_node.position):
 			if neighbor_position in closed_list:
 				continue
 			# One important aspect of A* is f = g + h. The f, g, and h variables
@@ -72,24 +69,31 @@ func _find_path(start : Vector2, goal : Vector2) -> Array:
 			# H is the heuristic — estimated distance from the current vertex to
 			# the end.
 			var neighbor = AStarNode.new()
-			neighbor.g = current_node.g + 1
-			neighbor.h = graph.get_manhattan_distance(neighbor, goal)
+			neighbor.position = neighbor_position
+			neighbor.g = current_node.g + graph.get_cost(current_node.position, 
+					neighbor_position)
+
+			neighbor.h = graph.get_manhattan_distance(neighbor.position, goal)
 			neighbor.f = neighbor.g + neighbor.h
 			neighbor.parent = current_node
 			
 			index = 0
+			var is_in_open_list = false
 			for open_node in open_list:
-				if open_node.position == neighbor.position and neighbor.g < \
-						open_node.g:
-					open_node[index] = neighbor
+				if open_node.position == neighbor.position:
+					if neighbor.g < open_node.g:
+						open_node[index] = neighbor
+					is_in_open_list = true
+					break
 				index += 1
-			
+			if is_in_open_list:
+				continue
 			open_list.push_back(neighbor)
-		closed_list.append(current_node)
+		closed_list.append(current_node.position)
 	return Array()
 
 
-func reconstruct_path(current_node):
+func reconstruct_path(current_node) -> Array:
 	var path = []
 	var current = current_node
 	while current != null:

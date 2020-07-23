@@ -52,9 +52,11 @@ func reset():
 			
 func get_cost(current, neighbor):
 	var md = get_manhattan_distance(current, neighbor)
-	if md == 1:
+	if md == 10:
 		return 10
-	elif md == 2:
+	elif md == 20:
 		return 14
 	else:
-		push_warning("get cost is not valid")
+		push_warning("get cost is not valid: md: "+ str(md) + " current " 
+			+ str(current) + " neighbor: " + str(neighbor))
+		

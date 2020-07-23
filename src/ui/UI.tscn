@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://data/textures/buttons/toolboard.png" type="Texture" id=1]
 [ext_resource path="res://data/textures/buttons/play.png" type="Texture" id=2]
@@ -12,12 +12,13 @@
 [ext_resource path="res://data/textures/buttons/rewdown_glow.png" type="Texture" id=10]
 [ext_resource path="res://data/textures/buttons/rewup_glow.png" type="Texture" id=11]
 [ext_resource path="res://src/ui/UI.gd" type="Script" id=12]
+[ext_resource path="res://data/textures/buttons/menu.png" type="Texture" id=13]
+[ext_resource path="res://data/textures/buttons/menu_glow.png" type="Texture" id=14]
 
 [node name="UserInterface" type="CanvasLayer"]
 script = ExtResource( 12 )
 
 [node name="UIRoot" type="Control" parent="."]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {
@@ -42,7 +43,7 @@ __meta__ = {
 
 [node name="Run" type="TextureButton" parent="UIRoot/HBoxContainer"]
 margin_right = 1024.0
-margin_bottom = 1024.0
+margin_bottom = 1030.0
 hint_tooltip = "Run"
 texture_normal = ExtResource( 2 )
 texture_pressed = ExtResource( 2 )
@@ -51,7 +52,7 @@ texture_hover = ExtResource( 3 )
 [node name="Pause" type="TextureButton" parent="UIRoot/HBoxContainer"]
 margin_left = 1028.0
 margin_right = 2052.0
-margin_bottom = 1024.0
+margin_bottom = 1030.0
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 4 )
 texture_hover = ExtResource( 5 )
@@ -59,7 +60,7 @@ texture_hover = ExtResource( 5 )
 [node name="Stop" type="TextureButton" parent="UIRoot/HBoxContainer"]
 margin_left = 2056.0
 margin_right = 3080.0
-margin_bottom = 1024.0
+margin_bottom = 1030.0
 texture_normal = ExtResource( 6 )
 texture_pressed = ExtResource( 6 )
 texture_hover = ExtResource( 7 )
@@ -76,12 +77,30 @@ texture_hover = ExtResource( 10 )
 [node name="NextStep" type="TextureButton" parent="UIRoot/HBoxContainer"]
 margin_left = 3084.0
 margin_right = 4108.0
-margin_bottom = 1024.0
+margin_bottom = 1030.0
 texture_normal = ExtResource( 9 )
 texture_pressed = ExtResource( 9 )
 texture_hover = ExtResource( 11 )
+
+[node name="Menu" type="TextureButton" parent="UIRoot/HBoxContainer"]
+margin_left = 4112.0
+margin_right = 5136.0
+margin_bottom = 1030.0
+texture_normal = ExtResource( 13 )
+texture_pressed = ExtResource( 14 )
+
+[node name="PopupMenu" type="PopupMenu" parent="UIRoot"]
+margin_left = 216.0
+margin_top = 48.0
+margin_right = 236.0
+margin_bottom = 68.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="pressed" from="UIRoot/HBoxContainer/Run" to="." method="_on_Run_pressed"]
 [connection signal="pressed" from="UIRoot/HBoxContainer/Pause" to="." method="_on_Pause_pressed"]
 [connection signal="pressed" from="UIRoot/HBoxContainer/Stop" to="." method="_on_Stop_pressed"]
 [connection signal="pressed" from="UIRoot/HBoxContainer/PreviousStep" to="." method="_on_PreviousStep_pressed"]
 [connection signal="pressed" from="UIRoot/HBoxContainer/NextStep" to="." method="_on_NextStep_pressed"]
+[connection signal="pressed" from="UIRoot/HBoxContainer/Menu" to="." method="_on_Menu_pressed"]
+[connection signal="index_pressed" from="UIRoot/PopupMenu" to="." method="_on_PopupMenu_index_pressed"]

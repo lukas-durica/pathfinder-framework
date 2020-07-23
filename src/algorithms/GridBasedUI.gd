@@ -22,7 +22,7 @@ onready var start : Sprite = $Start
 onready var goal : Sprite = $Goal
 
 # the algorithm for search the path
-var algorithm
+var algorithm : Reference
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -30,7 +30,8 @@ func _ready():
 	adjust_camera_to_grid()
 	#User interface is invisible due to work with the grid in the editor
 	$UserInterface/UIRoot.visible = true
-	MapLoader.load_map(grid)
+	#MapLoader.load_map(grid)
+	algorithm.initialize(grid)
 func adjust_camera_to_grid():
 	
 	# the size of the screen
@@ -69,70 +70,55 @@ func _input(event : InputEvent):
 			if event.button_index == BUTTON_LEFT:
 				# cell position to world/global position and add halfcell size
 				# offset to it
-				print(cell_pos)
-				
 				start.position = grid.map_to_world(cell_pos) \
 						+ grid.cell_size / 2.0
 			elif event.button_index == BUTTON_RIGHT:
 				goal.position = grid.map_to_world(cell_pos) \
 						+ grid.cell_size / 2.0
-						
-# validate start and goal position and initialize the algorithm
-func set_up_algorithm() -> bool:
-	#from global/world position to vertex/grid position
-	var start_position = grid.to_vertex(start.position)
-	var goal_position = grid.to_vertex(goal.position)
-	if grid.is_cell_free(start_position) and grid.is_cell_free(goal_position):
-			#algorithm.init(grid, start_position, goal_position)
-			return true
-	elif not grid.is_cell_free(start_position):
-		push_error("Start position is not free!")
-		return false
-	else:
-		push_error("Goal position is not free!")
-		return false
 
-# run algorithm instantly
+
 func run():
 	grid.reset()
-	#algorithm.reset()
-	if set_up_algorithm():
-		var path = algorithm.find_path()
+	var start_position = grid.to_vertex(start.position)
+	var goal_position = grid.to_vertex(goal.position)
+	if not grid.is_cell_free(start_position):
+		push_error("Start position is not free!")
+	elif not grid.is_cell_free(goal_position):
+		push_error("Goal position is not free!")
+	else:
+		var time_start = OS.get_ticks_usec()
+		var path = algorithm.find_path(start_position, goal_position)
+		print("Elapsed time: ", OS.get_ticks_usec() - time_start)
 		for vertex in path:
 			grid.set_cellv(vertex, Grid.PATH)
-func pause():
-	pass
 
-# reset grid and algorithm
-func stop():
-	pass
-	#grid.reset()
-	#algorithm.reset()
-func previous_step():
-	pass
-	
-# step the algorithm
-func next_step():
-	#if the algorithm is not initialized, then initialize it, step it otherwise
-	if not algorithm.is_initialized:
-		if set_up_algorithm():
-			algorithm.step()
-	else:
-		algorithm.step()
+
+
 
 # chceck which button was pressed and run the appropriate method
 func _on_UserInterface_button_pressed(id : int):
 	match id:
 		UserInteraface.RUN:
 			run()
-		UserInteraface.PAUSE:
-			pause()
-		UserInteraface.STOP:
-			stop()
-		UserInteraface.PREVIOUS_STEP:
-			previous_step()
-		UserInteraface.NEXT_STEP:
-			next_step()
+#		UserInteraface.PAUSE:
+#			pause()
+#		UserInteraface.STOP:
+#			stop()
+#		UserInteraface.PREVIOUS_STEP:
+#			previous_step()
+#		UserInteraface.NEXT_STEP:
+#			next_step()
 		_:
 			push_warning("ButtonId is not valid!")
 	
+
+
+func _on_UserInterface_menu_item_pressed(id):
+	match id:
+		Algorithm.A_STAR_DEFAULT:
+			algorithm = AStarDefault.new()
+		Algorithm.A_STAR_GODOT:
+			algorithm = AStarGodot.new()
+		Algorithm.A_STAR_REDBLOB:
+			algorithm = AStarRedBlob
+	algorithm.init(grid)
