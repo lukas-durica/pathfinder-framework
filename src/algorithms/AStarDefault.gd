@@ -79,14 +79,15 @@ func _find_path(start : Vector2, goal : Vector2) -> Array:
 			# the end.
 			# F is the total cost of the node. F = G + H
 			
-			# get cost form the start of the current node and add the cost
+			# get cost from the start of the current node and add the cost
 			# of the movement between current node and neighbor (e.g. 
 			# horizontal/vertical - 10, diagonal - 14)
 			neighbor.g = current_node.g + graph.get_cost(current_node.position, 
 					neighbor_position)
 			
 			# compute manhattan distance for a given neighbor to goal, more info
-			# here: www.quora.com/What-is-Manhattan-Distance
+			# www.redblobgames.com/pathfinding/a-star/introduction.html#greedy-best-first
+			# The location closest to the goal will be explored first.
 			neighbor.h = graph.get_manhattan_distance(neighbor.position, goal)
 			
 			# the sum of the cost from the beginning to neighbor and estimated

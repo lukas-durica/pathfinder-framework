@@ -5,7 +5,7 @@ class_name Grid
 enum {NONE = -1, FREE, OBSTACLE, OPEN, CLOSED, PATH}
 
 #eight way directional movement
-export var is_8_directional : = false
+var is_8_directional : = false
 
 
 # wold/global position to grid/vertex position

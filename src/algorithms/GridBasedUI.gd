@@ -21,13 +21,17 @@ onready var start : Sprite = $Start
 # (right mouse button)
 onready var goal : Sprite = $Goal
 
-# the algorithm for search the path
-var algorithm = AStarGodot.new()
+# the pathfindinf algorithm 
+var algorithm : GridBasedAlgorithm
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	#adjusting the camera zoom to the size of the grid
 	adjust_camera_to_grid()
+	
+	# set algorithm and update menu in gui
+	set_algorithm(Algorithm.A_STAR_GODOT, true)
+	
 	#MapLoader.load_map(grid)
 
 func adjust_camera_to_grid():
@@ -79,7 +83,10 @@ func _unhandled_input(event):
 
 
 func run():
+	# reset all cells to default (e.g. path cells to free)
 	grid.reset()
+	
+	# convert global positions to the grid (vertex) position
 	var start_position = grid.to_vertex(start.position)
 	var goal_position = grid.to_vertex(goal.position)
 	if not grid.is_cell_free(start_position):
@@ -87,10 +94,17 @@ func run():
 	elif not grid.is_cell_free(goal_position):
 		push_error("Goal position is not free!")
 	else:
+		# start measuring time
 		var time_start = OS.get_ticks_usec()
+		
+		# find the path
 		var path = algorithm.find_path(start_position, goal_position)
+		
+		# print elapsed time
 		print("Elapsed time: ", OS.get_ticks_usec() - time_start)
 		print("Path size: ", path.size())
+		
+		# color the path
 		for vertex in path:
 			grid.set_cellv(vertex, Grid.PATH)
 
@@ -113,12 +127,32 @@ func _on_UserInterface_button_pressed(id : int):
 		_:
 			push_warning("ButtonId is not valid!")
 
-func _on_UserInterface_menu_item_pressed(id):
-	match id:
+# set algorithm and upstate UserInterface if needed (e.g. at the functio _ready)
+func set_algorithm(algorithm_enum_value : int, update_ui : = false):
+	match algorithm_enum_value:
 		Algorithm.A_STAR_DEFAULT:
 			algorithm = AStarDefault.new()
 		Algorithm.A_STAR_GODOT:
 			algorithm = AStarGodot.new()
 		Algorithm.A_STAR_REDBLOB:
 			algorithm = AStarRedBlob.new()
+	
+	if update_ui:
+		$UserInterface.check_item(algorithm_enum_value)
+	
+	# initialize algorithm (e.g convert grid to Godot's Astar representation)
+	# look into the AstarGodot.gd for more
 	algorithm.initialize(grid)
+	
+
+
+func _on_UserInterface_algorithms_id_pressed(id):
+	set_algorithm(id)
+
+
+func _on_UserInterface_options_id_pressed(id):
+	print(id)
+	if id == 1:
+		grid.is_8_directional = not grid.is_8_directional
+		algorithm.initialize(grid)
+		print(grid.is_8_directional)

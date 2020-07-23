@@ -33,28 +33,55 @@ www.redblobgames.com/pathfinding/a-star/implementation.html#algorithm
 class_name AStarRedBlob
 
 func _find_path(start: Vector2, goal : Vector2) -> Array:
-
+	# The key idea for all of these algorithms is that we keep track of an 
+	# expanding cells called the frontier.
 	var frontier = MinBinaryHeap.new()
 	frontier.insert_key({value = 0, vertex = start})
+	
+	# came_from for each location points to the place where we came from. These 
+	# are like “breadcrumbs”. They’re enough to reconstruct the entire path.
 	var came_from = {}
+	
+	# cost_so_far, to keep track of the total movement cost from the start 
+	# location.
 	var cost_so_far = {}
+	
+	# add start position to came_from and add 0 as total movemenbt cost
 	came_from[start] = null
 	cost_so_far[start] = 0
-	var time_start = OS.get_ticks_usec()
 
 	
 	while not frontier.empty():
+		#Pick and remove a cell from the frontier.
 		var current = frontier.extractMin().vertex
+		# if the goal is found reconstruct the path, i.e. early exit
 		if current == goal:
 			return reconstruct_path(goal, came_from)
+		#Expand it by looking at its neighbors
 		for neighbor in graph.get_neighbors(current):
+			
+			# get cost from the start of the current node and add the cost
+			# of the movement between current node and neighbor (e.g. 
+			# horizontal/vertical - 10, diagonal - 14)
 			var new_cost = cost_so_far[current] \
 				+ graph.get_cost(current, neighbor)
+			
+			# Less obviously, we may end up visiting a location multiple times, 
+			# with different costs, so we need to alter the logic a little bit. 
+			# Instead of adding a location to the frontier if the location has 
+			# never been reached, we’ll add it if the new path to the location 
+			# is better than the best previous path.
 			if not neighbor in cost_so_far or new_cost < cost_so_far[neighbor]:
 				cost_so_far[neighbor] = new_cost
+				
+				# The location closest to the goal will be explored first.
 				var priority = new_cost + graph.get_manhattan_distance(goal, 
 						neighbor)
+						
+				# insert it to the frontier
 				frontier.insert_key({value = priority, vertex = neighbor})
+				
+				# add current as place where we came from to neighbor
 				came_from[neighbor] = current
 	
 	return Array()

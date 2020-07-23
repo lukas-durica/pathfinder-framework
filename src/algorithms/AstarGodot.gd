@@ -1,5 +1,6 @@
 """
-This algortihm uses Godot's Astar
+This algortihm uses Godot's Astar. It converts the grid to Godot's Astar 
+representation.
 """
 
 extends GridBasedAlgorithm
@@ -9,26 +10,48 @@ class_name AStarGodot
 var a_star = AStar2D.new()
 
 func _initialize(graph):
+	a_star.clear()
+	# already added vertexes to Godot's A* representation as points
 	var already_added : = {}
+	
+	# vertexes that already have their IDs but was not added to already_added
 	var open : = {}
 	
+	# reserve memory in A* with the size of the grid
 	a_star.reserve_space(graph.get_used_cells().size())
-	for cell in graph.get_used_cells():
-		if not graph.is_cell_obstacle(cell):
-			var cell_id = open[cell] if open.has(cell) else \
+	for current_cell in graph.get_used_cells():
+		
+		# check if the current cell is not and obstacle
+		if not graph.is_cell_obstacle(current_cell):
+			
+			# if the current cell is in open get it id, else generate one
+			var cell_id = open[current_cell] if open.has(current_cell) else \
 					a_star.get_available_point_id()
-			a_star.add_point(cell_id, cell)
-			already_added[cell] = cell_id
-			for neighbor in graph.get_neighbors(cell):
-				if not graph.is_cell_obstacle(neighbor): 
-					if not neighbor in already_added:
+			
+			#add current cell to the A*
+			a_star.add_point(cell_id, current_cell)
+			
+			#add it to already_added
+			already_added[current_cell] = cell_id
+			
+			#get its neighbors
+			for neighbor in graph.get_neighbors(current_cell):
+				
+				# if the neighbor is not obstacle and is not in already added
+				if not graph.is_cell_obstacle(neighbor) \
+						and not already_added.has(neighbor):
+					
+						# if neighbor is in open, get its id
 						var neighbor_id
 						if neighbor in open:
 							neighbor_id = open[neighbor]
 						else:
+							#else generate new id and add it there
 							neighbor_id = a_star.get_available_point_id()
 							open[neighbor] = neighbor_id
+						# add neighbor as point 
 						a_star.add_point(neighbor_id, neighbor)
+						# and connect it to the current cell
 						a_star.connect_points(cell_id, neighbor_id)
 	
 func _find_path(start : Vector2, goal : Vector2):

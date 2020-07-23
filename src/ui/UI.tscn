@@ -1,24 +1,19 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://data/textures/buttons/toolboard_thin.png" type="Texture" id=1]
 [ext_resource path="res://data/textures/buttons/play.png" type="Texture" id=2]
 [ext_resource path="res://data/textures/buttons/play_glow.png" type="Texture" id=3]
-[ext_resource path="res://data/textures/buttons/pause.png" type="Texture" id=4]
-[ext_resource path="res://data/textures/buttons/pause_glow.png" type="Texture" id=5]
-[ext_resource path="res://data/textures/buttons/stop.png" type="Texture" id=6]
-[ext_resource path="res://data/textures/buttons/stop_glow.png" type="Texture" id=7]
-[ext_resource path="res://data/textures/buttons/rewdown.png" type="Texture" id=8]
-[ext_resource path="res://data/textures/buttons/rewup.png" type="Texture" id=9]
-[ext_resource path="res://data/textures/buttons/rewdown_glow.png" type="Texture" id=10]
-[ext_resource path="res://data/textures/buttons/rewup_glow.png" type="Texture" id=11]
 [ext_resource path="res://src/ui/UI.gd" type="Script" id=12]
 [ext_resource path="res://data/textures/buttons/menu.png" type="Texture" id=13]
 [ext_resource path="res://data/textures/buttons/menu_glow.png" type="Texture" id=14]
+[ext_resource path="res://data/textures/buttons/algorithm_glow.png" type="Texture" id=15]
+[ext_resource path="res://data/textures/buttons/algorithm.png" type="Texture" id=16]
 
 [node name="UserInterface" type="CanvasLayer"]
 script = ExtResource( 12 )
 
 [node name="UIRoot" type="Control" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -1280.0
@@ -28,82 +23,69 @@ __meta__ = {
 }
 
 [node name="TextureRect" type="TextureRect" parent="UIRoot"]
-margin_right = 2563.5
-margin_bottom = 93.5
-rect_scale = Vector2( 0.5, 0.5 )
+margin_right = 1920.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 0, 64 )
 texture = ExtResource( 1 )
+expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UIRoot"]
-margin_right = 1024.0
-margin_bottom = 1024.0
-rect_scale = Vector2( 0.05, 0.05 )
+margin_right = 200.0
+margin_bottom = 64.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Run" type="TextureButton" parent="UIRoot/HBoxContainer"]
-margin_right = 1024.0
-margin_bottom = 1024.0
+margin_right = 64.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 64, 64 )
 hint_tooltip = "Run"
 texture_normal = ExtResource( 2 )
 texture_pressed = ExtResource( 2 )
 texture_hover = ExtResource( 3 )
+expand = true
 
-[node name="Pause" type="TextureButton" parent="UIRoot/HBoxContainer"]
-margin_left = 1028.0
-margin_right = 2052.0
-margin_bottom = 1024.0
-texture_normal = ExtResource( 4 )
-texture_pressed = ExtResource( 4 )
-texture_hover = ExtResource( 5 )
+[node name="Algorithm" type="TextureButton" parent="UIRoot/HBoxContainer"]
+margin_left = 68.0
+margin_right = 132.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 64, 64 )
+hint_tooltip = "Algorithms"
+texture_normal = ExtResource( 16 )
+texture_pressed = ExtResource( 15 )
+expand = true
 
-[node name="Stop" type="TextureButton" parent="UIRoot/HBoxContainer"]
-margin_left = 2056.0
-margin_right = 3080.0
-margin_bottom = 1024.0
-texture_normal = ExtResource( 6 )
-texture_pressed = ExtResource( 6 )
-texture_hover = ExtResource( 7 )
-
-[node name="PreviousStep" type="TextureButton" parent="UIRoot/HBoxContainer"]
-visible = false
-margin_left = 3084.0
-margin_right = 4108.0
-margin_bottom = 1024.0
-texture_normal = ExtResource( 8 )
-texture_pressed = ExtResource( 8 )
-texture_hover = ExtResource( 10 )
-
-[node name="NextStep" type="TextureButton" parent="UIRoot/HBoxContainer"]
-margin_left = 3084.0
-margin_right = 4108.0
-margin_bottom = 1024.0
-texture_normal = ExtResource( 9 )
-texture_pressed = ExtResource( 9 )
-texture_hover = ExtResource( 11 )
-
-[node name="Menu" type="TextureButton" parent="UIRoot/HBoxContainer"]
-margin_left = 4112.0
-margin_right = 5136.0
-margin_bottom = 1024.0
+[node name="Options" type="TextureButton" parent="UIRoot/HBoxContainer"]
+margin_left = 136.0
+margin_right = 200.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 64, 64 )
 texture_normal = ExtResource( 13 )
 texture_pressed = ExtResource( 14 )
+expand = true
 
-[node name="PopupMenu" type="PopupMenu" parent="UIRoot"]
-margin_left = 216.0
-margin_top = 48.0
-margin_right = 236.0
-margin_bottom = 68.0
+[node name="Algorithms" type="PopupMenu" parent="UIRoot"]
+margin_left = 85.0
+margin_top = 64.0
+margin_right = 105.0
+margin_bottom = 84.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Options" type="PopupMenu" parent="UIRoot"]
+margin_left = 154.0
+margin_top = 64.0
+margin_right = 174.0
+margin_bottom = 84.0
 [connection signal="pressed" from="UIRoot/HBoxContainer/Run" to="." method="_on_Run_pressed"]
-[connection signal="pressed" from="UIRoot/HBoxContainer/Pause" to="." method="_on_Pause_pressed"]
-[connection signal="pressed" from="UIRoot/HBoxContainer/Stop" to="." method="_on_Stop_pressed"]
-[connection signal="pressed" from="UIRoot/HBoxContainer/PreviousStep" to="." method="_on_PreviousStep_pressed"]
-[connection signal="pressed" from="UIRoot/HBoxContainer/NextStep" to="." method="_on_NextStep_pressed"]
-[connection signal="pressed" from="UIRoot/HBoxContainer/Menu" to="." method="_on_Menu_pressed"]
-[connection signal="index_pressed" from="UIRoot/PopupMenu" to="." method="_on_PopupMenu_index_pressed"]
+[connection signal="pressed" from="UIRoot/HBoxContainer/Algorithm" to="." method="_on_Algorithm_pressed"]
+[connection signal="pressed" from="UIRoot/HBoxContainer/Options" to="." method="_on_Options_pressed"]
+[connection signal="id_pressed" from="UIRoot/Algorithms" to="." method="_on_Algorithms_id_pressed"]
+[connection signal="id_pressed" from="UIRoot/Options" to="." method="_on_Options_id_pressed"]
