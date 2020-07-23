@@ -57,7 +57,7 @@ _global_script_classes=[ {
 "base": "Node2D",
 "class": "GridBasedUI",
 "language": "GDScript",
-"path": "res://src/algorithms/GridBasedUI.gd"
+"path": "res://src/tools/GridBasedUI.gd"
 }, {
 "base": "Node2D",
 "class": "MapLoader",
