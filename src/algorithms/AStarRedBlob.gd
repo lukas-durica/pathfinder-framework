@@ -54,6 +54,7 @@ func _find_path(start: Vector2, goal : Vector2) -> Array:
 	while not frontier.empty():
 		#Pick and remove a cell from the frontier.
 		var current = frontier.extractMin().vertex
+		graph.set_cellv(current, Grid.CLOSED)
 		# if the goal is found reconstruct the path, i.e. early exit
 		if current == goal:
 			return reconstruct_path(goal, came_from)
@@ -83,6 +84,7 @@ func _find_path(start: Vector2, goal : Vector2) -> Array:
 				
 				# add current as place where we came from to neighbor
 				came_from[neighbor] = current
+				graph.set_cellv(neighbor, Grid.OPEN)
 	
 	return Array()
 
