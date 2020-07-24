@@ -8,10 +8,16 @@
 #vertex position
 # grid podmnozina graph
 
-#implement fibonacci heap
-#https://www.growingwiththeweb.com/data-structures/fibonacci-heap/overview/#time-complexity
+
 #TODO implement:
 #Dijkstra’s Algorithm
 #Greedy Best-First Search
-#A*
-
+#implement fibonacci heap
+#https://www.growingwiththeweb.com/data-structures/
+#fibonacci-heap/overview/#time-complexity
+#implement chabayev distance
+#implement diagonal heuristic:
+#http://theory.stanford.edu/~amitp/GameProgramming/
+#Heuristics.html#diagonal-distance
+#allow and disallow passing through the walls with diagonal movement
+#https://www.redblobgames.com/grids/line-drawing.html#stepping

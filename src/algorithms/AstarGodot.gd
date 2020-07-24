@@ -15,7 +15,7 @@ func _initialize(graph):
 	var already_added : = {}
 	
 	# vertexes that already have their IDs but was not added to already_added
-	var open : = {}
+	var has_id : = {}
 	
 	# reserve memory in A* with the size of the grid
 	a_star.reserve_space(graph.get_used_cells().size())
@@ -24,8 +24,8 @@ func _initialize(graph):
 		# check if the current cell is not and obstacle
 		if not graph.is_cell_obstacle(current_cell):
 			
-			# if the current cell is in open get it id, else generate one
-			var cell_id = open[current_cell] if open.has(current_cell) else \
+			# if the current cell is has id get the id, else generate one
+			var cell_id = has_id[current_cell] if has_id.has(current_cell) else \
 					a_star.get_available_point_id()
 			
 			#add current cell to the A*
@@ -41,14 +41,14 @@ func _initialize(graph):
 				if not graph.is_cell_obstacle(neighbor) \
 						and not already_added.has(neighbor):
 					
-						# if neighbor is in open, get its id
+						# if neighbor has id, get its id
 						var neighbor_id
-						if neighbor in open:
-							neighbor_id = open[neighbor]
+						if neighbor in has_id:
+							neighbor_id = has_id[neighbor]
 						else:
 							#else generate new id and add it there
 							neighbor_id = a_star.get_available_point_id()
-							open[neighbor] = neighbor_id
+							has_id[neighbor] = neighbor_id
 						# add neighbor as point 
 						a_star.add_point(neighbor_id, neighbor)
 						# and connect it to the current cell
