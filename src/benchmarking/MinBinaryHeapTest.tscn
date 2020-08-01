@@ -2,5 +2,5 @@
 
 [ext_resource path="res://src/benchmarking/MinBinaryHeapTest.gd" type="Script" id=1]
 
-[node name="TestNode" type="Node"]
+[node name="MinBinaryHeapTest" type="Node"]
 script = ExtResource( 1 )
