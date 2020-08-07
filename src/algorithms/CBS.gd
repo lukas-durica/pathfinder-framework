@@ -4,3 +4,22 @@ extends Reference
 # Conflict-based search
 class_name CBS
 
+# start position and goals position in the form of starts_and_goals[start] = goal
+var starts_and_goals = {}
+
+var graph : Grid
+
+class CBSNode:
+	var constraints : = []
+	var solution : = [[]]
+	var cost : = INF
+	
+# sum of individual costs (heuristic)
+func get_sic():
+	var sic = 0
+	for start in starts_and_goals:
+		sic += graph.get_manhattan_distance()
+
+	
+	
+	
