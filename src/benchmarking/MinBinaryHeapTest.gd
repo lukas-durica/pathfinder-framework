@@ -39,6 +39,30 @@ func do_benchmark(number_of_elements):
 			" microseconds")
 	print()
 	
-
+	var new_heap_dict = MinBinaryHeapDict.new()
+	time_start = OS.get_ticks_usec()
+	for i in rand_array:
+		new_heap_dict.insert_key({value = i, cell = null})
+	elapsed = OS.get_ticks_usec() - time_start
+	print()
+	print("Number of elements: ", number_of_elements)
+	print()
+	print("===MinBinaryHeapDict===")
+	print("Inserting ", number_of_elements, 
+			" nodes, elapsed time: ", elapsed, " microseconds")
+	print("Inserting ", number_of_elements, 
+			" nodes, average time: ", elapsed / float(number_of_elements), 
+			" microseconds")
+	
+	time_start = OS.get_ticks_usec()
+	while not new_heap_dict.empty():
+		new_heap_dict.extractMin()
+	elapsed = OS.get_ticks_usec() - time_start
+	print("Extracting ", number_of_elements, 
+			" nodes, elapsed time: ", elapsed, " microseconds")
+	print("Extracting ", number_of_elements, 
+			" nodes, average time: ", elapsed / float(number_of_elements), 
+			" microseconds")
+	print()
 	
 	

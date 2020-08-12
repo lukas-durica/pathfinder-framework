@@ -26,7 +26,11 @@ func get_neighbors(vertex : Vector2) -> Array:
 		if is_cell_valid(tile_position) and not is_cell_obstacle(tile_position):
 			neighbors.push_back(tile_position)
 	return neighbors
-	
+
+func get_states(vertex : Vector2) -> Array:
+	var wait = Vector2.ZERO
+	return wait + get_neighbors(vertex)
+
 # manhattan distance between two vertexes
 func get_manhattan_distance(vertex_a : Vector2, vertex_b: Vector2) -> int:
 	return int(abs(vertex_a.x - vertex_b.x) + abs(vertex_a.y - vertex_b.y)) * 10
