@@ -23,7 +23,7 @@ class_name AStarCBS
 # additional_constraints are added during the CBS search in the form of
 # Vector3(x_position, y_position, time_dimension)
 func find_path(start: Vector2, goal : Vector2, 
-		additional_constraints : Dictionary) -> Array:
+		constraints : Dictionary) -> Array:
 	# The key idea for all of these algorithms is that we keep track of an 
 	# expanding cells called the frontier.
 	var frontier = MinBinaryHeap.new()
@@ -57,6 +57,9 @@ func find_path(start: Vector2, goal : Vector2,
 			# horizontal/vertical - 10, diagonal - 14)
 			var new_cost = cost_so_far[current] \
 				+ graph.get_cost(current, neighbor)
+				
+			# development notes: cost bude time, v pripade, ze stoji na mieste
+			# je potrebne pridat cost o 1
 			
 			# Less obviously, we may end up visiting a location multiple times, 
 			# with different costs, so we need to alter the logic a little bit. 

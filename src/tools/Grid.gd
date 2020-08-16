@@ -4,6 +4,10 @@ class_name Grid
 
 enum {NONE = -1, FREE, OBSTACLE, OPEN, CLOSED, PATH}
 
+const CARDINAL_MOVEMENT_COST = 5
+const DIAGONAL_MOVEMENT_COST = 7
+
+
 #eight way directional movement
 var is_8_directional : = false
 
@@ -32,9 +36,13 @@ func get_states(vertex : Vector2) -> Array:
 	return wait + get_neighbors(vertex)
 
 # manhattan distance between two vertexes
-func get_manhattan_distance(vertex_a : Vector2, vertex_b: Vector2) -> int:
-	return int(abs(vertex_a.x - vertex_b.x) + abs(vertex_a.y - vertex_b.y)) * 10
-	
+func get_manhattan_distance(vertex_a : Vector2, vertex_b : Vector2) -> int:
+	return int(abs(vertex_a.x - vertex_b.x) + abs(vertex_a.y - vertex_b.y)) * \
+			CARDINAL_MOVEMENT_COST
+
+
+func get_diagonal_distance(vertex_a : Vector2, vertex_b : Vector2) -> int:
+	return 0
 # whether the cell at given vertex exists
 func is_cell_valid(vertex : Vector2) -> bool:
 	#ternary operator
@@ -55,12 +63,13 @@ func reset():
 			set_cellv(vertex, FREE)
 			
 func get_cost(current, neighbor):
-	var md = get_manhattan_distance(current, neighbor)
-	if md == 10:
-		return 10
-	elif md == 20:
-		return 14
-	else:
-		push_warning("get cost is not valid: md: "+ str(md) + " current " 
-			+ str(current) + " neighbor: " + str(neighbor))
-		
+	if current.x != neighbor.x and current.y != current.y:
+		return CARDINAL_MOVEMENT_COST
+	return DIAGONAL_MOVEMENT_COST
+
+# 0,0!1,0!2,0
+# 0,1!1,1!2,1
+# 0,2!1,2!2,2
+
+
+
