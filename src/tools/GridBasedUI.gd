@@ -6,6 +6,10 @@ class_name GridBasedUI
 # overlap with the grid, just cosmetic treatment
 const GUI_ZOOM_FACTOR : = 1.13
 
+# the pathfindinf algorithm 
+var algorithm : GridBasedAlgorithm
+
+
 # camera is used for moving (pressing mouse wheel) and zooming (
 # scrolling mouse wheel) on the grid
 onready var camera : BasicCamera = $Camera
@@ -21,10 +25,11 @@ onready var start : Sprite = $Start
 # (right mouse button)
 onready var goal : Sprite = $Goal
 
+# reference to user interface 
 onready var user_interface = $UserInterface
 
-# the pathfindinf algorithm 
-var algorithm : GridBasedAlgorithm
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -34,6 +39,7 @@ func _ready():
 	# set algorithm and update menu in gui
 	set_algorithm(Algorithm.A_STAR_CBS, true)
 	
+	$Agent.grid = grid
 	
 	#MapLoader.load_map(grid)
 
@@ -75,14 +81,13 @@ func _unhandled_input(event):
 		
 		# if the cell is free, it can be assigned as start/goal
 		if grid.is_cell_free(cell_pos):
+			var world_pos = grid.to_world_position(cell_pos)
 			if event.button_index == BUTTON_LEFT:
-				# cell position to world/global position and add halfcell size
+				# cell position to world
 				# offset to it
-				start.position = grid.map_to_world(cell_pos) \
-						+ grid.cell_size / 2.0
+				start.position = world_pos
 			elif event.button_index == BUTTON_RIGHT:
-				goal.position = grid.map_to_world(cell_pos) \
-						+ grid.cell_size / 2.0
+				goal.position = world_pos
 	
 	elif event is InputEventMouseMotion:
 		 user_interface.set_coords(grid.to_vertex(get_global_mouse_position()))
@@ -114,6 +119,9 @@ func run():
 		# color the path
 		for vertex in path:
 			grid.set_cellv(vertex, Grid.PATH)
+		
+		# set path to an agent
+		$Agent.path = path
 
 
 

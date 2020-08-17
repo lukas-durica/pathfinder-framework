@@ -12,9 +12,13 @@ const DIAGONAL_MOVEMENT_COST = 7
 var is_8_directional : = true
 
 
-# wold/global position to grid/vertex position
+# wold position to grid/vertex position
 func to_vertex(world_position : Vector2) -> Vector2:
 	return world_to_map(world_position)
+
+# grid/vertex position to world position with halfcell offset
+func to_world_position(vertex : Vector2) ->Vector2:
+	return map_to_world(vertex) + cell_size / 2.0
 
 # get neighbors of a given cell
 func get_neighbors(vertex : Vector2) -> Array:
