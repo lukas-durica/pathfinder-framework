@@ -1,10 +1,10 @@
 extends Node2D
 
-var path = [] setget _set_path
+var path : = [] setget _set_path
 var grid : Grid
 
 func _set_path(value):
-	if path.empty():
+	if value.empty():
 		return
 	path = value
 	update_position()
@@ -19,5 +19,5 @@ func update_position():
 		$Timer.stop()
 		return
 		
-	position = grid.map_to_world(path.front())
+	position = grid.to_world_position(path.front())
 	path.pop_front()

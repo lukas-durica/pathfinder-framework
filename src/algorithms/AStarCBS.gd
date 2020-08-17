@@ -52,8 +52,8 @@ func _find_path(start: Vector2, goal : Vector2,
 		var min_value = frontier.extractMin()
 		
 		var current = min_value.vertex
-		graph.set_cellv(current, Grid.CLOSED)
-		print("current: ", current)
+		#graph.set_cellv(current, Grid.CLOSED)
+		
 		#print("min_value: ", min_value.value)
 		# if the goal is found reconstruct the path, i.e. early exit
 		if current == goal:
@@ -84,7 +84,7 @@ func _find_path(start: Vector2, goal : Vector2,
 				
 				
 				
-				graph.set_cellv(neighbor, Grid.OPEN)
+				#graph.set_cellv(neighbor, Grid.OPEN)
 				cost_so_far[neighbor] = new_cost
 				
 				# The location closest to the goal will be explored first.
@@ -92,11 +92,11 @@ func _find_path(start: Vector2, goal : Vector2,
 						neighbor)
 				var priority = new_cost + heuristic
 				
-				if not is_in_cost_so_far:
-					graph.create_test_label(neighbor, Vector3(new_cost, heuristic, priority))
-				else:
-					graph.update_test_label(neighbor, Vector3(new_cost, heuristic, priority))
-						
+#				if not is_in_cost_so_far:
+#					graph.create_test_label(neighbor, Vector3(new_cost, heuristic, priority))
+#				else:
+#					graph.update_test_label(neighbor, Vector3(new_cost, heuristic, priority))
+#
 				# insert it to the frontier
 				frontier.insert_key({value = priority, vertex = neighbor})
 				
