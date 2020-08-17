@@ -81,7 +81,7 @@ func _find_path(start : Vector2, goal : Vector2) -> Array:
 			
 			# get cost from the start of the current node and add the cost
 			# of the movement between current node and neighbor (e.g. 
-			# horizontal/vertical - 10, diagonal - 14)
+			# cardinal, diagonal)
 			neighbor.g = current_node.g + graph.get_cost(current_node.position, 
 					neighbor_position)
 			

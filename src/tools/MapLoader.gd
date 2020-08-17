@@ -10,7 +10,9 @@ onready var grid = get_node(grid_path)
 export(String, FILE) var map_path
 
 func _ready():
-	load_map()
+	pass
+	#grid.clear()
+	#load_map()
 
 func load_map():
 	grid.clear()

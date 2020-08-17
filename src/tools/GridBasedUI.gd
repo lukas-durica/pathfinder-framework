@@ -21,6 +21,8 @@ onready var start : Sprite = $Start
 # (right mouse button)
 onready var goal : Sprite = $Goal
 
+onready var user_interface = $UserInterface
+
 # the pathfindinf algorithm 
 var algorithm : GridBasedAlgorithm
 
@@ -30,7 +32,8 @@ func _ready():
 	adjust_camera_to_grid()
 	
 	# set algorithm and update menu in gui
-	set_algorithm(Algorithm.A_STAR_GODOT, true)
+	set_algorithm(Algorithm.A_STAR_CBS, true)
+	
 	
 	#MapLoader.load_map(grid)
 
@@ -80,6 +83,9 @@ func _unhandled_input(event):
 			elif event.button_index == BUTTON_RIGHT:
 				goal.position = grid.map_to_world(cell_pos) \
 						+ grid.cell_size / 2.0
+	
+	elif event is InputEventMouseMotion:
+		 user_interface.set_coords(grid.to_vertex(get_global_mouse_position()))
 
 
 func run():
@@ -101,7 +107,8 @@ func run():
 		var path = algorithm.find_path(start_position, goal_position)
 		
 		# print elapsed time
-		print("Elapsed time: ", OS.get_ticks_usec() - time_start)
+		print("Elapsed time: ", OS.get_ticks_usec() - time_start, 
+				" microseconds")
 		print("Path size: ", path.size())
 		
 		# color the path
@@ -128,6 +135,9 @@ func _on_UserInterface_button_pressed(id : int):
 			push_warning("ButtonId is not valid!")
 
 # set algorithm and upstate UserInterface if needed (e.g. at the functio _ready)
+# if the algorithm is set from the code (e.g. at the startup), user interface 
+# need to be updated accordingly update_ui, if the user will change algorithm 
+# using user interface was already changed
 func set_algorithm(algorithm_enum_value : int, update_ui : = false):
 	match algorithm_enum_value:
 		Algorithm.A_STAR_DEFAULT:
@@ -136,9 +146,18 @@ func set_algorithm(algorithm_enum_value : int, update_ui : = false):
 			algorithm = AStarGodot.new()
 		Algorithm.A_STAR_REDBLOB:
 			algorithm = AStarRedBlob.new()
+		Algorithm.A_STAR_CBS:
+			algorithm = AStarCBS.new()
+		
+		_:
+			push_error("Unknow algorithm! Setting default A*")
+			algorithm = AStarDefault.new()
+			
+			
 	
 	if update_ui:
-		$UserInterface.check_item(algorithm_enum_value)
+		$UserInterface.check_algorithm_item(algorithm_enum_value)
+		$UserInterface.update_options(grid.is_8_directional)
 	
 	# initialize algorithm (e.g convert grid to Godot's Astar representation)
 	# look into the AstarGodot.gd for more
@@ -155,4 +174,8 @@ func _on_UserInterface_options_id_pressed(id):
 	if id == 1:
 		grid.is_8_directional = not grid.is_8_directional
 		algorithm.initialize(grid)
-		print(grid.is_8_directional)
+
+
+			
+			
+			

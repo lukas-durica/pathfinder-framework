@@ -9,7 +9,7 @@ const DIAGONAL_MOVEMENT_COST = 7
 
 
 #eight way directional movement
-var is_8_directional : = false
+var is_8_directional : = true
 
 
 # wold/global position to grid/vertex position
@@ -31,22 +31,34 @@ func get_neighbors(vertex : Vector2) -> Array:
 			neighbors.push_back(tile_position)
 	return neighbors
 
+#will include wait action
 func get_states(vertex : Vector2) -> Array:
-	var wait = Vector2.ZERO
+	var wait = [Vector2.ZERO]
 	return wait + get_neighbors(vertex)
+
+func get_heuristic_distance(vertex_a : Vector2, vertex_b : Vector2) -> int:
+	if is_8_directional:
+		return get_diagonal_distance(vertex_a, vertex_b)
+	return get_manhattan_distance(vertex_a, vertex_b)
 
 # manhattan distance between two vertexes
 func get_manhattan_distance(vertex_a : Vector2, vertex_b : Vector2) -> int:
 	return int(abs(vertex_a.x - vertex_b.x) + abs(vertex_a.y - vertex_b.y)) * \
 			CARDINAL_MOVEMENT_COST
 
-
+# diagonal distance between two vertexes
 func get_diagonal_distance(vertex_a : Vector2, vertex_b : Vector2) -> int:
-	return 0
+	var dx = abs(vertex_a.x - vertex_b.x)
+	var dy = abs(vertex_a.y - vertex_b.y)
+	return CARDINAL_MOVEMENT_COST * int(abs(dx-dy)) + \
+			DIAGONAL_MOVEMENT_COST * int(min(dx,dy))
+	
+
+
 # whether the cell at given vertex exists
 func is_cell_valid(vertex : Vector2) -> bool:
 	#ternary operator
-	return true if get_cellv(vertex) != -1 else false
+	return get_cellv(vertex) != NONE 
 
 # whether the cell at given vertex is free
 func is_cell_free(vertex : Vector2) -> bool:
@@ -56,6 +68,8 @@ func is_cell_free(vertex : Vector2) -> bool:
 func is_cell_obstacle(vertex : Vector2) -> bool:
 	return get_cellv(vertex) == OBSTACLE
 
+
+
 # set all vertexes to FREE except OBSTACLE type
 func reset():
 	for vertex in get_used_cells():
@@ -63,13 +77,23 @@ func reset():
 			set_cellv(vertex, FREE)
 			
 func get_cost(current, neighbor):
-	if current.x != neighbor.x and current.y != current.y:
+	if current.x == neighbor.x or current.y == neighbor.y:
 		return CARDINAL_MOVEMENT_COST
-	return DIAGONAL_MOVEMENT_COST
+	return  DIAGONAL_MOVEMENT_COST
 
 # 0,0!1,0!2,0
 # 0,1!1,1!2,1
 # 0,2!1,2!2,2
 
+
+func create_test_label(vertex : Vector2, a_star_values : Vector3):
+	var label = preload("res://src/ui/TestLabel.tscn").instance()
+	label.rect_position = map_to_world(vertex)
+	label.set_a_star_values(a_star_values)
+	label.set_name(str(vertex))
+	add_child(label)
+			
+func update_test_label(vertex : Vector2, a_star_values : Vector3):
+	get_node(str(vertex)).set_a_star_values(a_star_values)
 
 

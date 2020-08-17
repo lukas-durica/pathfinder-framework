@@ -10,6 +10,7 @@ signal options_id_pressed(id)
 
 onready var algorithms = $UIRoot/Algorithms
 onready var options = $UIRoot/Options
+onready var coords_label = $UIRoot/HBoxContainer/Coords
 
 func _ready():
 	#User Interface is invisible due to work with the grid in the editor
@@ -22,6 +23,8 @@ func _ready():
 			Algorithm.A_STAR_DEFAULT)
 	algorithms.add_radio_check_item(Algorithm.to_str(Algorithm.A_STAR_REDBLOB),
 			Algorithm.A_STAR_REDBLOB)
+	algorithms.add_radio_check_item(Algorithm.to_str(Algorithm.A_STAR_CBS),
+			Algorithm.A_STAR_CBS)
 	
 	options.add_check_item("8 directional", 1)
 
@@ -41,7 +44,8 @@ func _on_PreviousStep_pressed():
 func _on_NextStep_pressed():
 	emit_signal("button_pressed", NEXT_STEP)
 
-
+func set_coords(vertex : Vector2):
+	coords_label.text = str(vertex)
 
 
 func _on_Options_pressed():
@@ -51,7 +55,7 @@ func _on_Options_pressed():
 func _on_Algorithm_pressed():
 	algorithms.popup()
 
-func check_item(index : int):
+func check_algorithm_item(index : int):
 	for idx in algorithms.get_item_count():
 		algorithms.set_item_checked(idx, false)
 		
@@ -59,9 +63,12 @@ func check_item(index : int):
 
 func _on_Algorithms_id_pressed(id):
 	var index = algorithms.get_item_index(id)
-	check_item(index)
+	check_algorithm_item(index)
 	emit_signal("algorithms_id_pressed", id)
 
+
+func update_options(is_8_direction):
+	options.set_item_checked(0, is_8_direction)
 
 func _on_Options_id_pressed(id):
 	var index = options.get_item_index(id)

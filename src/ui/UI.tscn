@@ -1,19 +1,22 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://data/textures/buttons/toolboard_thin.png" type="Texture" id=1]
 [ext_resource path="res://data/textures/buttons/play.png" type="Texture" id=2]
 [ext_resource path="res://data/textures/buttons/play_glow.png" type="Texture" id=3]
+[ext_resource path="res://data/fonts/Montserrat-Bold.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://src/ui/UI.gd" type="Script" id=12]
 [ext_resource path="res://data/textures/buttons/menu.png" type="Texture" id=13]
 [ext_resource path="res://data/textures/buttons/menu_glow.png" type="Texture" id=14]
 [ext_resource path="res://data/textures/buttons/algorithm_glow.png" type="Texture" id=15]
 [ext_resource path="res://data/textures/buttons/algorithm.png" type="Texture" id=16]
 
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 4 )
+
 [node name="UserInterface" type="CanvasLayer"]
 script = ExtResource( 12 )
 
 [node name="UIRoot" type="Control" parent="."]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -1280.0
@@ -69,6 +72,13 @@ rect_min_size = Vector2( 64, 64 )
 texture_normal = ExtResource( 13 )
 texture_pressed = ExtResource( 14 )
 expand = true
+
+[node name="Coords" type="Label" parent="UIRoot/HBoxContainer"]
+margin_left = 204.0
+margin_top = 21.0
+margin_right = 204.0
+margin_bottom = 42.0
+custom_fonts/font = SubResource( 1 )
 
 [node name="Algorithms" type="PopupMenu" parent="UIRoot"]
 margin_left = 85.0

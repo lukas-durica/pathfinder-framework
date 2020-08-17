@@ -2,7 +2,7 @@ extends Reference
 
 class_name Algorithm
 
-enum {A_STAR_GODOT, A_STAR_DEFAULT, A_STAR_REDBLOB}
+enum {A_STAR_GODOT, A_STAR_DEFAULT, A_STAR_REDBLOB, A_STAR_CBS}
 
 static func to_str(algorithm_id : int) -> String:
 	match algorithm_id:
@@ -12,6 +12,8 @@ static func to_str(algorithm_id : int) -> String:
 			return "A* Default"
 		A_STAR_REDBLOB:
 			return "A* RedBlob"
+		A_STAR_CBS:
+			return "A* CBS"
 		_:
 			push_warning("Unknown Algorithm ID!")
 			return ""
