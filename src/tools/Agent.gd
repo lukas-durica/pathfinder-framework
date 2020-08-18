@@ -18,6 +18,7 @@ func update_position():
 	if path.empty():
 		$Timer.stop()
 		return
-		
-	position = grid.to_world_position(path.front())
+	
+	#vertex position of the agent to world position
+	position = grid.to_world(path.front())
 	path.pop_front()

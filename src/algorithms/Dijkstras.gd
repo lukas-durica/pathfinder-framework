@@ -8,7 +8,7 @@ costs to avoid forests, higher costs to discourage going near enemies, and more.
 """
 
 
-extends Reference
+extends SigleAgentGridBasedAlgorithm
 
 
 

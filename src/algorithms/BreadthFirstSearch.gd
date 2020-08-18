@@ -1,4 +1,4 @@
-extends GridBasedAlgorithm
+extends SigleAgentGridBasedAlgorithm
 """
 Breadth First Search explores equally in all directions. This is an incredibly 
 useful algorithm, not only for regular path finding, but also for procedural map

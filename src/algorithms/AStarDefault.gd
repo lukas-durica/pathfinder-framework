@@ -9,7 +9,7 @@ veral locations. It prioritizes paths
 that seem to be leading closer to a goal.
 """
 
-extends GridBasedAlgorithm
+extends SigleAgentGridBasedAlgorithm
 
 
 class_name AStarDefault

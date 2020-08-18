@@ -9,7 +9,7 @@ const DIAGONAL_MOVEMENT_COST = 7
 
 
 #eight way directional movement
-var is_8_directional : = true
+var is_8_directional : = false
 
 
 # wold position to grid/vertex position
@@ -17,7 +17,7 @@ func to_vertex(world_position : Vector2) -> Vector2:
 	return world_to_map(world_position)
 
 # grid/vertex position to world position with halfcell offset
-func to_world_position(vertex : Vector2) ->Vector2:
+func to_world(vertex : Vector2) ->Vector2:
 	return map_to_world(vertex) + cell_size / 2.0
 
 # get neighbors of a given cell
@@ -37,8 +37,9 @@ func get_neighbors(vertex : Vector2) -> Array:
 
 #will include wait action
 func get_states(vertex : Vector2) -> Array:
-	var wait = [Vector2.ZERO]
-	return wait + get_neighbors(vertex)
+	#wait action at the same vertex
+	#treat it as the array so we can merge them
+	return [vertex] + get_neighbors(vertex)
 
 func get_heuristic_distance(vertex_a : Vector2, vertex_b : Vector2) -> int:
 	if is_8_directional:
@@ -56,8 +57,6 @@ func get_diagonal_distance(vertex_a : Vector2, vertex_b : Vector2) -> int:
 	var dy = abs(vertex_a.y - vertex_b.y)
 	return CARDINAL_MOVEMENT_COST * int(abs(dx-dy)) + \
 			DIAGONAL_MOVEMENT_COST * int(min(dx,dy))
-	
-
 
 # whether the cell at given vertex exists
 func is_cell_valid(vertex : Vector2) -> bool:

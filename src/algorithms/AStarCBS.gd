@@ -1,4 +1,4 @@
-extends GridBasedAlgorithm
+extends SigleAgentGridBasedAlgorithm
 
 #impelmentation similar to AstarRedBlob
 #var graph
@@ -27,8 +27,7 @@ class_name AStarCBS
 
 # constraints are added during the CBS search in the form of
 # Vector3(x_position, y_position, time_dimension)
-func _find_path(start: Vector2, goal : Vector2, 
-		constraints : = {}) -> Array:
+func _find_path(start: Vector2, goal : Vector2, constraints : = {}) -> Array:
 	# The key idea for all of these algorithms is that we keep track of an 
 	# expanding cells called the frontier.
 	var frontier = MinBinaryHeap.new()
@@ -45,8 +44,8 @@ func _find_path(start: Vector2, goal : Vector2,
 	# add start position to came_from and add 0 as total movemenbt cost
 	came_from[start] = null
 	cost_so_far[start] = 0
-
 	
+	var time : = 0
 	while not frontier.empty():
 		#Pick and remove a cell from the frontier.
 		var min_value = frontier.extractMin()
@@ -59,51 +58,49 @@ func _find_path(start: Vector2, goal : Vector2,
 		if current == goal:
 			return reconstruct_path(goal, came_from)
 		#Expand it by looking at its neighbors
-		for neighbor in graph.get_neighbors(current):
+		for state in graph.get_states(current):
+			var vertex_in_time = Vector3(state.x, state.y, time + 1)
+			if vertex_in_time in constraints:
+				continue
+			
 			
 			# get cost from the start of the current node and add the cost
 			# of the movement between current node and neighbor (i.e.
 			# cardinal movement, diagonal movement)
 			var new_cost = cost_so_far[current] \
-				+ graph.get_cost(current, neighbor)
-			
-			
-			
-			
+				+ graph.get_cost(current, state)
 				
-			# development notes: cost bude time, v pripade, ze stoji na mieste
-			# je potrebne pridat cost o 1
-			
+
 			# Less obviously, we may end up visiting a location multiple times, 
 			# with different costs, so we need to alter the logic a little bit. 
 			# Instead of adding a location to the frontier if the location has 
 			# never been reached, we’ll add it if the new path to the location 
 			# is better than the best previous path.
-			var is_in_cost_so_far = neighbor in cost_so_far
-			if not is_in_cost_so_far or new_cost < cost_so_far[neighbor]:
-				
+			
+			if not state in cost_so_far or new_cost < cost_so_far[state]:
+			#var is_in_cost_so_far = state in cost_so_far	
 				
 				
 				#graph.set_cellv(neighbor, Grid.OPEN)
-				cost_so_far[neighbor] = new_cost
+				cost_so_far[state] = new_cost
 				
 				# The location closest to the goal will be explored first.
 				var heuristic = graph.get_heuristic_distance(goal, 
-						neighbor)
+						state)
 				var priority = new_cost + heuristic
 				
 #				if not is_in_cost_so_far:
-#					graph.create_test_label(neighbor, Vector3(new_cost, heuristic, priority))
+#					graph.create_test_label(state, Vector3(new_cost, heuristic, priority))
 #				else:
-#					graph.update_test_label(neighbor, Vector3(new_cost, heuristic, priority))
+#					graph.update_test_label(state, Vector3(new_cost, heuristic, priority))
 #
 				# insert it to the frontier
-				frontier.insert_key({value = priority, vertex = neighbor})
+				frontier.insert_key({value = priority, vertex = state})
 				
 				# add current as place where we came from to neighbor
-				came_from[neighbor] = current
+				came_from[state] = current
 				
-		
+		time += 1
 	return Array()
 
 func reconstruct_path(goal : Vector2, came_from : Dictionary) -> Array:

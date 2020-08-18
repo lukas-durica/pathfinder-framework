@@ -24,3 +24,9 @@
 #Steven van Dijk suggests that a more straightforward way to do this 
 #would to pass h to the comparison function. When the f values 
 #are equal, the comparison function would break the tie by looking at h.
+
+
+
+#ak sa agent nachadza na tom istom mieste vysledny chodnik bude 0
+# treba otestovat, ci start != goal
+#otestovat algoritmy ak sa path nenajde ziadny

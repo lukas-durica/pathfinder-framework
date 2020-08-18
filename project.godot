@@ -9,22 +9,22 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "GridBasedAlgorithm",
+"base": "SigleAgentGridBasedAlgorithm",
 "class": "AStarCBS",
 "language": "GDScript",
 "path": "res://src/algorithms/AStarCBS.gd"
 }, {
-"base": "GridBasedAlgorithm",
+"base": "SigleAgentGridBasedAlgorithm",
 "class": "AStarDefault",
 "language": "GDScript",
 "path": "res://src/algorithms/AStarDefault.gd"
 }, {
-"base": "GridBasedAlgorithm",
+"base": "SigleAgentGridBasedAlgorithm",
 "class": "AStarGodot",
 "language": "GDScript",
 "path": "res://src/algorithms/AstarGodot.gd"
 }, {
-"base": "GridBasedAlgorithm",
+"base": "SigleAgentGridBasedAlgorithm",
 "class": "AStarRedBlob",
 "language": "GDScript",
 "path": "res://src/algorithms/AStarRedBlob.gd"
@@ -39,12 +39,12 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/tools/Camera.gd"
 }, {
-"base": "Reference",
+"base": "SigleAgentGridBasedAlgorithm",
 "class": "BestFirstSearch",
 "language": "GDScript",
 "path": "res://src/algorithms/BestFirstSearch.gd"
 }, {
-"base": "GridBasedAlgorithm",
+"base": "SigleAgentGridBasedAlgorithm",
 "class": "BreadthFirstSearch",
 "language": "GDScript",
 "path": "res://src/algorithms/BreadthFirstSearch.gd"
@@ -63,11 +63,6 @@ _global_script_classes=[ {
 "class": "Grid",
 "language": "GDScript",
 "path": "res://src/tools/Grid.gd"
-}, {
-"base": "Reference",
-"class": "GridBasedAlgorithm",
-"language": "GDScript",
-"path": "res://src/algorithms/GridBasedAlgorithm.gd"
 }, {
 "base": "Node2D",
 "class": "GridBasedUI",
@@ -89,6 +84,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/data_strunctures/MinBinaryHeapDict.gd"
 }, {
+"base": "Reference",
+"class": "SigleAgentGridBasedAlgorithm",
+"language": "GDScript",
+"path": "res://src/algorithms/SingleAgentGridBasedAlgorithm.gd"
+}, {
 "base": "CanvasLayer",
 "class": "UserInteraface",
 "language": "GDScript",
@@ -106,11 +106,11 @@ _global_script_class_icons={
 "BreadthFirstSearchDebug": "",
 "CBS": "",
 "Grid": "",
-"GridBasedAlgorithm": "",
 "GridBasedUI": "",
 "MapLoader": "",
 "MinBinaryHeap": "",
 "MinBinaryHeapDict": "",
+"SigleAgentGridBasedAlgorithm": "",
 "UserInteraface": ""
 }
 

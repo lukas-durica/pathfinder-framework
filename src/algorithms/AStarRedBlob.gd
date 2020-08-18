@@ -1,4 +1,4 @@
-extends GridBasedAlgorithm
+extends SigleAgentGridBasedAlgorithm
 """
 Check for more at:
 www.redblobgames.com/pathfinding/a-star/introduction.html#astar

@@ -1,6 +1,6 @@
 extends Reference
 
-class_name GridBasedAlgorithm
+class_name SigleAgentGridBasedAlgorithm
 
 var graph
 

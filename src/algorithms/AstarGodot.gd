@@ -3,7 +3,7 @@ This algortihm uses Godot's Astar. It converts the grid to Godot's Astar
 representation.
 """
 
-extends GridBasedAlgorithm
+extends SigleAgentGridBasedAlgorithm
 
 class_name AStarGodot
 

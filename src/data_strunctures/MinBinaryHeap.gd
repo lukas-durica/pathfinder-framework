@@ -18,7 +18,7 @@ must be recursively true for all nodes in Binary Tree. This is known as the heap
 (order) property. Max Binary Heap is similar to MinHeap.
 
 # usage create pair of value/priority and :
-# insert_key({value = 8, vertex = start})
+# insert_key({value = 8, node = start})
 
 For more information check:
 https://www.geeksforgeeks.org/binary-heap/
@@ -101,7 +101,7 @@ func decreaseKey(_i : int, _new_val : int):
 #tree. IF new key is greater than its parent, then we don’t need to do 
 #anything. Otherwise, we need to traverse up to fix the violated heap property.
 #Insert anonymous structure e.g.: 
-	# insert_key({value = 8, vertex = start})
+	# insert_key({value = 8, node = start})
 func insert_key(k):
 	#First insert the new key at the end 
 	heap_array.push_back(k)

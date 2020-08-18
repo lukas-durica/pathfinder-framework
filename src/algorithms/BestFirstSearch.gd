@@ -1,4 +1,4 @@
-extends Reference
+extends SigleAgentGridBasedAlgorithm
 
 class_name BestFirstSearch
 
