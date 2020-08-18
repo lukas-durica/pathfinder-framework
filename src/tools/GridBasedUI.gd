@@ -48,8 +48,6 @@ func _ready():
 	# set algorithm and update menu in gui
 	set_algorithm(Algorithm.A_STAR_CBS, true)
 	
-	$Agent.grid = grid
-	
 	#MapLoader.load_map(grid)
 
 func adjust_camera_to_grid():
@@ -96,7 +94,7 @@ func _unhandled_input(event):
 					# continue only if there are no already starts or goals at 
 					# this vertex
 					if not is_start_or_goal(cell_pos):
-						last_start = grid.to_world(cell_pos)
+						last_start = cell_pos
 						lmb_down = true
 					
 					
@@ -124,9 +122,11 @@ func _unhandled_input(event):
 			
 	
 	elif event is InputEventMouseMotion:
-		user_interface.set_coords(grid.to_vertex(get_global_mouse_position()))
+		var mouse_vertex_position = grid.to_vertex(get_global_mouse_position())
+		user_interface.set_coords(mouse_vertex_position)
 		if lmb_down:
-			
+			line_end = mouse_vertex_position
+			update()
 
 func _process(delta):
 	if lmb_down:
@@ -135,7 +135,12 @@ func _process(delta):
 
 
 func _draw():
-	draw_line(last_start, 
+	if lmb_down:
+		draw_line(grid.to_world(last_start), grid.to_world(line_end), ColorN("greenyellow"), 
+				5.0)
+	for start in starts_and_goals:
+		 draw_line(grid.to_world(start), grid.to_world(starts_and_goals[start]),
+				ColorN("greenyellow"), 5.0)
 
 func is_start_or_goal(vertex):
 	if not vertex in starts_and_goals:
