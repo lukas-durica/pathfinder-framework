@@ -35,6 +35,7 @@ func _initialize(graph):
 	
 	
 func _find_solution(starts_and_goals : Array):
+	open.clear()
 	for i in starts_and_goals.size():
 		var start = starts_and_goals[i].start
 		var goal = starts_and_goals[i].goal
@@ -130,5 +131,5 @@ static func get_sic(solution : Array):
 	return sic
 
 	
-	
+
 	

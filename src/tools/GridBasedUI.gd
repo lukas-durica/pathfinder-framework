@@ -250,6 +250,7 @@ func set_algorithm(algorithm_enum_value : int, update_ui : = false):
 	
 	if update_ui:
 		$UserInterface.check_algorithm_item(algorithm_enum_value)
+		print("grid.is_8_directional: ", grid.is_8_directional)
 		$UserInterface.update_options(grid.is_8_directional)
 	
 	# initialize algorithm (e.g convert grid to Godot's Astar representation)
@@ -266,6 +267,7 @@ func _on_UserInterface_options_id_pressed(id):
 	print(id)
 	if id == 1:
 		grid.is_8_directional = not grid.is_8_directional
+		print("settings vhanged")
 		algorithm.initialize(grid)
 
 

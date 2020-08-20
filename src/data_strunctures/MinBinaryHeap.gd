@@ -144,3 +144,6 @@ func empty():
 
 func size():
 	return heap_array.size()
+	
+func clear():
+	heap_array.clear()
