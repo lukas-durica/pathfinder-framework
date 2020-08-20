@@ -9,7 +9,7 @@ veral locations. It prioritizes paths
 that seem to be leading closer to a goal.
 """
 
-extends SigleAgentGridBasedAlgorithm
+extends GridBasedAlgorithm
 
 
 class_name AStarDefault
@@ -24,12 +24,12 @@ class AStarNode:
 func _initialize(graph):
 	pass
 
-func _find_path(start : Vector2, goal : Vector2) -> Array:
+func _find_path(starts_and_goals : Array) -> Array:
 	# create AstarNode and set position to it
 	var start_node = AStarNode.new()
-	start_node.position = start
+	start_node.position = starts_and_goals[0].start
 	var goal_node = AStarNode.new()
-	goal_node.position = goal
+	goal_node.position = starts_and_goals[0].goal
 	#  consists of nodes that have been visited but not expanded (meaning that 
 	# sucessors have not been explored yet). This is the list of pending tasks.
 	var open_list = []
@@ -88,7 +88,8 @@ func _find_path(start : Vector2, goal : Vector2) -> Array:
 			# compute manhattan distance for a given neighbor to goal, more info
 			# www.redblobgames.com/pathfinding/a-star/introduction.html#greedy-best-first
 			# The location closest to the goal will be explored first.
-			neighbor.h = graph.get_manhattan_distance(neighbor.position, goal)
+			neighbor.h = graph.get_manhattan_distance(neighbor.position, 
+					goal_node.position)
 			
 			# the sum of the cost from the beginning to neighbor and estimated
 			# cost to the goal is the cost of the current node

@@ -3,7 +3,7 @@ This algortihm uses Godot's Astar. It converts the grid to Godot's Astar
 representation.
 """
 
-extends SigleAgentGridBasedAlgorithm
+extends GridBasedAlgorithm
 
 class_name AStarGodot
 
@@ -54,7 +54,7 @@ func _initialize(graph):
 						# and connect it to the current cell
 						a_star.connect_points(cell_id, neighbor_id)
 	
-func _find_path(start : Vector2, goal : Vector2):
-	var start_id = a_star.get_closest_point(start)
-	var goal_id = a_star.get_closest_point(goal)
+func _find_path(starts_and_goals : Array):
+	var start_id = a_star.get_closest_point(starts_and_goals[0].start)
+	var goal_id = a_star.get_closest_point(starts_and_goals[0].goal)
 	return a_star.get_point_path(start_id, goal_id)

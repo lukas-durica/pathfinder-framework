@@ -1,4 +1,4 @@
-extends Reference
+extends GridBasedAlgorithm
 
 
 # Conflict-based search
@@ -8,8 +8,6 @@ class_name CBS
 var agents = []
 
 var astar = AStarCBS.new()
-
-var graph : Grid
 
 var open = MinBinaryHeap.new()
 
@@ -32,23 +30,20 @@ class CBSConstraint:
 # edge conflict is tuple (ai, aj, v1, v2, t) 
 
 #start_and_goal
-func initialize(graph, starts_and_goals : Dictionary):
-	self.graph = graph
+func _initialize(graph):
 	astar.graph = graph
-	self.starts_and_goals = starts_and_goals
 	
-	var id : = 0
-	for start in starts_and_goals:
-		var goal = starts_and_goals[start]
+	for i in starts_and_goals:
+		var start = starts_and_goals[i].start
+		var goal = starts_and_goals[i].goal
 		var agent = CBSAgent.new()
-		agent.id = 0
+		agent.id = i
 		agent.start_position = start
 		agent.goal_position = goal
 		agents.push_back(agent)
-		id += 1
+
+func _find_solution(starts_and_goals : Array):
 	
-	
-func find_goal_solution():
 	
 	var root = CBSNode.new()
 	root.solution = get_root_solution()

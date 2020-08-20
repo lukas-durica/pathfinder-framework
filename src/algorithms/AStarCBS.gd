@@ -1,4 +1,4 @@
-extends SigleAgentGridBasedAlgorithm
+extends GridBasedAlgorithm
 
 #impelmentation similar to AstarRedBlob
 #var graph
@@ -27,10 +27,15 @@ class_name AStarCBS
 
 # constraints are added during the CBS search in the form of
 # Vector3(x_position, y_position, time_dimension)
-func _find_path(start: Vector2, goal : Vector2, constraints : = {}) -> Array:
+func _find_path(starts_and_goals : Array, constraints : = {}) -> Array:
+	
+	var start = starts_and_goals[0].start
+	var goal = starts_and_goals[0].goal
+	
 	# The key idea for all of these algorithms is that we keep track of an 
 	# expanding cells called the frontier.
 	var frontier = MinBinaryHeap.new()
+	
 	frontier.insert_key({value = 0, vertex = start})
 	
 	# came_from for each location points to the place where we came from. These 

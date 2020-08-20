@@ -1,4 +1,4 @@
-extends SigleAgentGridBasedAlgorithm
+extends GridBasedAlgorithm
 """
 Check for more at:
 www.redblobgames.com/pathfinding/a-star/introduction.html#astar
@@ -32,9 +32,12 @@ www.redblobgames.com/pathfinding/a-star/implementation.html#algorithm
 
 class_name AStarRedBlob
 
-func _find_path(start: Vector2, goal : Vector2) -> Array:
+func _find_path(starts_and_goals : Array) -> Array:
 	# The key idea for all of these algorithms is that we keep track of an 
 	# expanding cells called the frontier.
+	var start = starts_and_goals[0].start
+	var goal = starts_and_goals[0].goal
+	
 	var frontier = MinBinaryHeap.new()
 	frontier.insert_key({value = 0, vertex = start})
 	

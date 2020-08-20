@@ -1,4 +1,4 @@
-extends SigleAgentGridBasedAlgorithm
+extends GridBasedAlgorithm
 """
 Breadth First Search explores equally in all directions. This is an incredibly 
 useful algorithm, not only for regular path finding, but also for procedural map
@@ -13,7 +13,11 @@ class_name BreadthFirstSearch
 func _initialize(graph):
 	pass
 
-func _find_path(start : Vector2, goal : Vector2) -> Array:
+func _find_path(starts_and_goals : Array) -> Array:
+	var start = starts_and_goals[0].start
+	var goal = starts_and_goals[0].goal
+	
+	
 	#add start to the open list, as this will be first vertex to expand by 
 	#looking at its neighbors
 	# open is a data structure for neighbors that have not yet been visited
