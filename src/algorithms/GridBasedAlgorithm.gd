@@ -3,18 +3,19 @@ extends Reference
 class_name GridBasedAlgorithm
 
 var graph
-var starts_and_goals : Array
 
-func initialize():
-	_initialize()
+#in this time starts and goals are not known
+func initialize(graph_tmp):
+	graph = graph_tmp
+	_initialize(graph)
 
-func find_path(starts_and_goals : Array) -> Array:
-	return _find_path(starts_and_goals)
+func find_solution(starts_and_goals : Array) -> Array:
+	return _find_solution(starts_and_goals)
 
 # virtual functions
-func _initialize():
+func _initialize(graph_tmp):
 	pass
 
 # virtual functions
-func _find_path(starts_and_goals : Array):
+func _find_solution(starts_and_goals : Array):
 	pass

@@ -20,12 +20,11 @@ func to_vertex(world_position : Vector2) -> Vector2:
 func to_world(vertex : Vector2) ->Vector2:
 	return map_to_world(vertex) + cell_size / 2.0
 
-# get neighbors of a given cell
+# get neighbors of a given cell for single agent pathfinding
 func get_neighbors(vertex : Vector2) -> Array:
-	var directions = [Vector2.LEFT, Vector2.UP, Vector2.RIGHT, Vector2.DOWN]
+	var directions = get_cardinal_directions()
 	if is_8_directional:
-		directions += [Vector2.LEFT + Vector2.UP, Vector2.UP + Vector2.RIGHT, 
-				Vector2.RIGHT + Vector2.DOWN, Vector2.DOWN + Vector2.LEFT]
+		directions += get_diagonal_directions()
 	var neighbors = []
 	
 	for direction in directions:
@@ -35,11 +34,39 @@ func get_neighbors(vertex : Vector2) -> Array:
 			neighbors.push_back(tile_position)
 	return neighbors
 
-#will include wait action
-func get_states(vertex : Vector2) -> Array:
+#get states for multiagent path finding
+func get_states(vertex : Vector3) -> Array:
+	var states = get_valid_directions(vertex, get_cardinal_directions(), 
+			CARDINAL_MOVEMENT_COST)
+	if is_8_directional:
+		states += get_valid_directions(vertex, get_diagonal_directions(), 
+				DIAGONAL_MOVEMENT_COST)
+	
 	#wait action at the same vertex
 	#treat it as the array so we can merge them
-	return [vertex] + get_neighbors(vertex)
+	vertex.z += CARDINAL_MOVEMENT_COST
+	states.push_back(vertex)
+	return states
+	
+	
+func get_valid_directions(vertex: Vector3, directions : Array, cost : int):
+	var valid_directions = []
+	for direction in directions:
+		var tile_position = Vector3(vertex.x + direction.x, 
+				vertex.y + direction.y, vertex.z + cost)
+	
+		if is_cell_valid(Vector2(tile_position.x, tile_position.y)) \
+				and not is_cell_obstacle(Vector2(tile_position.x, 
+				tile_position.y)):
+			valid_directions.push_back(tile_position)
+	return valid_directions
+
+func get_cardinal_directions() -> Array:
+	return [Vector2.LEFT, Vector2.UP, Vector2.RIGHT, Vector2.DOWN]
+
+func get_diagonal_directions() -> Array:
+	return [Vector2.LEFT + Vector2.UP, Vector2.UP + Vector2.RIGHT, 
+			Vector2.RIGHT + Vector2.DOWN, Vector2.DOWN + Vector2.LEFT]
 
 func get_heuristic_distance(vertex_a : Vector2, vertex_b : Vector2) -> int:
 	if is_8_directional:

@@ -11,7 +11,7 @@ const GOAL_SCENE = preload("res://src/tools/Goal.tscn")
 const AGENT_SCENE = preload("res://src/tools/Agent.tscn")
 
 # the pathfinding algorithm 
-var algorithm
+var algorithm : GridBasedAlgorithm
 
 # array that holds anonymous  start position and goal position of the agent(s)
 # and references to their visible counterparts (i.e. sprites)
@@ -35,15 +35,26 @@ onready var grid : Grid = $Grid
 # reference to user interface 
 onready var user_interface = $UserInterface
 
+# for setting from the editor
+# x -> start.x
+# y -> start.y
+# z -> goal.x
+# w -> goal.y
+export(Array, Quat) var editor_starts_goals 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	#adjusting the camera zoom to the size of the grid
 	adjust_camera_to_grid()
 	
 	# set algorithm and update menu in gui
-	set_algorithm(Algorithm.A_STAR_CBS, true)
+	set_algorithm(Algorithm.CONFLICT_BASED_SEARCH, true)
+	
+	for sg in editor_starts_goals:
+		add_start_and_goal(Vector2(sg.x, sg.y), Vector2(sg.z, sg.w))
 	
 	#MapLoader.load_map(grid)
+	
 
 func adjust_camera_to_grid():
 	
@@ -89,15 +100,7 @@ func _unhandled_input(event):
 						if line_start == Vector2.INF:
 							line_start = clicked_vertex
 						elif line_start != clicked_vertex:
-							var start = START_SCENE.instance()
-							var goal = GOAL_SCENE.instance()
-							start.position = grid.to_world(line_start)
-							goal.position = grid.to_world(clicked_vertex)
-							add_child(start)
-							add_child(goal)
-							starts_and_goals.push_back({start = line_start,
-									goal = clicked_vertex, start_sprite = start,
-									goal_sprite = goal})
+							add_start_and_goal(line_start, clicked_vertex)
 							line_start = Vector2.INF
 							line_end = Vector2.INF
 							update()
@@ -118,8 +121,6 @@ func _unhandled_input(event):
 			line_end = get_mouse_vertex()
 			update()
 
-
-
 func _draw():
 	if line_start != Vector2.INF:
 		draw_line(grid.to_world(line_start), grid.to_world(line_end), 
@@ -129,8 +130,15 @@ func _draw():
 				ColorN("greenyellow"), 5.0)
 
 
-func add_start_and_goal_position():
-	pass
+func add_start_and_goal(start_vertex : Vector2, goal_vertex : Vector2):
+	var start_scene = START_SCENE.instance()
+	var goal_scene = GOAL_SCENE.instance()
+	start_scene.position = grid.to_world(start_vertex)
+	goal_scene.position = grid.to_world(goal_vertex)
+	add_child(start_scene)
+	add_child(goal_scene)
+	starts_and_goals.push_back({start = start_vertex, goal = goal_vertex, 
+			start_sprite = start_scene, goal_sprite = goal_scene})
 
 # returns opposite index of and item in the starts_and_goal
 # if item doesnt exists it returns -1
@@ -152,7 +160,7 @@ func run():
 	# start measuring time
 	var time_start = OS.get_ticks_usec()
 	
-	var paths : = []
+	
 	
 	if starts_and_goals.empty():
 		push_error("There are no starts and goals!")
@@ -163,25 +171,39 @@ func run():
 	
 	# find the path
 	
-	paths.push_back(algorithm.find_path(starts_and_goals))
+	var paths = algorithm.find_solution(starts_and_goals)
 		
-		
-	
-	
-	 
-	
 	# print elapsed time
-	print("Elapsed time: ", OS.get_ticks_usec() - time_start, 
-			" microseconds")
-	#print("Path size: ", path.size())
-		
-	# color the path
-	for path in paths:
-		for vertex in path:
-			grid.set_cellv(vertex, Grid.PATH)
+	print("Elapsed time: ", OS.get_ticks_usec() - time_start, " microseconds")
+
 	
-	for path in paths:
-		var agent = AGENT_SCENE.instance()
+	if not paths.empty():
+		# if there is only one path from single agent algorithm
+		if paths[0] is Vector2:
+			
+			for vertex in paths:
+				grid.set_cellv(vertex, Grid.PATH)
+			add_agent(paths)
+			
+		# if there are multiple paths from multi agent algorithm
+		elif paths[0] is Array:
+			for path in paths:
+				for vertex in path:
+					grid.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
+				add_agent(path)
+	# color the path
+	
+		
+func add_agent(path):
+	var agent = AGENT_SCENE.instance()
+	add_child(agent)
+	agent.grid = grid
+	agent.path = path
+	
+	
+	
+		
+		
 		
 # returns global mouse position converted to grid/vertex position
 func get_mouse_vertex():
@@ -218,7 +240,8 @@ func set_algorithm(algorithm_enum_value : int, update_ui : = false):
 			algorithm = AStarRedBlob.new()
 		Algorithm.A_STAR_CBS:
 			algorithm = AStarCBS.new()
-		
+		Algorithm.CONFLICT_BASED_SEARCH:
+			algorithm = CBS.new()
 		_:
 			push_error("Unknow algorithm! Setting default A*")
 			algorithm = AStarDefault.new()
@@ -231,9 +254,7 @@ func set_algorithm(algorithm_enum_value : int, update_ui : = false):
 	
 	# initialize algorithm (e.g convert grid to Godot's Astar representation)
 	# look into the AstarGodot.gd for more
-	algorithm.graph = grid
-	algorithm.starts_and_goals = starts_and_goals
-	algorithm.initialize()
+	algorithm.initialize(grid)
 	
 
 

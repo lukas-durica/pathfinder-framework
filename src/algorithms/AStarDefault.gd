@@ -21,10 +21,7 @@ class AStarNode:
 	var h : = 0
 	var f : = 0
 
-func _initialize(graph):
-	pass
-
-func _find_path(starts_and_goals : Array) -> Array:
+func _find_solution(starts_and_goals : Array) -> Array:
 	# create AstarNode and set position to it
 	var start_node = AStarNode.new()
 	start_node.position = starts_and_goals[0].start

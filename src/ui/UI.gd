@@ -25,6 +25,9 @@ func _ready():
 			Algorithm.A_STAR_REDBLOB)
 	algorithms.add_radio_check_item(Algorithm.to_str(Algorithm.A_STAR_CBS),
 			Algorithm.A_STAR_CBS)
+			
+	algorithms.add_radio_check_item(Algorithm.to_str(Algorithm.CONFLICT_BASED_SEARCH),
+			Algorithm.CONFLICT_BASED_SEARCH)
 	
 	options.add_check_item("8 directional", 1)
 

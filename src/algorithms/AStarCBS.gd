@@ -5,7 +5,7 @@ extends GridBasedAlgorithm
 
 class_name AStarCBS
 
-
+var constraints = {}
 
 #For cases where two low-level A* states have the same f -value, we used a 
 #tie-breaking policy based on Standley’s #tie-breaking conflict avoidance table 
@@ -22,19 +22,19 @@ class_name AStarCBS
 #identical in both states
 
 
-#func initialize(graph):
-#	graph = graph
 
 # constraints are added during the CBS search in the form of
 # Vector3(x_position, y_position, time_dimension)
-func _find_path(starts_and_goals : Array, constraints : = {}) -> Array:
+func _find_solution(starts_and_goals : Array) -> Array:
 	
 	var start = starts_and_goals[0].start
 	var goal = starts_and_goals[0].goal
 	
+	start = Vector3(start.x, start.y, 0)
 	# The key idea for all of these algorithms is that we keep track of an 
 	# expanding cells called the frontier.
 	var frontier = MinBinaryHeap.new()
+	
 	
 	frontier.insert_key({value = 0, vertex = start})
 	
@@ -50,7 +50,6 @@ func _find_path(starts_and_goals : Array, constraints : = {}) -> Array:
 	came_from[start] = null
 	cost_so_far[start] = 0
 	
-	var time : = 0
 	while not frontier.empty():
 		#Pick and remove a cell from the frontier.
 		var min_value = frontier.extractMin()
@@ -58,23 +57,26 @@ func _find_path(starts_and_goals : Array, constraints : = {}) -> Array:
 		var current = min_value.vertex
 		#graph.set_cellv(current, Grid.CLOSED)
 		
-		#print("min_value: ", min_value.value)
 		# if the goal is found reconstruct the path, i.e. early exit
-		if current == goal:
-			return reconstruct_path(goal, came_from)
+		if Vector2(current.x, current.y) == goal:
+			return reconstruct_path(current, came_from)
 		#Expand it by looking at its neighbors
 		for state in graph.get_states(current):
-			var vertex_in_time = Vector3(state.x, state.y, time + 1)
-			if vertex_in_time in constraints:
+			
+			if state in constraints:
 				continue
-			
-			
+
 			# get cost from the start of the current node and add the cost
 			# of the movement between current node and neighbor (i.e.
 			# cardinal movement, diagonal movement)
-			var new_cost = cost_so_far[current] \
-				+ graph.get_cost(current, state)
-				
+			var new_cost = cost_so_far[current] + graph.get_cost(
+					Vector2(current.x, current.y), 
+					Vector2(state.x, state.y))
+			
+			#var vertex_in_time = Vector3(state.x, state.y, new_cost)
+			
+			
+			
 
 			# Less obviously, we may end up visiting a location multiple times, 
 			# with different costs, so we need to alter the logic a little bit. 
@@ -91,7 +93,7 @@ func _find_path(starts_and_goals : Array, constraints : = {}) -> Array:
 				
 				# The location closest to the goal will be explored first.
 				var heuristic = graph.get_heuristic_distance(goal, 
-						state)
+						Vector2(state.x, state.y))
 				var priority = new_cost + heuristic
 				
 #				if not is_in_cost_so_far:
@@ -105,10 +107,9 @@ func _find_path(starts_and_goals : Array, constraints : = {}) -> Array:
 				# add current as place where we came from to neighbor
 				came_from[state] = current
 				
-		time += 1
 	return Array()
 
-func reconstruct_path(goal : Vector2, came_from : Dictionary) -> Array:
+func reconstruct_path(goal : Vector3, came_from : Dictionary) -> Array:
 	var path : = []
 	var current = goal
 	# if this cell is not start (only start has no previous cell)
@@ -116,6 +117,7 @@ func reconstruct_path(goal : Vector2, came_from : Dictionary) -> Array:
 	# goal
 	while not current == null:
 		#add tile to our path
+		#print(current)
 		path.push_back(current)
 	
 		#and set current the previous vertex

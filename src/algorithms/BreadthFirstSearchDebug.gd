@@ -4,7 +4,7 @@ Comments of the algorithm is in BreadthFirstSearch.gd
 This class is used for debug (learning) purposes. It colors the cells. It is 
 slower than BreadthFirstSearch.
 Two modes (alaways use init() method before the use):
-	(1) For finding path instantly (find_path())
+	(1) For finding path instantly (find_solution())
 	(2) For stepping the algorithm (step())
 """
 class_name BreadthFirstSearchDebug
@@ -30,7 +30,7 @@ func init(graph, start : Vector2, goal : Vector2):
 	closed[start] = null
 	is_initialized = true
 
-func find_path() -> Array:
+func find_solution() -> Array:
 	if not is_initialized:
 		show_error()
 		return Array()

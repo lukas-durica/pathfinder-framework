@@ -3,6 +3,12 @@ extends Node2D
 var path : = [] setget _set_path
 var grid : Grid
 
+
+
+func _ready():
+	randomize()
+	modulate = Color(randf(), randf(), randf(), 1.0)
+
 func _set_path(value):
 	if value.empty():
 		return
@@ -20,5 +26,7 @@ func update_position():
 		return
 	
 	#vertex position of the agent to world position
-	position = grid.to_world(path.front())
+	#if needed Vector3 is converted to Vector2
+	var vertex = Vector2(path.front().x, path.front().y)
+	position = grid.to_world(vertex)
 	path.pop_front()
