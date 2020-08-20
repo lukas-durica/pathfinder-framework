@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://data/textures/actors/circle/green_b.png" type="Texture" id=1]
+[ext_resource path="res://data/textures/actors/squares/round_corners_blue.png" type="Texture" id=1]
 [ext_resource path="res://src/tools/Agent.gd" type="Script" id=2]
 
 [node name="Agent" type="Node2D"]
