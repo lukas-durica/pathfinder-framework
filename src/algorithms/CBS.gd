@@ -4,6 +4,8 @@ extends GridBasedAlgorithm
 # Conflict-based search
 class_name CBS
 
+enum ConflictType {NONE, VERTEX, EDGE}
+
 # start position and goals position in the form of starts_and_goals[start] = goal
 var agents = []
 
@@ -54,8 +56,17 @@ func _find_solution(starts_and_goals : Array):
 	while not open.empty():
 		var current = open.extractMin().node
 		var conflict = get_first_conflict(current.solution)
+		match conflict.t:
+			ConflictType.NONE:
+				return current.solution
+			ConflictType.VERTEX:
+				
+		
+		
 		if conflict.empty():
-			return current.solution
+			
+		#elif conflict.size() == 
+		
 		
 		for i in range(2):
 			
@@ -80,7 +91,8 @@ func _find_solution(starts_and_goals : Array):
 #validate the paths until a first conflict occurs
 func get_first_conflict(solution : Array) -> Dictionary:
 	var vertex_conflicts = {}
-	var agent_id = 0
+	var edge_conflicts = {}
+	var agent_id : = 0
 	for path in solution:
 		for vertex_in_time in path:
 			if not vertex_in_time in vertex_conflicts:
@@ -90,11 +102,45 @@ func get_first_conflict(solution : Array) -> Dictionary:
 				# ai - first agent in conflict (who)
 				# aj - second agent in conflict (whith whom)
 				# v - conflicting vertex (where)
-				# t - timestamp with the conflict (when)
+				# t - type of conflivt
 				return {ai = agent_id, aj = vertex_conflicts[vertex_in_time], 
-						v = vertex_in_time}
+						v = vertex_in_time, c = ConflictType.VERTEX}
+			
+			if vertex_in_time.z + 1 < path.size():
+				# vertex from, vertex to, and time
+				# before the assing it we will compare the consecutive 
+				# vertex_in_time, e.g. 
+				var next_vertex_in_time = path[vertex_in_time.z + 1]
+				
+				# the hash table keys needs to be consistent, e.g. edge movement
+				# from the vertex # (x,y) to (x+1, y) in time t to t+1 is the 
+				# same as the egde movement of the other agent (x+1, y) to (x,y)
+				# in time t to t+1
+				var edge_in_time = ""
+				if vertex_in_time < next_vertex_in_time:
+					edge_in_time = str(vertex_in_time) + \
+							str(next_vertex_in_time) 
+				else:
+					edge_in_time = str(next_vertex_in_time) + \
+							str(vertex_in_time)
+				
+				if not edge_conflicts.has(edge_in_time):
+					edge_conflicts[edge_in_time] = agent_id
+				
+				else:
+					#edge conflict is a tuple (ai, a j, v1, v2, t)
+					# ai - first agent in conflict (who)
+					# aj - second agent in conflict (whith whom)
+					# v1 - conflicting vertex in time defining an edge (from)
+					# v2 - conflicting vertex in time defining an edge (to)
+					# t - type of conflict
+					return {ai = agent_id, aj = edge_conflicts[edge_in_time], 
+							v1 = vertex_in_time, v2 = next_vertex_in_time,
+							c = ConflictType.EDGE}
+				
+			
 		agent_id += 1
-	return {}
+	return {c = ConflictType.NONE}
 	
 
 

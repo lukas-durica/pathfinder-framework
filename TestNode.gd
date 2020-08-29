@@ -8,5 +8,6 @@ extends Node
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var vec = Vector2.INF
-	print(vec is Vector2)
+	var t = Transform2D.IDENTITY
+	var d = {a = 5, b = 6}
+	print(d.size())
