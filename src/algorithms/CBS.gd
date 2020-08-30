@@ -56,25 +56,24 @@ func _find_solution(starts_and_goals : Array):
 	while not open.empty():
 		var current = open.extractMin().node
 		var conflict = get_first_conflict(current.solution)
-		match conflict.t:
-			ConflictType.NONE:
-				return current.solution
-			ConflictType.VERTEX:
-				
-		
-		
 		if conflict.empty():
-			
-		#elif conflict.size() == 
-		
+			return current.solution
 		
 		for i in range(2):
 			
 			var new_constraint = CBSConstraint.new()
 			new_constraint.agent_id = conflict.ai if i == 0 else conflict.aj
-			new_constraint.vertex = conflict.v
 			
-			#print(new_constraint.vertex)
+			# if the conflict is vertex conflict
+			if conflict.size() == 3:
+				print("vertex conflict")
+				new_constraint.vertex = conflict.v
+			
+			# if the conflict is edge conflict
+			elif conflict.size() == 4:
+				
+				new_constraint.vertex = conflict.v1 if i == 0 else conflict.v2
+				print("edge conflict: ", conflict.v1, " v2: ", conflict.v2)
 			
 			var new_node = CBSNode.new()
 			new_node.parent = current
@@ -94,6 +93,8 @@ func get_first_conflict(solution : Array) -> Dictionary:
 	var edge_conflicts = {}
 	var agent_id : = 0
 	for path in solution:
+		#print("agent_id: ", agent_id, "path.size: ", path.size())
+		var time_step : = 0
 		for vertex_in_time in path:
 			if not vertex_in_time in vertex_conflicts:
 				vertex_conflicts[vertex_in_time] = agent_id
@@ -102,15 +103,16 @@ func get_first_conflict(solution : Array) -> Dictionary:
 				# ai - first agent in conflict (who)
 				# aj - second agent in conflict (whith whom)
 				# v - conflicting vertex (where)
-				# t - type of conflivt
+				# t - type of confliv
+				#print("vertex conflict")
 				return {ai = agent_id, aj = vertex_conflicts[vertex_in_time], 
-						v = vertex_in_time, c = ConflictType.VERTEX}
+						v = vertex_in_time}
 			
-			if vertex_in_time.z + 1 < path.size():
+			if time_step + 1 < path.size():
 				# vertex from, vertex to, and time
 				# before the assing it we will compare the consecutive 
 				# vertex_in_time, e.g. 
-				var next_vertex_in_time = path[vertex_in_time.z + 1]
+				var next_vertex_in_time = path[time_step + 1]
 				
 				# the hash table keys needs to be consistent, e.g. edge movement
 				# from the vertex # (x,y) to (x+1, y) in time t to t+1 is the 
@@ -118,32 +120,43 @@ func get_first_conflict(solution : Array) -> Dictionary:
 				# in time t to t+1
 				var edge_in_time = ""
 				if vertex_in_time < next_vertex_in_time:
-					edge_in_time = str(vertex_in_time) + \
-							str(next_vertex_in_time) 
+					edge_in_time = str(Vector2(vertex_in_time.x,
+							vertex_in_time.y)) + str(Vector2(
+							next_vertex_in_time.x, next_vertex_in_time.y)) + \
+							str(vertex_in_time.z)
 				else:
-					edge_in_time = str(next_vertex_in_time) + \
-							str(vertex_in_time)
+					edge_in_time = str(Vector2(next_vertex_in_time.x,
+							next_vertex_in_time.y)) + str(Vector2(
+							vertex_in_time.x, vertex_in_time.y)) + \
+							str(vertex_in_time.z)
 				
 				if not edge_conflicts.has(edge_in_time):
 					edge_conflicts[edge_in_time] = agent_id
 				
 				else:
+					
+					print("edge conflict found!: ", edge_in_time)
 					#edge conflict is a tuple (ai, a j, v1, v2, t)
 					# ai - first agent in conflict (who)
 					# aj - second agent in conflict (whith whom)
 					# v1 - conflicting vertex in time defining an edge (from)
 					# v2 - conflicting vertex in time defining an edge (to)
 					# t - type of conflict
-					return {ai = agent_id, aj = edge_conflicts[edge_in_time], 
-							v1 = vertex_in_time, v2 = next_vertex_in_time,
-							c = ConflictType.EDGE}
+					
+					# create conflicting vertex in time for other agen
+					var other_agent_vertex_conflict = Vector3(vertex_in_time.x, 
+							vertex_in_time.y, next_vertex_in_time.z)
+					
+					# next_vertex_in_time is conflicting vertex for this agent 
+					# in conflict  
+					return {ai = agent_id, aj = edge_conflicts[edge_in_time],
+							v1 = next_vertex_in_time, 
+							v2 = other_agent_vertex_conflict}
 				
-			
+			time_step += 1
 		agent_id += 1
-	return {c = ConflictType.NONE}
+	return {}
 	
-
-
 func get_root_solution() -> Array:
 	var solution = []
 	for agent in agents:

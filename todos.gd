@@ -33,6 +33,7 @@
 # pozriet dalsie zlepsenia, CAT, ID, rozlisovanie podla poctu konfliktov BinaryMinHeap
 # -> detekcia vsetkych konfliktov, pozriek konflikty k > 2 ICBS
 # skusit hash stringu pri datovych strukturach vertex_conflicts a edge_conflicts
+# spravit unit testy, pre jednotlive pohyby pri upravach
 
 
 #ak sa agent nachadza na tom istom mieste vysledny chodnik bude 0

@@ -3,7 +3,7 @@ extends Node2D
 class_name GridBasedUI
 
 # use gui zoom factor for adjusting the camera zoom with respect to GUI to avoid
-# overlap with the grid, just cosmetic treatment
+# overlap with the start position of the grid, just cosmetic treatment
 const GUI_ZOOM_FACTOR : = 1.13
 
 const START_SCENE = preload("res://src/tools/Start.tscn")

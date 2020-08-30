@@ -8,7 +8,7 @@
 
 [node name="GridBasedUI" type="Node2D"]
 script = ExtResource( 6 )
-editor_starts_goals = [ Quat( 0, -4, 0, 4 ), Quat( 4, 0, -4, 0 ) ]
+editor_starts_goals = [ Quat( 0, -2, 0, 2 ), Quat( 0, 2, 0, -2 ) ]
 
 [node name="UserInterface" parent="." instance=ExtResource( 1 )]
 
