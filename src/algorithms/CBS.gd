@@ -56,7 +56,7 @@ func _find_solution(starts_and_goals : Array):
 	while not open.empty():
 		var current = open.extractMin().node
 		var conflict = get_first_conflict(current.solution)
-		if conflict.empty():
+		if conflict.type == ConflictType.NONE:
 			return current.solution
 		
 		for i in range(2):
@@ -65,15 +65,13 @@ func _find_solution(starts_and_goals : Array):
 			new_constraint.agent_id = conflict.ai if i == 0 else conflict.aj
 			
 			# if the conflict is vertex conflict
-			if conflict.size() == 3:
-				print("vertex conflict")
+			if conflict.type == ConflictType.VERTEX:
 				new_constraint.vertex = conflict.v
 			
 			# if the conflict is edge conflict
-			elif conflict.size() == 4:
+			elif conflict.type == ConflictType.EDGE:
 				
 				new_constraint.vertex = conflict.v1 if i == 0 else conflict.v2
-				print("edge conflict: ", conflict.v1, " v2: ", conflict.v2)
 			
 			var new_node = CBSNode.new()
 			new_node.parent = current
@@ -106,7 +104,7 @@ func get_first_conflict(solution : Array) -> Dictionary:
 				# t - type of confliv
 				#print("vertex conflict")
 				return {ai = agent_id, aj = vertex_conflicts[vertex_in_time], 
-						v = vertex_in_time}
+						v = vertex_in_time, type = ConflictType.VERTEX}
 			
 			if time_step + 1 < path.size():
 				# vertex from, vertex to, and time
@@ -134,8 +132,6 @@ func get_first_conflict(solution : Array) -> Dictionary:
 					edge_conflicts[edge_in_time] = agent_id
 				
 				else:
-					
-					print("edge conflict found!: ", edge_in_time)
 					#edge conflict is a tuple (ai, a j, v1, v2, t)
 					# ai - first agent in conflict (who)
 					# aj - second agent in conflict (whith whom)
@@ -151,11 +147,12 @@ func get_first_conflict(solution : Array) -> Dictionary:
 					# in conflict  
 					return {ai = agent_id, aj = edge_conflicts[edge_in_time],
 							v1 = next_vertex_in_time, 
-							v2 = other_agent_vertex_conflict}
+							v2 = other_agent_vertex_conflict, 
+							type = ConflictType.EDGE}
 				
 			time_step += 1
 		agent_id += 1
-	return {}
+	return {type = ConflictType.NONE}
 	
 func get_root_solution() -> Array:
 	var solution = []
@@ -186,9 +183,10 @@ static func get_sic(solution : Array):
 		if path.empty():
 			return INF
 		sic += path.size()
-	
 	return sic
 
 	
-
+func _clear():
+	agents.clear()
+	open.clear()
 	

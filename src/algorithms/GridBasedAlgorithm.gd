@@ -12,10 +12,16 @@ func initialize(graph_tmp):
 func find_solution(starts_and_goals : Array) -> Array:
 	return _find_solution(starts_and_goals)
 
+func clear():
+	_clear()
+
 # virtual functions
 func _initialize(graph_tmp):
 	pass
 
 # virtual functions
 func _find_solution(starts_and_goals : Array):
+	pass
+
+func _clear():
 	pass

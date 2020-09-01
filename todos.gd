@@ -27,9 +27,8 @@
 
 # todo:
 # pustit simulaciu s cbs diagonal, potom prepnut a pustit simulaciu 8diagonal
-# zistit chybu
+
 # pozriet riesenie pri diagonal
-# implementovat swap detection, skusit riesenie kde k >2 2x diagonal 2x cardinal
 # pozriet dalsie zlepsenia, CAT, ID, rozlisovanie podla poctu konfliktov BinaryMinHeap
 # -> detekcia vsetkych konfliktov, pozriek konflikty k > 2 ICBS
 # skusit hash stringu pri datovych strukturach vertex_conflicts a edge_conflicts

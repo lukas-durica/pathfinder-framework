@@ -154,7 +154,9 @@ func find_start_or_goal(vertex) -> int:
 
 func run():
 	# reset all cells to default (e.g. path cells to free)
+	remove_agents()
 	grid.reset()
+	algorithm.clear()
 	
 	# convert global positions to the grid (vertex) position
 	# start measuring time
@@ -196,14 +198,13 @@ func run():
 		
 func add_agent(path):
 	var agent = AGENT_SCENE.instance()
-	add_child(agent)
+	$Agents.add_child(agent)
 	agent.grid = grid
 	agent.path = path
 	
-	
-	
-		
-		
+func remove_agents():
+	for agent in $Agents.get_children():
+		agent.queue_free()
 		
 # returns global mouse position converted to grid/vertex position
 func get_mouse_vertex():
@@ -250,7 +251,6 @@ func set_algorithm(algorithm_enum_value : int, update_ui : = false):
 	
 	if update_ui:
 		$UserInterface.check_algorithm_item(algorithm_enum_value)
-		print("grid.is_8_directional: ", grid.is_8_directional)
 		$UserInterface.update_options(grid.is_8_directional)
 	
 	# initialize algorithm (e.g convert grid to Godot's Astar representation)
@@ -267,7 +267,6 @@ func _on_UserInterface_options_id_pressed(id):
 	print(id)
 	if id == 1:
 		grid.is_8_directional = not grid.is_8_directional
-		print("settings vhanged")
 		algorithm.initialize(grid)
 
 
