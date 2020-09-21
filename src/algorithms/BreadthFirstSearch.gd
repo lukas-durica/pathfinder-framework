@@ -50,7 +50,7 @@ func _find_solution(starts_and_goals : Array) -> Array:
 		open.pop_front()
 		
 		# iterate through valid neighbors
-		for neighbor in graph.get_neighbors(current):
+		for neighbor in grid.get_neighbors(current):
 			
 			# if the neighbor is not already in closed
 			if not neighbor in closed:

@@ -2,9 +2,11 @@ extends Reference
 
 class_name Algorithm
 
+# the list of search algorithm 
 enum {A_STAR_GODOT, A_STAR_DEFAULT, A_STAR_REDBLOB, A_STAR_CBS, 
 		CONFLICT_BASED_SEARCH}
 
+# enum id to string
 static func to_str(algorithm_id : int) -> String:
 	match algorithm_id:
 		A_STAR_GODOT:

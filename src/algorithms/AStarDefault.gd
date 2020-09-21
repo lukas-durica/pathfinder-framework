@@ -11,9 +11,10 @@ that seem to be leading closer to a goal.
 
 extends GridBasedAlgorithm
 
-
+# Default AStar implmentation using open and closed list
 class_name AStarDefault
 
+# Astar node
 class AStarNode:
 	var parent = null
 	var position : = Vector2.INF
@@ -25,6 +26,7 @@ func _find_solution(starts_and_goals : Array) -> Array:
 	# create AstarNode and set position to it
 	var start_node = AStarNode.new()
 	start_node.position = starts_and_goals[0].start
+	
 	var goal_node = AStarNode.new()
 	goal_node.position = starts_and_goals[0].goal
 	#  consists of nodes that have been visited but not expanded (meaning that 
@@ -39,7 +41,8 @@ func _find_solution(starts_and_goals : Array) -> Array:
 	open_list.push_back(start_node)
 	#  while the open list is not empty
 	while not open_list.empty():
-		#find the node with the least f on the open list
+		#find the node with the least f on the open list and assing it to the
+		# current
 		var min_index = 0
 		var index = 0
 		
@@ -51,7 +54,7 @@ func _find_solution(starts_and_goals : Array) -> Array:
 				min_index = index
 			index += 1
 		
-		#pop current node off the open list
+		#remove the current node off the open list
 		open_list.remove(min_index)
 		
 		# if the goal was reached reconstruct path
@@ -59,7 +62,7 @@ func _find_solution(starts_and_goals : Array) -> Array:
 			return reconstruct_path(current_node)
 		
 		# get all neighbors of current node
-		for neighbor_position in graph.get_neighbors(current_node.position):
+		for neighbor_position in grid.get_neighbors(current_node.position):
 			
 			# if the neighbor is closed list, jump to next neighbor
 			if neighbor_position in closed_list:
@@ -79,13 +82,13 @@ func _find_solution(starts_and_goals : Array) -> Array:
 			# get cost from the start of the current node and add the cost
 			# of the movement between current node and neighbor (e.g. 
 			# cardinal, diagonal)
-			neighbor.g = current_node.g + graph.get_cost(current_node.position, 
+			neighbor.g = current_node.g + grid.get_cost(current_node.position, 
 					neighbor_position)
 			
 			# compute manhattan distance for a given neighbor to goal, more info
 			# www.redblobgames.com/pathfinding/a-star/introduction.html#greedy-best-first
 			# The location closest to the goal will be explored first.
-			neighbor.h = graph.get_manhattan_distance(neighbor.position, 
+			neighbor.h = grid.get_manhattan_distance(neighbor.position, 
 					goal_node.position)
 			
 			# the sum of the cost from the beginning to neighbor and estimated
@@ -111,7 +114,7 @@ func _find_solution(starts_and_goals : Array) -> Array:
 						open_list[index] = neighbor
 					break
 				index += 1
-			# if the neighbor is already in open list but cost lower, just skip 
+			# if the neighbor is already in open list but costs lower, just skip 
 			if is_in_open_list:
 				continue
 			# if the neighbor is not in open list add it to it

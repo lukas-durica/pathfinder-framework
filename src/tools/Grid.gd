@@ -4,7 +4,10 @@ class_name Grid
 
 enum {NONE = -1, FREE, OBSTACLE, OPEN, CLOSED, PATH}
 
-const CARDINAL_MOVEMENT_COST = 5
+const TIME_STEP = 1
+
+const WAITING_COST = 5
+const REGULAR_MOVEMENT_COST = 5
 const DIAGONAL_MOVEMENT_COST = 7
 
 
@@ -36,24 +39,22 @@ func get_neighbors(vertex : Vector2) -> Array:
 
 #get states for multiagent path finding
 func get_states(vertex : Vector3) -> Array:
-	var states = get_valid_directions(vertex, get_cardinal_directions(), 
-			CARDINAL_MOVEMENT_COST)
-	if is_8_directional:
-		states += get_valid_directions(vertex, get_diagonal_directions(), 
-				DIAGONAL_MOVEMENT_COST)
-	
 	#wait action at the same vertex
-	#treat it as the array so we can merge them
-	vertex.z += CARDINAL_MOVEMENT_COST
+	vertex.z += TIME_STEP
+	var states = []
 	states.push_back(vertex)
+	states += get_valid_directions(vertex, get_cardinal_directions())
+	if is_8_directional:
+		states += get_valid_directions(vertex, get_diagonal_directions())
 	return states
-	
-	
-func get_valid_directions(vertex: Vector3, directions : Array, cost : int):
+
+# get array of valid subsequent vertexes defined by directions and the
+# validate them, i.e. check if they are valid and not obstacle
+func get_valid_directions(vertex: Vector3, directions : Array):
 	var valid_directions = []
 	for direction in directions:
 		var tile_position = Vector3(vertex.x + direction.x, 
-				vertex.y + direction.y, vertex.z + cost)
+				vertex.y + direction.y, vertex.z)
 	
 		if is_cell_valid(Vector2(tile_position.x, tile_position.y)) \
 				and not is_cell_obstacle(Vector2(tile_position.x, 
@@ -61,13 +62,15 @@ func get_valid_directions(vertex: Vector3, directions : Array, cost : int):
 			valid_directions.push_back(tile_position)
 	return valid_directions
 
+# +
 func get_cardinal_directions() -> Array:
 	return [Vector2.LEFT, Vector2.UP, Vector2.RIGHT, Vector2.DOWN]
-
+# /\
 func get_diagonal_directions() -> Array:
 	return [Vector2.LEFT + Vector2.UP, Vector2.UP + Vector2.RIGHT, 
 			Vector2.RIGHT + Vector2.DOWN, Vector2.DOWN + Vector2.LEFT]
 
+# heuristic distance between two vertexes based on th type of the movement
 func get_heuristic_distance(vertex_a : Vector2, vertex_b : Vector2) -> int:
 	if is_8_directional:
 		return get_diagonal_distance(vertex_a, vertex_b)
@@ -76,13 +79,13 @@ func get_heuristic_distance(vertex_a : Vector2, vertex_b : Vector2) -> int:
 # manhattan distance between two vertexes
 func get_manhattan_distance(vertex_a : Vector2, vertex_b : Vector2) -> int:
 	return int(abs(vertex_a.x - vertex_b.x) + abs(vertex_a.y - vertex_b.y)) * \
-			CARDINAL_MOVEMENT_COST
+			REGULAR_MOVEMENT_COST
 
 # diagonal distance between two vertexes
 func get_diagonal_distance(vertex_a : Vector2, vertex_b : Vector2) -> int:
 	var dx = abs(vertex_a.x - vertex_b.x)
 	var dy = abs(vertex_a.y - vertex_b.y)
-	return CARDINAL_MOVEMENT_COST * int(abs(dx-dy)) + \
+	return REGULAR_MOVEMENT_COST * int(abs(dx-dy)) + \
 			DIAGONAL_MOVEMENT_COST * int(min(dx,dy))
 
 # whether the cell at given vertex exists
@@ -105,10 +108,15 @@ func reset():
 	for vertex in get_used_cells():
 		if not is_cell_obstacle(vertex):
 			set_cellv(vertex, FREE)
-			
+
+#includes waiting cost
 func get_cost(current, neighbor):
+	if Vector2(current.x, current.y) == Vector2(neighbor.x, neighbor.y):
+		return WAITING_COST
+	
+	
 	if current.x == neighbor.x or current.y == neighbor.y:
-		return CARDINAL_MOVEMENT_COST
+		return REGULAR_MOVEMENT_COST
 	return  DIAGONAL_MOVEMENT_COST
 
 # 0,0!1,0!2,0

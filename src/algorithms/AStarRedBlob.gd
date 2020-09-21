@@ -57,18 +57,18 @@ func _find_solution(starts_and_goals : Array) -> Array:
 	while not frontier.empty():
 		#Pick and remove a cell from the frontier.
 		var current = frontier.extractMin().vertex
-		graph.set_cellv(current, Grid.CLOSED)
+		grid.set_cellv(current, Grid.CLOSED)
 		# if the goal is found reconstruct the path, i.e. early exit
 		if current == goal:
 			return reconstruct_path(goal, came_from)
 		#Expand it by looking at its neighbors
-		for neighbor in graph.get_neighbors(current):
+		for neighbor in grid.get_neighbors(current):
 			
 			# get cost from the start of the current node and add the cost
 			# of the movement between current node and neighbor (e.g. 
 			# horizontal/vertical - 10, diagonal - 14)
 			var new_cost = cost_so_far[current] \
-				+ graph.get_cost(current, neighbor)
+				+ grid.get_cost(current, neighbor)
 			
 			# Less obviously, we may end up visiting a location multiple times, 
 			# with different costs, so we need to alter the logic a little bit. 
@@ -79,7 +79,7 @@ func _find_solution(starts_and_goals : Array) -> Array:
 				cost_so_far[neighbor] = new_cost
 				
 				# The location closest to the goal will be explored first.
-				var priority = new_cost + graph.get_manhattan_distance(goal, 
+				var priority = new_cost + grid.get_manhattan_distance(goal, 
 						neighbor)
 						
 				# insert it to the frontier
@@ -87,7 +87,7 @@ func _find_solution(starts_and_goals : Array) -> Array:
 				
 				# add current as place where we came from to neighbor
 				came_from[neighbor] = current
-				graph.set_cellv(neighbor, Grid.OPEN)
+				grid.set_cellv(neighbor, Grid.OPEN)
 	
 	return Array()
 

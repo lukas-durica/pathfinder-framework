@@ -95,8 +95,8 @@ func _unhandled_input(event):
 		# if the cell is free, it can be assigned as start/goal if not return
 		if event.pressed:
 			if event.button_index == BUTTON_LEFT \
-					and grid.is_cell_free(clicked_vertex) \
-					and index == -1:
+					and not grid.is_cell_obstacle(clicked_vertex) \
+					and grid.is_cell_valid(clicked_vertex):
 						if line_start == Vector2.INF:
 							line_start = clicked_vertex
 						elif line_start != clicked_vertex:
@@ -104,23 +104,27 @@ func _unhandled_input(event):
 							line_start = Vector2.INF
 							line_end = Vector2.INF
 							update()
+			# clear with right button started line
 			elif event.button_index == BUTTON_RIGHT:
 				if line_start != Vector2.INF:
 					line_start = Vector2.INF
 					line_end = Vector2.INF
+				# if line exists delete it
 				elif index != -1:
 					starts_and_goals[index].start_sprite.queue_free()
 					starts_and_goals[index].goal_sprite.queue_free()
 					starts_and_goals.remove(index)
 				update()
 			
-	
+	# update coords in UI with every mouse motion
 	elif event is InputEventMouseMotion:
 		user_interface.set_coords(get_mouse_vertex())
+		# if line is drawn update it 
 		if line_start != Vector2.INF:
 			line_end = get_mouse_vertex()
 			update()
 
+# called through update()
 func _draw():
 	if line_start != Vector2.INF:
 		draw_line(grid.to_world(line_start), grid.to_world(line_end), 
@@ -129,7 +133,7 @@ func _draw():
 		 draw_line(grid.to_world(sag.start), grid.to_world(sag.goal),
 				ColorN("greenyellow"), 5.0)
 
-
+# add start position and goal position to UI and to starts_and_goals
 func add_start_and_goal(start_vertex : Vector2, goal_vertex : Vector2):
 	var start_scene = START_SCENE.instance()
 	var goal_scene = GOAL_SCENE.instance()
@@ -148,10 +152,8 @@ func find_start_or_goal(vertex) -> int:
 				or starts_and_goals[index].goal == vertex:
 			return index
 	return -1
-	
-		
 
-
+# run the pathfinder
 func run():
 	# reset all cells to default (e.g. path cells to free)
 	remove_agents()
@@ -160,10 +162,6 @@ func run():
 	
 	# convert global positions to the grid (vertex) position
 	# start measuring time
-	var time_start = OS.get_ticks_usec()
-	
-	
-	
 	if starts_and_goals.empty():
 		push_error("There are no starts and goals!")
 		return
@@ -171,8 +169,10 @@ func run():
 	# if it is single agent algorithm it will take only first pair of start and
 	# goal
 	
-	# find the path
 	
+	var time_start = OS.get_ticks_usec()
+	
+	# find the path
 	var paths = algorithm.find_solution(starts_and_goals)
 		
 	# print elapsed time

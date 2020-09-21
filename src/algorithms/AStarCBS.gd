@@ -5,37 +5,23 @@ extends GridBasedAlgorithm
 
 class_name AStarCBS
 
+# constraints are added during the CBS search
 var constraints = {}
 
-#For cases where two low-level A* states have the same f -value, we used a 
-#tie-breaking policy based on Standley’s #tie-breaking conflict avoidance table 
-#(CAT) (described in Section 3.3.4). States that contain a conflict with a 
-#smaller number of other agents are preferred. For example, if states s1 = (v1,
-#t1) and s2 = (v2,t2) have the same f value, but v1 is used by two other agents 
-#at time t1 while v2 is not used by any other agent at time t2, then s2 will be 
-#expanded first. This tie-breaking #policy improves the total running time by a
-#factor of 2 compared to arbitrary tie breaking. Duplicate states detection and
-#pruning (DD) speeds up the low-level procedure. Unlike single-agent 
-#pathfinding, the low-level state-space also includes the time dimension and 
-#dynamic ‘obstacles’ caused by constraints. Therefore, two states are 
-#considered duplicates if both the position of ai and the time step are 
-#identical in both states
-
-
-
-# constraints are added during the CBS search in the form of
-# Vector3(x_position, y_position, time_dimension)
-func _find_solution(starts_and_goals : Array) -> Array:
+func _find_solution(starts_and_goals : Array):
 	
+	# start and goal as Vector3 datatype 
 	var start = starts_and_goals[0].start
 	var goal = starts_and_goals[0].goal
 	
-	start = Vector3(start.x, start.y, 0)
+	
 	# The key idea for all of these algorithms is that we keep track of an 
 	# expanding cells called the frontier.
 	var frontier = MinBinaryHeap.new()
 	
-	
+	# insert start and add it value 0
+	# however its cost should be based on heuristics, but at the beginning of
+	# the search there are no other vertexes/states only start
 	frontier.insert_key({value = 0, vertex = start})
 	
 	# came_from for each location points to the place where we came from. These 
@@ -50,34 +36,51 @@ func _find_solution(starts_and_goals : Array) -> Array:
 	came_from[start] = null
 	cost_so_far[start] = 0
 	
+	# until the frontier is empty, hovewer in search with time parameter
+	# there is less likely the frontier will be empty,
 	while not frontier.empty():
-		#Pick and remove a cell from the frontier.
+		
+		#Pick and remove a cell with minimal value from the frontier.
 		var min_value = frontier.extractMin()
 		
 		var current = min_value.vertex
 		#graph.set_cellv(current, Grid.CLOSED)
 		
 		# if the goal is found reconstruct the path, i.e. early exit
-		if Vector2(current.x, current.y) == goal:
-			return reconstruct_path(current, came_from)
+		# in CBS search we know the length of the paths and they need to have
+		# same size during searching for conflict, even if they (agents) are 
+		# waiting at the goal position, thus in CBS set goal.z (time parameter)
+		# to the size of the padded path, and new path must be at least long as
+		# is the padded path
+		
+		if is_equal(goal, current) and current.z >= goal.z:
+			return {path = reconstruct_path(current, came_from), 
+					cost = cost_so_far[current]}
+		
 		#Expand it by looking at its neighbors
-		for state in graph.get_states(current):
+		for state in grid.get_states(current):
 			
-			if state in constraints:
+			# create edge conflict
+			var edge_conflict = Transform2D(Vector2(current.x, current.y), 
+					Vector2(state.x, state.y), Vector2(current.z, 0))
+			
+			# chceck if movement from current to state is not vertex conflcit or
+			# edge conflict
+			if state in constraints or edge_conflict in constraints:
 				continue
 
 			# get cost from the start of the current node and add the cost
 			# of the movement between current node and neighbor (i.e.
-			# cardinal movement, diagonal movement)
-			var new_cost = cost_so_far[current] + graph.get_cost(
+			# regular movement, diagonal movement)
+			var new_cost = cost_so_far[current] 
+			
+			
+			# if the current state position is at the goal and is waiting the
+			# cost is zero else compute the cost
+			new_cost += 0 if is_equal(goal, current) else grid.get_cost(
 					Vector2(current.x, current.y), 
 					Vector2(state.x, state.y))
 			
-			#var vertex_in_time = Vector3(state.x, state.y, new_cost)
-			
-			
-			
-
 			# Less obviously, we may end up visiting a location multiple times, 
 			# with different costs, so we need to alter the logic a little bit. 
 			# Instead of adding a location to the frontier if the location has 
@@ -92,22 +95,21 @@ func _find_solution(starts_and_goals : Array) -> Array:
 				cost_so_far[state] = new_cost
 				
 				# The location closest to the goal will be explored first.
-				var heuristic = graph.get_heuristic_distance(goal, 
-						Vector2(state.x, state.y))
+				var heuristic = grid.get_heuristic_distance(
+						Vector2(goal.x, goal.y), Vector2(state.x, state.y))
+				
+				# by adding new_cost and heuristic we will end up with the 
+				# priority, i.e. f = g + h
 				var priority = new_cost + heuristic
 				
-#				if not is_in_cost_so_far:
-#					graph.create_test_label(state, Vector3(new_cost, heuristic, priority))
-#				else:
-#					graph.update_test_label(state, Vector3(new_cost, heuristic, priority))
-#
 				# insert it to the frontier
 				frontier.insert_key({value = priority, vertex = state})
 				
 				# add current as place where we came from to neighbor
 				came_from[state] = current
-				
-	return Array()
+	
+	# if there are no nodes in frontier
+	return {path = [], cost = INF}
 
 func reconstruct_path(goal : Vector3, came_from : Dictionary) -> Array:
 	var path : = []
@@ -128,3 +130,10 @@ func reconstruct_path(goal : Vector3, came_from : Dictionary) -> Array:
 	#the path is oriented from the goal to the start so it needs to be reversed
 	path.invert()
 	return path
+
+func _clear():
+	constraints.clear()
+
+# function for comparing position, i.e. withoat time dimension
+static func is_equal(goal, state) -> bool:
+	return Vector2(goal.x, goal.y) == Vector2(state.x, state.y)
