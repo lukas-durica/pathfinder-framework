@@ -1,0 +1,8 @@
+C:\Users\lukas.durica\Work\Godot\GodotProjects\3.2\pathfinder-framework\.mono\temp\bin\Debug\pathfinder-framework.dll
+C:\Users\lukas.durica\Work\Godot\GodotProjects\3.2\pathfinder-framework\.mono\temp\bin\Debug\pathfinder-framework.pdb
+C:\Users\lukas.durica\Work\Godot\GodotProjects\3.2\pathfinder-framework\.mono\temp\obj\Debug\pathfinder-framework.csprojAssemblyReference.cache
+C:\Users\lukas.durica\Work\Godot\GodotProjects\3.2\pathfinder-framework\.mono\temp\obj\Debug\pathfinder-framework.AssemblyInfoInputs.cache
+C:\Users\lukas.durica\Work\Godot\GodotProjects\3.2\pathfinder-framework\.mono\temp\obj\Debug\pathfinder-framework.AssemblyInfo.cs
+C:\Users\lukas.durica\Work\Godot\GodotProjects\3.2\pathfinder-framework\.mono\temp\obj\Debug\pathfinder-framework.csproj.CoreCompileInputs.cache
+C:\Users\lukas.durica\Work\Godot\GodotProjects\3.2\pathfinder-framework\.mono\temp\obj\Debug\pathfinder-framework.dll
+C:\Users\lukas.durica\Work\Godot\GodotProjects\3.2\pathfinder-framework\.mono\temp\obj\Debug\pathfinder-framework.pdb

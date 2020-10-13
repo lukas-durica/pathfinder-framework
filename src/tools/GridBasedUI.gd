@@ -158,41 +158,50 @@ func run():
 	# reset all cells to default (e.g. path cells to free)
 	remove_agents()
 	grid.reset()
-	algorithm.clear()
+	#algorithm.clear()
 	
 	# convert global positions to the grid (vertex) position
 	# start measuring time
-	if starts_and_goals.empty():
-		push_error("There are no starts and goals!")
-		return
+	
+	var time_start = OS.get_ticks_usec()
+	#if starts_and_goals.empty():
+	var c_sharp_a_star = preload("res://src/algorithms/AStarCSharp.cs").new()
+	var path = c_sharp_a_star.FindSolution(grid, Vector3(-3, 0, 0), Vector3(3, 0, 0))
+	#var path = AStarSpaceTime.find_solution(grid, Vector3(-3, 0, 0), Vector3(3, 0, 0))
+	print("Elapsed time: ", OS.get_ticks_usec() - time_start, " microseconds")
+	for vertex in path:
+		grid.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
+	
+	#	push_error("There are no starts and goals!")
+	#	return
 	
 	# if it is single agent algorithm it will take only first pair of start and
 	# goal
 	
 	
-	var time_start = OS.get_ticks_usec()
+	
 	
 	# find the path
-	var paths = algorithm.find_solution(starts_and_goals)
+	#var paths = algorithm.find_solution(starts_and_goals)
 		
 	# print elapsed time
-	print("Elapsed time: ", OS.get_ticks_usec() - time_start, " microseconds")
+	
 
 	
-	if not paths.empty():
-		# if there is only one path from single agent algorithm
-		if paths[0] is Vector2:
-			
-			for vertex in paths:
-				grid.set_cellv(vertex, Grid.PATH)
-			add_agent(paths)
-			
-		# if there are multiple paths from multi agent algorithm
-		elif paths[0] is Array:
-			for path in paths:
-				for vertex in path:
-					grid.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
-				add_agent(path)
+#	if not paths.empty():
+#		# if there is only one path from single agent algorithm
+#		if paths[0] is Vector2:
+#
+#			for vertex in paths:
+#				grid.set_cellv(vertex, Grid.PATH)
+#			add_agent(paths)
+#
+#		# if there are multiple paths from multi agent algorithm
+#		elif paths[0] is Array:
+#			for path in paths:
+#				for vertex in path:
+#					grid.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
+#				add_agent(path)
 	# color the path
 	
 		

@@ -38,3 +38,10 @@
 #ak sa agent nachadza na tom istom mieste vysledny chodnik bude 0
 # treba otestovat, ci start != goal
 #otestovat algoritmy ak sa path nenajde ziadny
+
+#NSRS not so random search
+#vieme ziskat optimalnu cestu pre agenta s pouzitim A* ako aj najhorsiu moznu pre kazdeho agenta
+# s pouzitim STA*
+# optimalne cesty najdu konflikt k(opt)
+# najhorsie mozne cesty najdu konflikt k(worst)
+# spojit k(opt) a k(worst) ciarou a vyhodit tak vsetky mozne stavy medzi nimi

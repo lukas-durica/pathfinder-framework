@@ -63,10 +63,10 @@ func get_valid_directions(vertex: Vector3, directions : Array):
 	return valid_directions
 
 # +
-func get_cardinal_directions() -> Array:
+static func get_cardinal_directions() -> Array:
 	return [Vector2.LEFT, Vector2.UP, Vector2.RIGHT, Vector2.DOWN]
 # /\
-func get_diagonal_directions() -> Array:
+static func get_diagonal_directions() -> Array:
 	return [Vector2.LEFT + Vector2.UP, Vector2.UP + Vector2.RIGHT, 
 			Vector2.RIGHT + Vector2.DOWN, Vector2.DOWN + Vector2.LEFT]
 

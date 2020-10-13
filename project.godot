@@ -30,6 +30,11 @@ _global_script_classes=[ {
 "path": "res://src/algorithms/AStarRedBlob.gd"
 }, {
 "base": "Reference",
+"class": "AStarSpaceTime",
+"language": "GDScript",
+"path": "res://src/algorithms/AStarSpaceTime.gd"
+}, {
+"base": "Reference",
 "class": "Algorithm",
 "language": "GDScript",
 "path": "res://src/algorithms/Algorithm.gd"
@@ -69,6 +74,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/tools/GridBasedUI.gd"
 }, {
+"base": "GridBasedAlgorithm",
+"class": "ICTS",
+"language": "GDScript",
+"path": "res://src/algorithms/ICTS.gd"
+}, {
 "base": "Node2D",
 "class": "MapLoader",
 "language": "GDScript",
@@ -94,6 +104,7 @@ _global_script_class_icons={
 "AStarDefault": "",
 "AStarGodot": "",
 "AStarRedBlob": "",
+"AStarSpaceTime": "",
 "Algorithm": "",
 "BasicCamera": "",
 "BreadthFirstSearch": "",
@@ -102,6 +113,7 @@ _global_script_class_icons={
 "Grid": "",
 "GridBasedAlgorithm": "",
 "GridBasedUI": "",
+"ICTS": "",
 "MapLoader": "",
 "MinBinaryHeap": "",
 "MinBinaryHeapDict": "",
