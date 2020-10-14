@@ -1,10 +1,8 @@
+using System;
 
-
-namespace DataStructures.Collections
+namespace PathFinder.Collections
 {
-	using System;
-
-
+	
 	/// <summary>
 	/// Implements a basic Binary Min Heap that can be used for A* pathfinding. Items are removed from 
 	/// the list in order from lowest to highest cost

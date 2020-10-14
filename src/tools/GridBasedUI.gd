@@ -30,7 +30,7 @@ var line_end : = Vector2.INF
 onready var camera : BasicCamera = $Camera
 
 # the playground
-onready var grid : Grid = $Grid
+onready var grid = $Grid
 
 # reference to user interface 
 onready var user_interface = $UserInterface
@@ -260,11 +260,11 @@ func set_algorithm(algorithm_enum_value : int, update_ui : = false):
 	
 	if update_ui:
 		$UserInterface.check_algorithm_item(algorithm_enum_value)
-		$UserInterface.update_options(grid.is_8_directional)
+		#$UserInterface.update_options(grid.is_8_directional)
 	
 	# initialize algorithm (e.g convert grid to Godot's Astar representation)
 	# look into the AstarGodot.gd for more
-	algorithm.initialize(grid)
+	#algorithm.initialize(grid)
 	
 
 
