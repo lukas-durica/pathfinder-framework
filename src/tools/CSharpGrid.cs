@@ -95,7 +95,6 @@ namespace PathFinder
         {
             return ((int)Mathf.Abs(vertexA.x - vertexB.x) + (int)Mathf.Abs(vertexA.y - vertexB.y)) * RegularMovementCost;
         }
-
         public static int GetDiagonalDistance(Vector2 vertexA, Vector2 vertexB)
         {
             var dx = Mathf.Abs(vertexA.x - vertexB.x);
@@ -113,7 +112,6 @@ namespace PathFinder
 
             }
         }
-
         public static int GetCost(Vector2 current, Vector2 neighbor)
         {
             if (current == neighbor)
@@ -125,9 +123,7 @@ namespace PathFinder
                 return RegularMovementCost;
             }
             return DiagonalMovementCost;
-
         }
-
         private static Vector2Array GetCardinalDirections()
         {
             return new Vector2Array { Vector2.Left, Vector2.Up, Vector2.Right, Vector2.Down };

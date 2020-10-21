@@ -4,17 +4,12 @@ extends Node2D
 
 class_name MapLoader
 
-export(NodePath) var grid_path
-
-onready var grid = get_node(grid_path)
-export(String, FILE) var map_path
-
 func _ready():
 	pass
 	#grid.clear()
 	#load_map()
 
-func load_map():
+static func load_map(grid, map_path):
 	grid.clear()
 	var file = File.new()
 	if not file.file_exists(map_path):

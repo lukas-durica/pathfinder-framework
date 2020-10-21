@@ -31,6 +31,7 @@ onready var camera : BasicCamera = $Camera
 
 # the playground
 onready var grid = $Grid
+onready var grid_c_sharp = $GridCSharp
 
 # reference to user interface 
 onready var user_interface = $UserInterface
@@ -40,6 +41,8 @@ onready var user_interface = $UserInterface
 # y -> start.y
 # z -> goal.x
 # w -> goal.y
+export(String, FILE) var map_path
+
 export(Array, Quat) var editor_starts_goals 
 
 # Called when the node enters the scene tree for the first time.
@@ -53,7 +56,10 @@ func _ready():
 	for sg in editor_starts_goals:
 		add_start_and_goal(Vector2(sg.x, sg.y), Vector2(sg.z, sg.w))
 	
-	#MapLoader.load_map(grid)
+	if not map_path.empty():
+		MapLoader.load_map(grid, map_path)
+		MapLoader.load_map(grid_c_sharp, map_path)
+		
 	
 
 func adjust_camera_to_grid():
@@ -155,23 +161,39 @@ func find_start_or_goal(vertex) -> int:
 
 # run the pathfinder
 func run():
+	print("run")
 	# reset all cells to default (e.g. path cells to free)
 	remove_agents()
 	grid.reset()
+	grid_c_sharp.Reset()
 	#algorithm.clear()
 	
 	# convert global positions to the grid (vertex) position
 	# start measuring time
 	
-	var time_start = OS.get_ticks_usec()
+	var start = Vector3(-50, -50, 0)
+	var goal = Vector3(50, 50,0 )
+	#var start = Vector3(5, -5, 0)
+	#var goal = Vector3(5, 5,0 )
 	#if starts_and_goals.empty():
 	var c_sharp_a_star = preload("res://src/algorithms/AStarCSharp.cs").new()
-	var path = c_sharp_a_star.FindSolution(grid, Vector3(-3, 0, 0), Vector3(3, 0, 0))
-	#var path = AStarSpaceTime.find_solution(grid, Vector3(-3, 0, 0), Vector3(3, 0, 0))
-	print("Elapsed time: ", OS.get_ticks_usec() - time_start, " microseconds")
+	var time_start = OS.get_ticks_usec()
+	var path = c_sharp_a_star.FindSolution(grid_c_sharp, start, goal)
+	print("Elapsed C# time: ", OS.get_ticks_usec() - time_start, " microseconds, size: ", path.size())
+	#for vertex in path:
+	#	grid.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
 	for vertex in path:
-		grid.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
+		grid_c_sharp.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
 	
+	
+	time_start = OS.get_ticks_usec()
+	path = AStarSpaceTime.find_solution(grid, start, goal)
+	print("Elapsed    time: ", OS.get_ticks_usec() - time_start, " microseconds, size: ", path.size())
+	
+	
+	#for vertex in path:
+	#	if grid.is_cell_free(Vector2(vertex.x, vertex.y)):
+	#		grid.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
 	#	push_error("There are no starts and goals!")
 	#	return
 	
@@ -212,8 +234,9 @@ func add_agent(path):
 	agent.path = path
 	
 func remove_agents():
-	for agent in $Agents.get_children():
-		agent.queue_free()
+	if has_node("Agents"):
+		for agent in $Agents.get_children():
+			agent.queue_free()
 		
 # returns global mouse position converted to grid/vertex position
 func get_mouse_vertex():

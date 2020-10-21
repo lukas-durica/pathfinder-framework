@@ -1,0 +1,8 @@
+C:\USERS\LUKAS.DURICA\WORK\GODOT\GODOTPROJECTS\3.2\PATHFINDER-FRAMEWORK\.mono\temp\bin\ExportDebug\pathfinder-framework.dll
+C:\USERS\LUKAS.DURICA\WORK\GODOT\GODOTPROJECTS\3.2\PATHFINDER-FRAMEWORK\.mono\temp\bin\ExportDebug\pathfinder-framework.pdb
+C:\USERS\LUKAS.DURICA\WORK\GODOT\GODOTPROJECTS\3.2\PATHFINDER-FRAMEWORK\.mono\temp\obj\ExportDebug\pathfinder-framework.csprojAssemblyReference.cache
+C:\USERS\LUKAS.DURICA\WORK\GODOT\GODOTPROJECTS\3.2\PATHFINDER-FRAMEWORK\.mono\temp\obj\ExportDebug\pathfinder-framework.AssemblyInfoInputs.cache
+C:\USERS\LUKAS.DURICA\WORK\GODOT\GODOTPROJECTS\3.2\PATHFINDER-FRAMEWORK\.mono\temp\obj\ExportDebug\pathfinder-framework.AssemblyInfo.cs
+C:\USERS\LUKAS.DURICA\WORK\GODOT\GODOTPROJECTS\3.2\PATHFINDER-FRAMEWORK\.mono\temp\obj\ExportDebug\pathfinder-framework.csproj.CoreCompileInputs.cache
+C:\USERS\LUKAS.DURICA\WORK\GODOT\GODOTPROJECTS\3.2\PATHFINDER-FRAMEWORK\.mono\temp\obj\ExportDebug\pathfinder-framework.dll
+C:\USERS\LUKAS.DURICA\WORK\GODOT\GODOTPROJECTS\3.2\PATHFINDER-FRAMEWORK\.mono\temp\obj\ExportDebug\pathfinder-framework.pdb

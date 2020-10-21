@@ -5,14 +5,14 @@ using System.Collections.Generic;
 namespace PathFinder
 {
     using Vector3Array = Godot.Collections.Array<Godot.Vector3>;
-
     public class AStarCSharp : Reference
     {
-
         public static Vector3Array FindSolution(Godot.Object object_grid, Vector3 start, Vector3 goal)
         {
+            var start_time = OS.GetTicksUsec();
             var grid = (CSharpGrid)object_grid;
             var frontier = new BinaryMinHeap<Vector3, int>();
+            frontier.Capacity = 200;
             frontier.Add(start, 0);
 
             var cameFrom = new Dictionary<Vector3, Vector3>();
@@ -27,9 +27,10 @@ namespace PathFinder
                 var current = frontier.Remove();
                 if (IsEqualInV2(current, goal))
                 {
+                    GD.Print("c# time:         ", OS.GetTicksUsec() - start_time);
                     return ReconstructPath(current, cameFrom);
                 }
-
+                grid.SetCellv(new Vector2(current.x, current.y), (int)CSharpGrid.TileType.Closed);
                 foreach (Vector3 state in grid.GetStates(current))
                 {
 
@@ -43,6 +44,7 @@ namespace PathFinder
                         var heuristic = grid.GetHeuristicDistance(ToVector2(goal), ToVector2(state));
                         var priority = newCost + heuristic;
                         frontier.Add(state, priority);
+                        grid.SetCellv(new Vector2(state.x, state.y), (int)CSharpGrid.TileType.Open);
                         cameFrom[state] = current;
                     }
 
@@ -80,26 +82,19 @@ namespace PathFinder
         {
             Vector3Array path = new Vector3Array();
             var current = goal;
-
-
             while (current != Vector3.Inf)
             {
                 path.Add(current);
                 current = cameFrom[current];
             }
-            path.Add(current);
-
-
             return InvertArray(path);
-
-            //return ;
+            
         }
 
         public static bool IsEqualInV2(Vector3 current, Vector3 goal)
         {
             return ToVector2(current) == ToVector2(goal);
         }
-
         public static Vector2 ToVector2(Vector3 state)
         {
             return new Vector2(state.x, state.y);
