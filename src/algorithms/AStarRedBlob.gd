@@ -37,8 +37,10 @@ func _find_solution(starts_and_goals : Array) -> Array:
 	
 	# The key idea for all of these algorithms is that we keep track of an 
 	# expanding cells called the frontier.
+	
 	var start = starts_and_goals[0].start
 	var goal = starts_and_goals[0].goal
+	print("start: ", start)
 	
 	var frontier = MinBinaryHeap.new()
 	frontier.insert_key({value = 0, vertex = start})
