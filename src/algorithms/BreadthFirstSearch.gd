@@ -11,7 +11,7 @@ www.redblobgames.com/pathfinding/a-star/introduction.html#breadth-first-search
 class_name BreadthFirstSearch
 
 
-func _find_solution(starts_and_goals : Array) -> Array:
+func find_solution(starts_and_goals : Array) -> Array:
 	var start = starts_and_goals[0].start
 	var goal = starts_and_goals[0].goal
 	

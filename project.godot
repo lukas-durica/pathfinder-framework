@@ -14,6 +14,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/algorithms/AStarCBS.gd"
 }, {
+"base": "",
+"class": "AStarCustom",
+"language": "NativeScript",
+"path": "res://bin/AStarCustom.gdns"
+}, {
+"base": "GridBasedAlgorithm",
+"class": "AStarCustomCPP",
+"language": "GDScript",
+"path": "res://src/algorithms/AStarCustomCPP.gd"
+}, {
 "base": "GridBasedAlgorithm",
 "class": "AStarDefault",
 "language": "GDScript",
@@ -101,6 +111,8 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "AStarCBS": "",
+"AStarCustom": "",
+"AStarCustomCPP": "",
 "AStarDefault": "",
 "AStarGodot": "",
 "AStarRedBlob": "",

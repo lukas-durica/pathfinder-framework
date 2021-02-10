@@ -45,3 +45,13 @@
 # optimalne cesty najdu konflikt k(opt)
 # najhorsie mozne cesty najdu konflikt k(worst)
 # spojit k(opt) a k(worst) ciarou a vyhodit tak vsetky mozne stavy medzi nimi
+# od -50, -50 do 50, 30 
+# 134965
+# 308562
+# 3786
+# 5369
+# 58837
+# testovanie map vs dictionary pri came from etc
+# frontier vymenit priority za int
+# came from, frontier dat ako lokalne, pozriet vykon
+# nahradit vector kde sa da godot array

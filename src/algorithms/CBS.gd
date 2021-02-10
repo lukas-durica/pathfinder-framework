@@ -71,12 +71,13 @@ class CBSConstraint:
 	var data
 
 # overrided virtual function
-func _initialize(grid):
+func initialize(grid):
+	.initialize(grid)
 	# assign the graph to the
 	astar.grid = grid
 
 # overrided virtual function
-func _find_solution(starts_and_goals : Array):
+func find_solution(starts_and_goals : Array):
 	# clear open as it is the member value
 	
 	#the structure for best-first search for high-level search
@@ -319,6 +320,6 @@ func update_solution(node : CBSNode):
 	# and finally add it to the cost od the node
 	node.cost += node.costs[agent_id]
 
-func _clear():
+func clear():
 	agents.clear()
 	

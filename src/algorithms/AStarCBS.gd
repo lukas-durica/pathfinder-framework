@@ -8,8 +8,7 @@ class_name AStarCBS
 # constraints are added during the CBS search
 var constraints = {}
 
-func _find_solution(starts_and_goals : Array):
-	
+func find_solution(starts_and_goals : Array):
 	# start and goal as Vector3 datatype 
 	var start = starts_and_goals[0].start
 	var goal = starts_and_goals[0].goal
@@ -131,7 +130,7 @@ func reconstruct_path(goal : Vector3, came_from : Dictionary) -> Array:
 	path.invert()
 	return path
 
-func _clear():
+func clear():
 	constraints.clear()
 
 # function for comparing position, i.e. withoat time dimension

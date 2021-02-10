@@ -11,7 +11,7 @@ const GOAL_SCENE = preload("res://src/tools/Goal.tscn")
 const AGENT_SCENE = preload("res://src/tools/Agent.tscn")
 
 # the pathfinding algorithm 
-var algorithm : GridBasedAlgorithm
+var algorithm
 
 # array that holds anonymous  start position and goal position of the agent(s)
 # and references to their visible counterparts (i.e. sprites)
@@ -49,14 +49,16 @@ func _ready():
 	#adjusting the camera zoom to the size of the grid
 	adjust_camera_to_grid()
 	
+	if not map_path.empty():
+		MapLoader.load_map(grid, map_path)
+	
 	# set algorithm and update menu in gui
-	set_algorithm(Algorithm.A_STAR_REDBLOB, true)
+	set_algorithm(Algorithm.Type.ASTAR_CUSTOM_CPP, true)
 	
 	for sg in editor_starts_goals:
 		add_start_and_goal(Vector2(sg.x, sg.y), Vector2(sg.z, sg.w))
 	
-	if not map_path.empty():
-		MapLoader.load_map(grid, map_path)
+	
 		
 	
 
@@ -173,11 +175,11 @@ func run():
 	#if starts_and_goals.empty():
 	var time_start = OS.get_ticks_usec()
 	var path = algorithm.find_solution(starts_and_goals)
+	
+	print("Elapsed time: ", OS.get_ticks_usec() - time_start, 
+			" microseconds, size: ", path.size())
 	for vertex in path:
 		grid.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
-	
-	print("Elapsed    time: ", OS.get_ticks_usec() - time_start, " microseconds, size: ", path.size())
-	
 	
 	#for vertex in path:
 	#	if grid.is_cell_free(Vector2(vertex.x, vertex.y)):
@@ -253,16 +255,18 @@ func _on_UserInterface_button_pressed(id : int):
 # using user interface was already changed
 func set_algorithm(algorithm_enum_value : int, update_ui : = false):
 	match algorithm_enum_value:
-		Algorithm.A_STAR_DEFAULT:
+		Algorithm.Type.A_STAR_DEFAULT:
 			algorithm = AStarDefault.new()
-		Algorithm.A_STAR_GODOT:
+		Algorithm.Type.A_STAR_GODOT:
 			algorithm = AStarGodot.new()
-		Algorithm.A_STAR_REDBLOB:
+		Algorithm.Type.A_STAR_REDBLOB:
 			algorithm = AStarRedBlob.new()
-		Algorithm.A_STAR_CBS:
+		Algorithm.Type.A_STAR_CBS:
 			algorithm = AStarCBS.new()
-		Algorithm.CONFLICT_BASED_SEARCH:
+		Algorithm.Type.CONFLICT_BASED_SEARCH:
 			algorithm = CBS.new()
+		Algorithm.Type.ASTAR_CUSTOM_CPP:
+			algorithm = AStarCustomCPP.new()
 		_:
 			push_error("Unknow algorithm! Setting default A*")
 			algorithm = AStarDefault.new()

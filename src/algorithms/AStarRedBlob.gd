@@ -32,8 +32,9 @@ www.redblobgames.com/pathfinding/a-star/implementation.html#algorithm
 
 class_name AStarRedBlob
 
+var frontier = preload("res://bin/MinPriorityQueue.gdns").new()
 
-func _find_solution(starts_and_goals : Array) -> Array:
+func find_solution(starts_and_goals : Array) -> Array:
 	
 	# The key idea for all of these algorithms is that we keep track of an 
 	# expanding cells called the frontier.
@@ -42,8 +43,9 @@ func _find_solution(starts_and_goals : Array) -> Array:
 	var goal = starts_and_goals[0].goal
 	print("start: ", start)
 	
-	var frontier = MinBinaryHeap.new()
-	frontier.insert_key({value = 0, vertex = start})
+	#var frontier = MinBinaryHeap.new()
+	#frontier.insert_key({value = 0, vertex = start})
+	frontier.push(0, start)
 	
 	# came_from for each location points to the place where we came from. These 
 	# are like “breadcrumbs”. They’re enough to reconstruct the entire path.
@@ -60,8 +62,9 @@ func _find_solution(starts_and_goals : Array) -> Array:
 	
 	while not frontier.empty():
 		#Pick and remove a cell from the frontier.
-		var current = frontier.extractMin().vertex
-		grid.set_cellv(current, Grid.CLOSED)
+		var current = frontier.top()
+		frontier.pop()
+		#grid.set_cellv(current, Grid.CLOSED)
 		# if the goal is found reconstruct the path, i.e. early exit
 		if current == goal:
 			return reconstruct_path(goal, came_from)
@@ -87,11 +90,11 @@ func _find_solution(starts_and_goals : Array) -> Array:
 						neighbor)
 						
 				# insert it to the frontier
-				frontier.insert_key({value = priority, vertex = neighbor})
+				frontier.push(priority, neighbor)
 				
 				# add current as place where we came from to neighbor
 				came_from[neighbor] = current
-				grid.set_cellv(neighbor, Grid.OPEN)
+				#grid.set_cellv(neighbor, Grid.OPEN)
 	
 	return Array()
 

@@ -11,10 +11,8 @@ class ICTSNode:
 
 var starts_goals : = []
 
-func _initialize(grid):
-	pass
 
-func _find_solution(starts_and_goals : Array):
+func find_solution(starts_and_goals : Array):
 	starts_goals = starts_and_goals
 	var root = get_root()
 
@@ -40,6 +38,6 @@ func generate_successors(node : ICTSNode) -> Array:
 	
 	
 
-func _clear():
+func clear():
 	pass
 

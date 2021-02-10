@@ -9,7 +9,8 @@ class_name AStarGodot
 
 var a_star = AStar2D.new()
 
-func _initialize(grid):
+func initialize(grid):
+	.initialize(grid)
 	a_star.clear()
 	# already added vertexes to Godot's A* representation as points
 	var already_added : = {}
@@ -57,7 +58,7 @@ func _initialize(grid):
 
 # find ids of the closest points to start and goal and pass them to the 
 # algorithm
-func _find_solution(starts_and_goals : Array):
+func find_solution(starts_and_goals : Array):
 	var start_id = a_star.get_closest_point(starts_and_goals[0].start)
 	var goal_id = a_star.get_closest_point(starts_and_goals[0].goal)
 	return a_star.get_point_path(start_id, goal_id)

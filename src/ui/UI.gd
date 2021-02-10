@@ -16,18 +16,8 @@ func _ready():
 	#User Interface is invisible due to work with the grid in the editor
 	$UIRoot.visible = true
 	
-	
-	algorithms.add_radio_check_item(Algorithm.to_str(Algorithm.A_STAR_GODOT), 
-			Algorithm.A_STAR_GODOT)
-	algorithms.add_radio_check_item(Algorithm.to_str(Algorithm.A_STAR_DEFAULT),
-			Algorithm.A_STAR_DEFAULT)
-	algorithms.add_radio_check_item(Algorithm.to_str(Algorithm.A_STAR_REDBLOB),
-			Algorithm.A_STAR_REDBLOB)
-	algorithms.add_radio_check_item(Algorithm.to_str(Algorithm.A_STAR_CBS),
-			Algorithm.A_STAR_CBS)
-			
-	algorithms.add_radio_check_item(Algorithm.to_str(Algorithm.CONFLICT_BASED_SEARCH),
-			Algorithm.CONFLICT_BASED_SEARCH)
+	for key in Algorithm.Type:
+		algorithms.add_radio_check_item(key, Algorithm.Type[key])
 	
 	options.add_check_item("8 directional", 1)
 

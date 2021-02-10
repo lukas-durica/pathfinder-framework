@@ -31,8 +31,7 @@ func get_neighbors(vertex : Vector2) -> Array:
 	var neighbors = []
 	
 	for direction in directions:
-		var tile_position = Vector2(vertex.x + direction.x,
-				vertex.y + direction.y)
+		var tile_position = vertex + direction
 		if is_cell_valid(tile_position) and not is_cell_obstacle(tile_position):
 			neighbors.push_back(tile_position)
 	return neighbors
