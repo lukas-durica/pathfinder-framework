@@ -46,7 +46,7 @@ static func find_solution(grid : Grid, start : Vector3, goal : Vector3):
 		# is the padded path
 		
 		if is_equal(goal, current):
-			return reconstruct_path(current, came_from) 
+			return reconstruct_path(current, came_from)
 					
 		
 		#Expand it by looking at its neighbors

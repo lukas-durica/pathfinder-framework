@@ -58,10 +58,6 @@ func _ready():
 	for sg in editor_starts_goals:
 		add_start_and_goal(Vector2(sg.x, sg.y), Vector2(sg.z, sg.w))
 	
-	
-		
-	
-
 func adjust_camera_to_grid():
 	
 	# the size of the screen

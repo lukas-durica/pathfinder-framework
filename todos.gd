@@ -55,3 +55,4 @@
 # frontier vymenit priority za int
 # came from, frontier dat ako lokalne, pozriet vykon
 # nahradit vector kde sa da godot array
+# -50, -42 -> -26, -40

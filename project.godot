@@ -9,15 +9,15 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "",
+"class": "AStar2D",
+"language": "NativeScript",
+"path": "res://bin/AStar2D.gdns"
+}, {
 "base": "GridBasedAlgorithm",
 "class": "AStarCBS",
 "language": "GDScript",
 "path": "res://src/algorithms/AStarCBS.gd"
-}, {
-"base": "",
-"class": "AStarCustom",
-"language": "NativeScript",
-"path": "res://bin/AStarCustom.gdns"
 }, {
 "base": "GridBasedAlgorithm",
 "class": "AStarCustomCPP",
@@ -110,8 +110,8 @@ _global_script_classes=[ {
 "path": "res://src/ui/UI.gd"
 } ]
 _global_script_class_icons={
+"AStar2D": "",
 "AStarCBS": "",
-"AStarCustom": "",
 "AStarCustomCPP": "",
 "AStarDefault": "",
 "AStarGodot": "",

@@ -1,0 +1,9 @@
+[gd_resource type="NativeScript" load_steps=2 format=2]
+
+[ext_resource path="res://bin/AStarCustom.gdnlib" type="GDNativeLibrary" id=1]
+
+[resource]
+resource_name = "a_star_space_time"
+class_name = "AStarSpaceTime"
+library = ExtResource( 1 )
+script_class_name = "AStarSpaceTime"
