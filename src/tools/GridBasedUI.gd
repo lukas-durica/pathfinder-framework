@@ -40,20 +40,23 @@ onready var user_interface = $UserInterface
 # y -> start.y
 # z -> goal.x
 # w -> goal.y
+
+export var load_path : = false
 export(String, FILE) var map_path
 
 export(Array, Quat) var editor_starts_goals 
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	#adjusting the camera zoom to the size of the grid
 	adjust_camera_to_grid()
-	
-	if not map_path.empty():
-		MapLoader.load_map(grid, map_path)
-	
+	if load_path:
+		if not map_path.empty():
+			MapLoader.load_map(grid, map_path)
+		
 	# set algorithm and update menu in gui
-	set_algorithm(Algorithm.Type.ASTAR_CUSTOM_CPP, true)
+	set_algorithm(Algorithm.Type.A_STAR_CUSTOM_CPP, true)
 	
 	for sg in editor_starts_goals:
 		add_start_and_goal(Vector2(sg.x, sg.y), Vector2(sg.z, sg.w))
@@ -261,8 +264,10 @@ func set_algorithm(algorithm_enum_value : int, update_ui : = false):
 			algorithm = AStarCBS.new()
 		Algorithm.Type.CONFLICT_BASED_SEARCH:
 			algorithm = CBS.new()
-		Algorithm.Type.ASTAR_CUSTOM_CPP:
+		Algorithm.Type.A_STAR_CUSTOM_CPP:
 			algorithm = AStarCustomCPP.new()
+		Algorithm.Type.A_STAR_SPACE_TIME:
+			algorithm = AStarSpaceTime.new()
 		_:
 			push_error("Unknow algorithm! Setting default A*")
 			algorithm = AStarDefault.new()

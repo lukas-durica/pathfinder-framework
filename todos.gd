@@ -56,3 +56,9 @@
 # came from, frontier dat ako lokalne, pozriet vykon
 # nahradit vector kde sa da godot array
 # -50, -42 -> -26, -40
+
+#46452766
+#5069691
+#4403249
+#3576627
+#4715144

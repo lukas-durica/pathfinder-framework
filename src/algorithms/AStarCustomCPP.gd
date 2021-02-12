@@ -1,7 +1,7 @@
 class_name AStarCustomCPP extends GridBasedAlgorithm
 
 #var astar_cpp : = AStarCustom.new()
-var astar_cpp : = preload("res://bin/AStar2D.gdns").new()
+var astar_cpp : = preload("res://bin/AStarSpaceTime.gdns").new()
 
 func initialize(grd):
 	print("initializing")
@@ -50,8 +50,9 @@ func initialize(grd):
 func find_solution(starts_and_goals : Array):
 	var start = starts_and_goals[0].start
 	var goal = starts_and_goals[0].goal
-	return astar_cpp.find_solution(start, goal)
+	print("man: ", grid.get_manhattan_distance(start, goal))
+	return astar_cpp.find_solution(Vector3(start.x, start.y, 0.0), 
+			Vector3(goal.x, goal.y, 0.0), 1.625)
 
 func clear():
-	print("clearing")
-	pass
+	astar_cpp.clear_constraints()

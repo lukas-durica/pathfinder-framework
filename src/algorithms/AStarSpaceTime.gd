@@ -1,12 +1,20 @@
-extends Reference
+class_name AStarSpaceTime extends GridBasedAlgorithm
 
 #impelmentation similar to AstarRedBlob
 #var graph
 
-class_name AStarSpaceTime
+func initialize(grd):
+	.initialize(grd)
 
-static func find_solution(grid : Grid, start : Vector3, goal : Vector3):
+func find_solution(starts_and_goals : Array):
+	pass
 	
+	var start_v2 = starts_and_goals[0].start
+	var goal_v2 = starts_and_goals[0].goal
+	
+	var start = Vector3(start_v2.x, start_v2.y, 0.0)
+	var goal = Vector3(goal_v2.x, goal_v2.y, 0.0)
+		
 	# The key idea for all of these algorithms is that we keep track of an 
 	# expanding cells called the frontier.
 	var frontier = MinBinaryHeap.new()

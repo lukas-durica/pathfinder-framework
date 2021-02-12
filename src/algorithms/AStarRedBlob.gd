@@ -64,7 +64,7 @@ func find_solution(starts_and_goals : Array) -> Array:
 		#Pick and remove a cell from the frontier.
 		var current = frontier.top()
 		frontier.pop()
-		#grid.set_cellv(current, Grid.CLOSED)
+		grid.set_cellv(current, Grid.CLOSED)
 		# if the goal is found reconstruct the path, i.e. early exit
 		if current == goal:
 			return reconstruct_path(goal, came_from)
@@ -86,15 +86,16 @@ func find_solution(starts_and_goals : Array) -> Array:
 				cost_so_far[neighbor] = new_cost
 				
 				# The location closest to the goal will be explored first.
-				var priority = new_cost + grid.get_manhattan_distance(goal, 
+				var heuristic = grid.get_manhattan_distance(goal, 
 						neighbor)
+				var priority = new_cost + heuristic * 1.1
 						
 				# insert it to the frontier
 				frontier.push(priority, neighbor)
 				
 				# add current as place where we came from to neighbor
 				came_from[neighbor] = current
-				#grid.set_cellv(neighbor, Grid.OPEN)
+				grid.set_cellv(neighbor, Grid.OPEN)
 	
 	return Array()
 
