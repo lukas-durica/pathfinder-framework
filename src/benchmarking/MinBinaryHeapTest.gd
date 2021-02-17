@@ -16,7 +16,7 @@ func do_benchmark(number_of_elements):
 	var new_heap = MinBinaryHeap.new()
 	var time_start = OS.get_ticks_usec()
 	for i in rand_array:
-		new_heap.insert_key({value = i, cell = null})
+		new_heap.push(i, null)
 	var elapsed = OS.get_ticks_usec() - time_start
 	print()
 	print("Number of elements: ", number_of_elements)
@@ -30,7 +30,8 @@ func do_benchmark(number_of_elements):
 	
 	time_start = OS.get_ticks_usec()
 	while not new_heap.empty():
-		new_heap.extractMin()
+		new_heap.top()
+		new_heap.pop()
 	elapsed = OS.get_ticks_usec() - time_start
 	print("Extracting ", number_of_elements, 
 			" nodes, elapsed time: ", elapsed, " microseconds")

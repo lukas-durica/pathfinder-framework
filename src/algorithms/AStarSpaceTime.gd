@@ -22,7 +22,7 @@ func find_solution(starts_and_goals : Array):
 	# insert start and add it value 0
 	# however its cost should be based on heuristics, but at the beginning of
 	# the search there are no other vertexes/states only start
-	frontier.insert_key({value = 0, vertex = start})
+	frontier.push(0, start)
 	
 	# came_from for each location points to the place where we came from. These 
 	# are like “breadcrumbs”. They’re enough to reconstruct the entire path.
@@ -41,8 +41,8 @@ func find_solution(starts_and_goals : Array):
 	while not frontier.empty():
 		
 		#Pick and remove a cell with minimal value from the frontier.
-		var min_value = frontier.extractMin()
-		
+		var min_value = frontier.top()
+		frontier.pop()
 		var current = min_value.vertex
 		#graph.set_cellv(current, Grid.CLOSED)
 		
@@ -94,7 +94,7 @@ func find_solution(starts_and_goals : Array):
 				var priority = new_cost + heuristic
 				
 				# insert it to the frontier
-				frontier.insert_key({value = priority, vertex = state})
+				frontier.push(priority, state)
 				
 				# add current as place where we came from to neighbor
 				came_from[state] = current

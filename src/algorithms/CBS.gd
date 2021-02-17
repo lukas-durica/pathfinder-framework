@@ -90,7 +90,7 @@ func find_solution(starts_and_goals : Array):
 	var root = get_root()
 	
 	# insert it to min heap for best-first search
-	open.insert_key({value = root.cost, node = root})
+	open.push(root.cost, root)
 	
 	# just helper variable
 	var closed_nodes : = 0
@@ -99,8 +99,8 @@ func find_solution(starts_and_goals : Array):
 	while not open.empty():
 		
 		# get the node with the lowest value
-		var current = open.extractMin().node
-		
+		var current = open.top().node
+		open.pop()
 		# the length of the paths in the solution needs to be of the same 
 		# size during searching for conflict even if they (agents) are 
 		# waiting at the goal position
@@ -160,7 +160,7 @@ func find_solution(starts_and_goals : Array):
 			
 			# if solution is feasible
 			if new_node.cost != INF:
-				open.insert_key({value = new_node.cost, node = new_node})
+				open.push(new_node.cost, new_node)
 		closed_nodes += 1
 	return []
 

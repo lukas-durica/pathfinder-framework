@@ -56,7 +56,7 @@ func _ready():
 			MapLoader.load_map(grid, map_path)
 		
 	# set algorithm and update menu in gui
-	set_algorithm(Algorithm.Type.A_STAR_CUSTOM_CPP, true)
+	set_algorithm(Algorithm.Type.A_STAR_SPACE_TIME_CPP, true)
 	
 	for sg in editor_starts_goals:
 		add_start_and_goal(Vector2(sg.x, sg.y), Vector2(sg.z, sg.w))
@@ -248,39 +248,7 @@ func _on_UserInterface_button_pressed(id : int):
 		_:
 			push_warning("ButtonId is not valid!")
 
-# set algorithm and upstate UserInterface if needed (e.g. at the functio _ready)
-# if the algorithm is set from the code (e.g. at the startup), user interface 
-# need to be updated accordingly update_ui, if the user will change algorithm 
-# using user interface was already changed
-func set_algorithm(algorithm_enum_value : int, update_ui : = false):
-	match algorithm_enum_value:
-		Algorithm.Type.A_STAR_DEFAULT:
-			algorithm = AStarDefault.new()
-		Algorithm.Type.A_STAR_GODOT:
-			algorithm = AStarGodot.new()
-		Algorithm.Type.A_STAR_REDBLOB:
-			algorithm = AStarRedBlob.new()
-		Algorithm.Type.A_STAR_CBS:
-			algorithm = AStarCBS.new()
-		Algorithm.Type.CONFLICT_BASED_SEARCH:
-			algorithm = CBS.new()
-		Algorithm.Type.A_STAR_CUSTOM_CPP:
-			algorithm = AStarCustomCPP.new()
-		Algorithm.Type.A_STAR_SPACE_TIME:
-			algorithm = AStarSpaceTime.new()
-		_:
-			push_error("Unknow algorithm! Setting default A*")
-			algorithm = AStarDefault.new()
-			
-			
-	
-	if update_ui:
-		$UserInterface.check_algorithm_item(algorithm_enum_value)
-		#$UserInterface.update_options(grid.is_8_directional)
-	
-	# initialize algorithm (e.g convert grid to Godot's Astar representation)
-	# look into the AstarGodot.gd for more
-	algorithm.initialize(grid)
+
 	
 
 
@@ -294,7 +262,23 @@ func _on_UserInterface_options_id_pressed(id):
 		grid.is_8_directional = not grid.is_8_directional
 		algorithm.initialize(grid)
 
+# set algorithm and upstate UserInterface if needed (e.g. at the functio _ready)
+# if the algorithm is set from the code (e.g. at the startup), user interface 
+# need to be updated accordingly update_ui, if the user will change algorithm 
+# using user interface was already changed
 
+func set_algorithm(algorithm_enum_value, update_ui : = false):
+
+	algorithm = Algorithm.get_algorithm(algorithm_enum_value)
+			
+	
+	if update_ui:
+		$UserInterface.check_algorithm_item(algorithm_enum_value)
+		#$UserInterface.update_options(grid.is_8_directional)
+	
+	# initialize algorithm (e.g convert grid to Godot's Astar representation)
+	# look into the AstarGodot.gd for more
+	algorithm.initialize(grid)
 			
 			
 			

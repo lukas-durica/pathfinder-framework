@@ -32,12 +32,13 @@ www.redblobgames.com/pathfinding/a-star/implementation.html#algorithm
 
 class_name AStarRedBlob
 
-var frontier = preload("res://bin/MinPriorityQueue.gdns").new()
+
 
 func find_solution(starts_and_goals : Array) -> Array:
 	
 	# The key idea for all of these algorithms is that we keep track of an 
 	# expanding cells called the frontier.
+	var frontier = MinBinaryHeap.new()
 	
 	var start = starts_and_goals[0].start
 	var goal = starts_and_goals[0].goal
@@ -88,7 +89,7 @@ func find_solution(starts_and_goals : Array) -> Array:
 				# The location closest to the goal will be explored first.
 				var heuristic = grid.get_manhattan_distance(goal, 
 						neighbor)
-				var priority = new_cost + heuristic * 1.1
+				var priority = new_cost + heuristic
 						
 				# insert it to the frontier
 				frontier.push(priority, neighbor)

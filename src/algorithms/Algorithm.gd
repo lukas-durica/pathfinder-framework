@@ -4,7 +4,8 @@ class_name Algorithm
 
 # the list of search algorithm 
 enum Type {A_STAR_GODOT, A_STAR_DEFAULT, A_STAR_REDBLOB, A_STAR_CBS, 
-		CONFLICT_BASED_SEARCH, A_STAR_CUSTOM_CPP, A_STAR_SPACE_TIME}
+		CONFLICT_BASED_SEARCH, A_STAR_2D_CPP, A_STAR_SPACE_TIME_CPP, 
+		A_STAR_SPACE_TIME, A_STAR_SIPP_CPP, A_STAR_SIPP}
 
 # enum id to string
 static func to_str(algorithm_id : int) -> String:
@@ -20,9 +21,43 @@ static func to_str(algorithm_id : int) -> String:
 		Type.CONFLICT_BASED_SEARCH:
 			return "CBS"
 		Type.A_STAR_CUSTOM_CPP:
-			return "A* Custom CPP"
+			return "A* Custom Cpp"
 		Type.A_STAR_SPACE_TIME:
 			return "A* Space Time"
+		Type.A_STAR_2D_CPP:
+			return "A* 2D Cpp"
+		Type.A_STAR_SPACE_TIME_CPP:
+			return "A* Space Time Cpp"
+		Type.A_STAR_SIPP_CPP:
+			return "A* SIPP Cpp"
+		Type.A_STAR_SIPP:
+			return "A* SIPP"
 		_:
 			push_warning("Unknown Algorithm ID!")
 			return ""
+
+static func get_algorithm(algorithm_id : int):
+	match algorithm_id:
+		Type.A_STAR_DEFAULT:
+			return AStarDefault.new()
+		Type.A_STAR_GODOT:
+			return AStarGodot.new()
+		Type.A_STAR_REDBLOB:
+			return AStarRedBlob.new()
+		Type.A_STAR_CBS:
+			return AStarCBS.new()
+		Type.CONFLICT_BASED_SEARCH:
+			return CBS.new()
+		Type.A_STAR_SPACE_TIME_CPP:
+			return AStarSpaceTimeCppWrapper.new()
+		Type.A_STAR_SPACE_TIME:
+			return AStarSpaceTime.new()
+		Type.A_STAR_2D_CPP:
+			return AStar2DCppWrapper.new()
+		Type.A_STAR_SIPP_CPP:
+			return AStarSIPPCppWrapper.new()
+		Type.A_STAR_SIPP:
+			return AStarSIPP.new()
+		_:
+			push_error("Unknow algorithm! Setting default A*")
+			return AStarDefault.new()

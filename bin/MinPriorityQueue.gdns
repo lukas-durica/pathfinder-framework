@@ -6,3 +6,4 @@
 resource_name = "min_priority_queue"
 class_name = "MinPriorityQueue"
 library = ExtResource( 1 )
+script_class_name = "MinPriorityQueueCpp"

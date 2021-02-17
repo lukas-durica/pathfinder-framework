@@ -49,14 +49,19 @@
 # 134965
 # 308562
 # 3786
-# 5369
+# 53694802846
+
+#4802846
+
 # 58837
 # testovanie map vs dictionary pri came from etc
 # frontier vymenit priority za int
 # came from, frontier dat ako lokalne, pozriet vykon
 # nahradit vector kde sa da godot array
 # -50, -42 -> -26, -40
-
+# pri AStarSpaceTimeCpp by bolo mozne urychlit hladanie, ak by 
+# sa pouzila UnorderedMap a id podla ktoreho by sa dalo identifikovat
+# Vector3
 #46452766
 #5069691
 #4403249

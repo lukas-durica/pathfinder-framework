@@ -17,8 +17,7 @@ at root must be minimum among all keys present in Binary Heap. The same property
 must be recursively true for all nodes in Binary Tree. This is known as the heap
 (order) property. Max Binary Heap is similar to MinHeap.
 
-# usage create pair of value/priority and :
-# insert_key({value = 8, node = start})
+
 
 For more information check:
 https://www.geeksforgeeks.org/binary-heap/
@@ -32,37 +31,53 @@ class_name MinBinaryHeap
 #use PoolIntArray instead
 var heap_array : Array = []
 
+#Pushing a new key takes O(Logn) time. We add a new key at the end of the 
+#tree. IF new key is greater than its parent, then we don’t need to do 
+#anything. Otherwise, we need to traverse up to fix the violated heap property.
+	# push(8, start)
+func push(priority : int, data):
+	#First insert the new key at the end 
+	heap_array.push_back({priority = priority, data = data})
+	
+	#take the actual index of newly added key
+	var i = heap_array.size() - 1
+	
+	#Now fix the min heap property if it is violated
+	#Until index is not root (0) and parent has greater priority then the actual node
+	#swap those prioritys (structures) and continue with the parent node
+	while i != 0 and heap_array[parent_index(i)].priority > \
+			heap_array[i].priority:
+		swap_nodes_at(i, parent_index(i))
+		i = parent_index(i)
+
+
 #It returns the root element of Min Heap. Time Complexity of this operation is 
 #O(1).
-func getMin() -> int:
-	return heap_array[0]
+func top() -> int:
+	return heap_array[0].data
 
 #Removes the minimum element from MinHeap. Time Complexity of this Operation is 
 #O(Logn) as this operation needs to maintain the heap property (by calling 
 #heapify()) after removing root.
-func extractMin(): 
+func pop(): 
 	if heap_array.empty():
-		return null
+		return
 	elif heap_array.size() == 1:
-		var root = heap_array[0]
 		heap_array.clear()
-		return root
 	else:
-		var root = heap_array[0]
 		#restoring/maintaining a complete binary tree, taking the fartest 
 		#(deepest), most right node and assigning it as root
 		heap_array[0] = heap_array[heap_array.size() - 1]
 		heap_array.pop_back()
-		
-		#restore heap property
 		min_heapify(0)
-		return root
-		
+		return 
+# for compatibility with MinPriorityQueue
+
 #A recursive method to heapify (restore heap property) tree, starting from the
 # node at index i
 func min_heapify(i : int):
-	#the index of the smallest (actual) value
-	var smallest_value_index = i
+	#the index of the smallest (actual) priority
+	var smallest_priority_index = i
 	
 	#the index of the left child
 	var left_child_index = left_index(i)
@@ -72,49 +87,32 @@ func min_heapify(i : int):
 	
 	# check if the child index is not bigger than the size of our array in case
 	# node with the index i has no children
-	# then check if value at the smallest_value_index is greater than the child
-	# if so remember the index as the smallest_value_index
+	# then check if priority at the smallest_priority_index is greater than the child
+	# if so remember the index as the smallest_priority_index
 	if left_child_index < heap_array.size() and \
-			heap_array[left_child_index].value \
-			< heap_array[smallest_value_index].value:
-		smallest_value_index = left_child_index
+			heap_array[left_child_index].priority \
+			< heap_array[smallest_priority_index].priority:
+		smallest_priority_index = left_child_index
 	#same for the right children
 	if right_child_index < heap_array.size() and \
-			heap_array[right_child_index].value \
-			< heap_array[smallest_value_index].value:
-		smallest_value_index = right_child_index
-	#if and of children has smaller value swap them and then continue with 
-	#the node at child index with the former smallest value
-	if smallest_value_index != i:
-		swap_nodes_at(i, smallest_value_index)
-		min_heapify(smallest_value_index)
+			heap_array[right_child_index].priority \
+			< heap_array[smallest_priority_index].priority:
+		smallest_priority_index = right_child_index
+	#if and of children has smaller priority swap them and then continue with 
+	#the node at child index with the former smallest priority
+	if smallest_priority_index != i:
+		swap_nodes_at(i, smallest_priority_index)
+		min_heapify(smallest_priority_index)
 
 
-#Decreases value of key. The time complexity of this operation is O(Logn). If 
-#the decreases key value of a node is greater than the parent of the node, then 
+#Decreases priority of key. The time complexity of this operation is O(Logn). If 
+#the decreases key priority of a node is greater than the parent of the node, then 
 #we don’t need to do anything. Otherwise, we need to traverse up to fix the 
 #violated heap property.
 func decreaseKey(_i : int, _new_val : int): 
 	pass
 
-#Inserting a new key takes O(Logn) time. We add a new key at the end of the 
-#tree. IF new key is greater than its parent, then we don’t need to do 
-#anything. Otherwise, we need to traverse up to fix the violated heap property.
-#Insert anonymous structure e.g.: 
-	# insert_key({value = 8, node = start})
-func insert_key(k):
-	#First insert the new key at the end 
-	heap_array.push_back(k)
-	
-	#take the actual index of newly added key
-	var i = heap_array.size() - 1
-	
-	#Now fix the min heap property if it is violated
-	#Until index is not root (0) and parent has greater value then the actual node
-	#swap those values (structures) and continue with the parent node
-	while i != 0 and heap_array[parent_index(i)].value > heap_array[i].value:
-		swap_nodes_at(i, parent_index(i))
-		i = parent_index(i)
+
 
 #Not needed, if do implement by moving fartest right node, chceck here:
 #http://www.mathcs.emory.edu/~cheung/Courses/171/Syllabus/9-BinTree
