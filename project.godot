@@ -9,7 +9,7 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "Reference",
+"base": "",
 "class": "AStar2DCpp",
 "language": "NativeScript",
 "path": "res://bin/AStar2DCpp.gdns"
@@ -44,7 +44,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/algorithms/AStarSIPP.gd"
 }, {
-"base": "Reference",
+"base": "",
 "class": "AStarSIPPCpp",
 "language": "NativeScript",
 "path": "res://bin/AStarSIPPCpp.gdns"
@@ -59,7 +59,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/algorithms/AStarSpaceTime.gd"
 }, {
-"base": "Reference",
+"base": "",
 "class": "AStarSpaceTimeCpp",
 "language": "NativeScript",
 "path": "res://bin/AStarSpaceTimeCpp.gdns"
@@ -144,7 +144,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/data_strunctures/MinBinaryHeapDict.gd"
 }, {
-"base": "Reference",
+"base": "",
 "class": "MinPriorityQueueCpp",
 "language": "NativeScript",
 "path": "res://bin/MinPriorityQueue.gdns"
