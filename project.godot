@@ -44,7 +44,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/algorithms/AStarSIPP.gd"
 }, {
-"base": "",
+"base": "Reference",
 "class": "AStarSIPPCpp",
 "language": "NativeScript",
 "path": "res://bin/AStarSIPPCpp.gdns"
@@ -75,7 +75,7 @@ _global_script_classes=[ {
 "path": "res://src/data_strunctures/AVLTree.gd"
 }, {
 "base": "Node2D",
-"class": "AgentSipp",
+"class": "AgentSIPP",
 "language": "GDScript",
 "path": "res://src/tools/AgentSIPP.gd"
 }, {
@@ -144,7 +144,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/data_strunctures/MinBinaryHeapDict.gd"
 }, {
-"base": "",
+"base": "Reference",
 "class": "MinPriorityQueueCpp",
 "language": "NativeScript",
 "path": "res://bin/MinPriorityQueue.gdns"
@@ -168,7 +168,7 @@ _global_script_class_icons={
 "AStarSpaceTimeCpp": "",
 "AStarSpaceTimeCppWrapper": "",
 "AVLTree": "",
-"AgentSipp": "",
+"AgentSIPP": "",
 "Algorithm": "",
 "BasicCamera": "",
 "BreadthFirstSearch": "",

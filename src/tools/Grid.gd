@@ -79,6 +79,9 @@ func get_heuristic_distance(vertex_a : Vector2, vertex_b : Vector2) -> int:
 func get_manhattan_distance(vertex_a : Vector2, vertex_b : Vector2) -> int:
 	return int(abs(vertex_a.x - vertex_b.x) + abs(vertex_a.y - vertex_b.y)) * \
 			REGULAR_MOVEMENT_COST
+			
+func get_manhattan_distance_a_sipp(vertex_a : Vector2, vertex_b : Vector2) -> int:
+	return int(abs(vertex_a.x - vertex_b.x) + abs(vertex_a.y - vertex_b.y))
 
 # diagonal distance between two vertexes
 func get_diagonal_distance(vertex_a : Vector2, vertex_b : Vector2) -> int:

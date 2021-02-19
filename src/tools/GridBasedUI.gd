@@ -8,7 +8,7 @@ const GUI_ZOOM_FACTOR : = 1.13
 
 const START_SCENE = preload("res://src/tools/Start.tscn")
 const GOAL_SCENE = preload("res://src/tools/Goal.tscn")
-const AGENT_SCENE = preload("res://src/tools/Agent.tscn")
+const AGENT_SCENE = preload("res://src/tools/AgentSIPP.tscn")
 
 # the pathfinding algorithm 
 var algorithm
@@ -56,7 +56,7 @@ func _ready():
 			MapLoader.load_map(grid, map_path)
 		
 	# set algorithm and update menu in gui
-	set_algorithm(Algorithm.Type.A_STAR_SPACE_TIME_CPP, true)
+	set_algorithm(Algorithm.Type.A_STAR_SIPP, true)
 	
 	for sg in editor_starts_goals:
 		add_start_and_goal(Vector2(sg.x, sg.y), Vector2(sg.z, sg.w))
@@ -179,6 +179,8 @@ func run():
 			" microseconds, size: ", path.size())
 	for vertex in path:
 		grid.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
+	
+	#add_agent(path)
 	
 	#for vertex in path:
 	#	if grid.is_cell_free(Vector2(vertex.x, vertex.y)):
