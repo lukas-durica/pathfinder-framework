@@ -4,9 +4,7 @@ class_name AStarSIPPCppWrapper extends GridBasedAlgorithm
 var astar_cpp : = AStarSIPPCpp.new()
 
 func initialize(grd):
-	print("initializing")
 	.initialize(grd)
-	var start_time = OS.get_ticks_usec()
 	# already added vertexes to Godot's A* representation as points
 	var already_added : = {}
 	
@@ -45,7 +43,6 @@ func initialize(grd):
 			
 			# and connect it to the current cell
 			astar_cpp.connect_points(current, neighbor)
-	print("Grid Initialized: ", OS.get_ticks_usec() - start_time)
 # virtual functions
 func find_solution(starts_and_goals : Array):
 	var start = starts_and_goals[0].start

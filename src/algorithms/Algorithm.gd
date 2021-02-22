@@ -5,7 +5,8 @@ class_name Algorithm
 # the list of search algorithm 
 enum Type {A_STAR_GODOT, A_STAR_DEFAULT, A_STAR_REDBLOB, A_STAR_CBS, 
 		CONFLICT_BASED_SEARCH, A_STAR_2D_CPP, A_STAR_SPACE_TIME_CPP, 
-		A_STAR_SPACE_TIME, A_STAR_SIPP_CPP, A_STAR_SIPP}
+		A_STAR_SPACE_TIME, A_STAR_SIPP_CPP, A_STAR_SIPP, 
+		A_STAR_SPACE_TIME_CPP_TEST, A_STAR_SPACE_TIME_CPP_TEST_2}
 
 # enum id to string
 static func to_str(algorithm_id : int) -> String:
@@ -32,6 +33,10 @@ static func to_str(algorithm_id : int) -> String:
 			return "A* SIPP Cpp"
 		Type.A_STAR_SIPP:
 			return "A* SIPP"
+		Type.A_STAR_SPACE_TIME_CPP_TEST:
+			return "A* Space Time Cpp Test"
+		Type.A_STAR_SPACE_TIME_CPP_TEST_2:
+			return "A* Space Time Cpp Test 2"
 		_:
 			push_warning("Unknown Algorithm ID!")
 			return ""
@@ -58,6 +63,10 @@ static func get_algorithm(algorithm_id : int):
 			return AStarSIPPCppWrapper.new()
 		Type.A_STAR_SIPP:
 			return AStarSIPP.new()
+		Type.A_STAR_SPACE_TIME_CPP_TEST:
+			return AStarSpaceTimeCppWrapperTest.new()
+		Type.A_STAR_SPACE_TIME_CPP_TEST_2:
+			return AStarSpaceTimeCppWrapperTest2.new()
 		_:
 			push_error("Unknow algorithm! Setting default A*")
 			return AStarDefault.new()

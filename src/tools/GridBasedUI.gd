@@ -56,7 +56,7 @@ func _ready():
 			MapLoader.load_map(grid, map_path)
 		
 	# set algorithm and update menu in gui
-	set_algorithm(Algorithm.Type.A_STAR_SIPP, true)
+	set_algorithm(Algorithm.Type.A_STAR_SPACE_TIME_CPP_TEST_2, true)
 	
 	for sg in editor_starts_goals:
 		add_start_and_goal(Vector2(sg.x, sg.y), Vector2(sg.z, sg.w))
@@ -161,6 +161,11 @@ func find_start_or_goal(vertex) -> int:
 # run the pathfinder
 func run():
 	# reset all cells to default (e.g. path cells to free)
+	if starts_and_goals.empty():
+		push_error("No start defined!")
+		return
+	
+	
 	remove_agents()
 	grid.reset()
 	algorithm.clear()
@@ -262,15 +267,16 @@ func _on_UserInterface_options_id_pressed(id):
 	print(id)
 	if id == 1:
 		grid.is_8_directional = not grid.is_8_directional
+		var start_time = OS.get_ticks_usec()
 		algorithm.initialize(grid)
-
+		print("Grid Initialized: {0} microseconds".format(
+				[OS.get_ticks_usec() - start_time]))
 # set algorithm and upstate UserInterface if needed (e.g. at the functio _ready)
 # if the algorithm is set from the code (e.g. at the startup), user interface 
 # need to be updated accordingly update_ui, if the user will change algorithm 
 # using user interface was already changed
 
 func set_algorithm(algorithm_enum_value, update_ui : = false):
-
 	algorithm = Algorithm.get_algorithm(algorithm_enum_value)
 			
 	
@@ -280,7 +286,9 @@ func set_algorithm(algorithm_enum_value, update_ui : = false):
 	
 	# initialize algorithm (e.g convert grid to Godot's Astar representation)
 	# look into the AstarGodot.gd for more
+	var start_time = OS.get_ticks_usec()
 	algorithm.initialize(grid)
-			
+	print("Grid Initialized: {0} microseconds".format(
+				[OS.get_ticks_usec() - start_time]))
 			
 			
