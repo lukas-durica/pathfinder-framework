@@ -7,5 +7,4 @@
 script = ExtResource( 1 )
 
 [node name="GridBasedAlgorithm" parent="." instance=ExtResource( 2 )]
-load_path = false
-editor_starts_goals = [ Quat( 0, 0, 0, 1 ) ]
+editor_starts_goals = [ Quat( -2, -2, 0, 0 ) ]
