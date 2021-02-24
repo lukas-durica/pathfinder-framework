@@ -65,7 +65,7 @@ func find_solution(starts_and_goals : Array) -> Array:
 		#Pick and remove a cell from the frontier.
 		var current = frontier.top()
 		frontier.pop()
-		grid.set_cellv(current, Grid.CLOSED)
+		#grid.set_cellv(current, Grid.CLOSED)
 		# if the goal is found reconstruct the path, i.e. early exit
 		if current == goal:
 			return reconstruct_path(goal, came_from)
@@ -96,7 +96,7 @@ func find_solution(starts_and_goals : Array) -> Array:
 				
 				# add current as place where we came from to neighbor
 				came_from[neighbor] = current
-				grid.set_cellv(neighbor, Grid.OPEN)
+				#grid.set_cellv(neighbor, Grid.OPEN)
 	
 	return Array()
 

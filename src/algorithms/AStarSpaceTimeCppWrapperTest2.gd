@@ -51,7 +51,7 @@ func find_solution(starts_and_goals : Array):
 	var start = starts_and_goals[0].start
 	var goal = starts_and_goals[0].goal
 	return astar_cpp.find_solution(Vector3(start.x, start.y, 0.0), 
-			Vector3(goal.x, goal.y, 0.0), 1.0)
+			Vector3(goal.x, goal.y, 0.0), 1.67)
 
 func clear():
 	astar_cpp.clear()
