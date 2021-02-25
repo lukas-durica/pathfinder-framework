@@ -1,13 +1,12 @@
 class_name AStarSpaceTimeCppWrapper extends GridBasedAlgorithm
 
 #var astar_cpp : = AStarCustom.new()
-var astar_cpp : = AStarSpaceTimeCpp.new()
-
+var astar_cpp : = AStarSpaceTimeCppTest2.new()
+var added : = {}
+var connected : = {}
 func initialize(grd):
-	print("initializing")
 	.initialize(grd)
 	var start_time = OS.get_ticks_usec()
-	# already added vertexes to Godot's A* representation as points
 	var already_added : = {}
 	
 	# vertexes that already have their IDs but was not added to already_added
@@ -45,13 +44,15 @@ func initialize(grd):
 			
 			# and connect it to the current cell
 			astar_cpp.connect_points(current, neighbor)
-	print("Grid Initialized: ", OS.get_ticks_usec() - start_time)
+	
+
 # virtual functions
 func find_solution(starts_and_goals : Array):
 	var start = starts_and_goals[0].start
 	var goal = starts_and_goals[0].goal
 	return astar_cpp.find_solution(Vector3(start.x, start.y, 0.0), 
-			Vector3(goal.x, goal.y, 0.0))
+			Vector3(goal.x, goal.y, 0.0), 1.00)
 
 func clear():
+	astar_cpp.clear()
 	astar_cpp.clear_constraints()

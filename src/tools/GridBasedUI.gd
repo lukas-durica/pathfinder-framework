@@ -43,7 +43,8 @@ onready var user_interface = $UserInterface
 
 export var load_path : = false
 export(String, FILE) var map_path
-
+export(Algorithm.Type) var default_algorithm = \
+		Algorithm.Type.A_STAR_SPACE_TIME_CPP
 export(Array, Quat) var editor_starts_goals 
 
 
@@ -56,7 +57,7 @@ func _ready():
 			MapLoader.load_map(grid, map_path)
 		
 	# set algorithm and update menu in gui
-	set_algorithm(Algorithm.Type.A_STAR_SPACE_TIME_CPP_TEST_2, true)
+	set_algorithm(default_algorithm, true)
 	
 	for sg in editor_starts_goals:
 		add_start_and_goal(Vector2(sg.x, sg.y), Vector2(sg.z, sg.w))
