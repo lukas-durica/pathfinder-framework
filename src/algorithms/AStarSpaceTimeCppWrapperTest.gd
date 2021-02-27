@@ -7,9 +7,12 @@ var connected : = {}
 func initialize(grd):
 	.initialize(grd)
 	var start_time = OS.get_ticks_usec()
-	var idx : = 0
-	# already added vertexes to Godot's A* representation as points
+	var added : = {}
+	var connected : = {}
+	var already_added : = {}
 	
+	# vertexes that already have their IDs but was not added to already_added
+
 	
 	# reserve memory in A* with the size of the grid
 	for current in grid.get_used_cells():
@@ -17,40 +20,42 @@ func initialize(grd):
 		if grid.is_cell_obstacle(current):
 			continue
 		# it will be added so chceck if is added
-		#print("current: ", current)
-		if not current in added:
-			astar_cpp.add_point(idx, current)
-			#print("adding point: {0}: {1} ".format([idx, current]))
-			#add it to added and processed
-			added[current] = idx
-			idx += 1
+		
+		 
+		if not current in already_added:
+			astar_cpp.add_point(current)
+			#add it to already_added and processed
+			already_added[current] = true
 			#add current cell to the A*
-		connected[current] = true
+		elif current in already_added and not already_added[current]:
+			already_added[current] = true
+		
 		#get its neighbors
 		for neighbor in grid.get_neighbors(current):
-			
-			if neighbor in connected:
+			# if the neighbor is not obstacle and is not in already added 
+			# and processed
+			if grid.is_cell_obstacle(neighbor) or (neighbor in already_added \
+					and already_added[neighbor]):
 				continue
-			var neighbor_idx = -1
-			if neighbor in added:
-				neighbor_idx = added[neighbor]
-			else:
-				astar_cpp.add_point(idx, neighbor)
-				added[neighbor] = idx
-				neighbor_idx = idx
-				idx += 1
-			#print("adding neighbor: {0}: {1}".format([idx, neighbor]))
-			# neighbor added but not yet processed
-		
+			
+			if not neighbor in already_added:
+				astar_cpp.add_point(neighbor)
+				
+				#neighbor added but not yet processed
+				already_added[neighbor] = false
+			
 			# and connect it to the current cell
-			astar_cpp.connect_points(added[current], neighbor_idx)
+			astar_cpp.connect_points(current, neighbor)
 	
 
 # virtual functions
 func find_solution(starts_and_goals : Array):
-	var start = starts_and_goals[0].start
-	var goal = starts_and_goals[0].goal
-	return astar_cpp.find_solution(added[start], added[goal], 1.0)
-
+	var paths : = []
+	for sag in starts_and_goals:
+		var start = sag.start
+		var goal = sag.goal
+		paths.push_back(astar_cpp.find_solution(Vector3(start.x, start.y, 29.0), 
+				Vector3(goal.x, goal.y, 0.0)))
+	return paths
 func clear():
 	astar_cpp.clear_constraints()

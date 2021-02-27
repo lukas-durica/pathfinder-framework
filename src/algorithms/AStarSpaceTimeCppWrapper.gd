@@ -2,11 +2,12 @@ class_name AStarSpaceTimeCppWrapper extends GridBasedAlgorithm
 
 #var astar_cpp : = AStarCustom.new()
 var astar_cpp : = AStarSpaceTimeCppTest2.new()
-var added : = {}
-var connected : = {}
+
 func initialize(grd):
 	.initialize(grd)
 	var start_time = OS.get_ticks_usec()
+	var added : = {}
+	var connected : = {}
 	var already_added : = {}
 	
 	# vertexes that already have their IDs but was not added to already_added
@@ -51,7 +52,7 @@ func find_solution(starts_and_goals : Array):
 	var start = starts_and_goals[0].start
 	var goal = starts_and_goals[0].goal
 	return astar_cpp.find_solution(Vector3(start.x, start.y, 0.0), 
-			Vector3(goal.x, goal.y, 0.0), 1.00)
+			Vector3(goal.x, goal.y, 0.0))
 
 func clear():
 	astar_cpp.clear()

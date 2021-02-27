@@ -8,7 +8,7 @@ const GUI_ZOOM_FACTOR : = 1.13
 
 const START_SCENE = preload("res://src/tools/Start.tscn")
 const GOAL_SCENE = preload("res://src/tools/Goal.tscn")
-const AGENT_SCENE = preload("res://src/tools/AgentSIPP.tscn")
+const AGENT_SCENE = preload("res://src/tools/AgentContinuous.tscn")
 
 # the pathfinding algorithm 
 var algorithm
@@ -179,14 +179,23 @@ func run():
 	#var goal = Vector3(5, 5,0 )
 	#if starts_and_goals.empty():
 	var time_start = OS.get_ticks_usec()
-	var path = algorithm.find_solution(starts_and_goals)
+	var paths = algorithm.find_solution(starts_and_goals)
 	
 	print("Elapsed time: ", OS.get_ticks_usec() - time_start, 
-			" microseconds, size: ", path.size())
-	for vertex in path:
-		grid.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
-	
-	#add_agent(path)
+			" microseconds")
+	# if there is only one path from single agent algorithm
+	if paths[0] is Vector2:
+		
+		for vertex in paths:
+			grid.set_cellv(vertex, Grid.PATH)
+		add_agent(paths)
+
+		# if there are multiple paths from multi agent algorithm
+	elif paths[0] is Array:
+		for path in paths:
+			for vertex in path:
+				grid.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
+			add_agent(path)
 	
 	#for vertex in path:
 	#	if grid.is_cell_free(Vector2(vertex.x, vertex.y)):
@@ -208,19 +217,7 @@ func run():
 
 	
 #	if not paths.empty():
-#		# if there is only one path from single agent algorithm
-#		if paths[0] is Vector2:
-#
-#			for vertex in paths:
-#				grid.set_cellv(vertex, Grid.PATH)
-#			add_agent(paths)
-#
-#		# if there are multiple paths from multi agent algorithm
-#		elif paths[0] is Array:
-#			for path in paths:
-#				for vertex in path:
-#					grid.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
-#				add_agent(path)
+#		
 	# color the path
 	
 		
