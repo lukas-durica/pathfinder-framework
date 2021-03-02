@@ -1,7 +1,7 @@
-class_name AStarSpaceTimeCppWrapperTest extends GridBasedAlgorithm
+class_name AStarMAPFCppWrapper extends GridBasedAlgorithm
 
 #var astar_cpp : = AStarCustom.new()
-var astar_cpp : = AStarSpaceTimeCppTest.new()
+var astar_cpp : = AStarMAPFCpp.new()
 var added : = {}
 var connected : = {}
 func initialize(grd):
@@ -53,7 +53,7 @@ func find_solution(starts_and_goals : Array):
 	var initial_positions = []
 	for sag in starts_and_goals:
 		initial_positions.push_back(sag.start)
-	astar_cpp.add_initial_positions(initial_positions)
+	astar_cpp.add_initial_agent_positions(initial_positions)
 	
 	var paths : = []
 	for sag in starts_and_goals:
@@ -64,3 +64,8 @@ func find_solution(starts_and_goals : Array):
 	return paths
 func clear():
 	astar_cpp.clear_constraints()
+
+func update_actual_time_step():
+	print("udpate actual time step")
+	astar_cpp.update_actual_time_step()
+	

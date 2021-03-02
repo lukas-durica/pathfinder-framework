@@ -3,7 +3,7 @@
 [ext_resource path="res://bin/AStarCustom.gdnlib" type="GDNativeLibrary" id=1]
 
 [resource]
-resource_name = "a_star_space_time_test"
-class_name = "AStarSpaceTimeTest"
+resource_name = "a_star_mapf"
+class_name = "AStarMAPF"
 library = ExtResource( 1 )
-script_class_name = "AStarSpaceTimeCppTest"
+script_class_name = "AStarMAPFCpp"

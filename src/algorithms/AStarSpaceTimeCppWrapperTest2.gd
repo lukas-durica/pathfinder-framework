@@ -7,6 +7,8 @@ var connected : = {}
 func initialize(grd):
 	.initialize(grd)
 	var start_time = OS.get_ticks_usec()
+	var added : = {}
+	var connected : = {}
 	var already_added : = {}
 	
 	# vertexes that already have their IDs but was not added to already_added
@@ -48,11 +50,22 @@ func initialize(grd):
 
 # virtual functions
 func find_solution(starts_and_goals : Array):
-	var start = starts_and_goals[0].start
-	var goal = starts_and_goals[0].goal
-	return astar_cpp.find_solution(Vector3(start.x, start.y, 0.0), 
-			Vector3(goal.x, goal.y, 0.0), 1.00)
-
+	var initial_positions = []
+	for sag in starts_and_goals:
+		initial_positions.push_back(sag.start)
+	astar_cpp.add_initial_agent_positions(initial_positions)
+	
+	var paths : = []
+	for sag in starts_and_goals:
+		var start = sag.start
+		var goal = sag.goal
+		paths.push_back(astar_cpp.find_solution(Vector3(start.x, start.y, 27.0), 
+				Vector3(goal.x, goal.y, 0.0)))
+	return paths
 func clear():
-	astar_cpp.clear()
 	astar_cpp.clear_constraints()
+
+func update_actual_time_step():
+	print("udpate actual time step")
+	astar_cpp.update_actual_time_step()
+	

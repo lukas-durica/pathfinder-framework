@@ -195,7 +195,10 @@ func run():
 		for path in paths:
 			for vertex in path:
 				grid.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
-			add_agent(path)
+			if not path.empty(): 
+				add_agent(path)
+		$Timer.start()
+	
 	
 	#for vertex in path:
 	#	if grid.is_cell_free(Vector2(vertex.x, vertex.y)):
@@ -290,3 +293,8 @@ func set_algorithm(algorithm_enum_value, update_ui : = false):
 				[OS.get_ticks_usec() - start_time]))
 			
 			
+
+
+func _on_Timer_timeout():
+	if algorithm.has_method("update_actual_time_step"):
+		algorithm.update_actual_time_step()

@@ -9,7 +9,7 @@
 [node name="GridBasedUI" type="Node2D"]
 script = ExtResource( 6 )
 map_path = "res://data/maps/dao-map/lak506d.map"
-default_algorithm = 10
+default_algorithm = 11
 editor_starts_goals = [ Quat( -2, 0, 2, 0 ), Quat( 2, -5, 2, 1 ) ]
 
 [node name="UserInterface" parent="." instance=ExtResource( 1 )]
@@ -24,6 +24,9 @@ tile_data = PoolIntArray( -327687, 0, 0, -327686, 0, 0, -327685, 0, 0, -327684, 
 script = ExtResource( 7 )
 
 [node name="Agents" type="Node2D" parent="."]
+
+[node name="Timer" type="Timer" parent="."]
 [connection signal="algorithms_id_pressed" from="UserInterface" to="." method="_on_UserInterface_algorithms_id_pressed"]
 [connection signal="button_pressed" from="UserInterface" to="." method="_on_UserInterface_button_pressed"]
 [connection signal="options_id_pressed" from="UserInterface" to="." method="_on_UserInterface_options_id_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
