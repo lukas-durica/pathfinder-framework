@@ -60,7 +60,7 @@ func find_solution(starts_and_goals : Array):
 		var start = sag.start
 		var goal = sag.goal
 		paths.push_back(astar_cpp.find_solution(Vector3(start.x, start.y, 27.0), 
-				Vector3(goal.x, goal.y, 0.0)))
+				Vector3(goal.x, goal.y, 0.0), false))
 	return paths
 func clear():
 	astar_cpp.clear_constraints()

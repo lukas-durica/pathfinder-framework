@@ -44,7 +44,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/algorithms/AStarMAPDCppWrapper.gd"
 }, {
-"base": "",
+"base": "Reference",
 "class": "AStarMAPFCpp",
 "language": "NativeScript",
 "path": "res://bin/AStarMAPF.gdns"
@@ -88,6 +88,11 @@ _global_script_classes=[ {
 "class": "AStarSpaceTimeCppWrapper",
 "language": "GDScript",
 "path": "res://src/algorithms/AStarSpaceTimeCppWrapper.gd"
+}, {
+"base": "GridBasedAlgorithm",
+"class": "AStarSpaceTimeTest",
+"language": "GDScript",
+"path": "res://src/algorithms/AStarSpaceTimeTest.gd"
 }, {
 "base": "Node2D",
 "class": "AVLTree",
@@ -169,7 +174,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/data_strunctures/MinBinaryHeapDict.gd"
 }, {
-"base": "",
+"base": "Reference",
 "class": "MinPriorityQueueCpp",
 "language": "NativeScript",
 "path": "res://bin/MinPriorityQueue.gdns"
@@ -196,6 +201,7 @@ _global_script_class_icons={
 "AStarSpaceTime": "",
 "AStarSpaceTimeCpp": "",
 "AStarSpaceTimeCppWrapper": "",
+"AStarSpaceTimeTest": "",
 "AVLTree": "",
 "AgentContinuous": "",
 "AgentSIPP": "",

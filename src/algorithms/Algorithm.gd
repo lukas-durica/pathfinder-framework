@@ -6,7 +6,7 @@ class_name Algorithm
 enum Type {A_STAR_GODOT, A_STAR_DEFAULT, A_STAR_REDBLOB, A_STAR_CBS, 
 		CONFLICT_BASED_SEARCH, A_STAR_2D_CPP, A_STAR_SPACE_TIME_CPP, 
 		A_STAR_SPACE_TIME, A_STAR_SIPP_CPP, A_STAR_SIPP, 
-		A_STAR_MAPF_CPP, A_STAR_MAPD_CPP}
+		A_STAR_MAPF_CPP, A_STAR_MAPD_CPP, A_STAR_SPACE_TIME_TEST}
 
 # enum id to string
 static func to_str(algorithm_id : int) -> String:
@@ -37,6 +37,8 @@ static func to_str(algorithm_id : int) -> String:
 			return "A* MAPF Cpp"
 		Type.A_STAR_MAPD_CPP:
 			return "A* MAPD Cpp"
+		Type.A_STAR_SPACE_TIME_TEST:
+			return "A* Space Time Test"
 		_:
 			push_warning("Unknown Algorithm ID!")
 			return ""
@@ -67,6 +69,8 @@ static func get_algorithm(algorithm_id : int):
 			return AStarMAPFCppWrapper.new()
 		Type.A_STAR_MAPD_CPP:
 			return AStarMAPDCppWrapper.new()
+		Type.A_STAR_SPACE_TIME_TEST:
+			return AStarSpaceTimeTest.new()
 		_:
 			push_error("Unknow algorithm! Setting default A*")
 			return AStarDefault.new()

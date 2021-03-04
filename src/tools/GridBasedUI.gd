@@ -181,13 +181,20 @@ func run():
 	var time_start = OS.get_ticks_usec()
 	var paths = algorithm.find_solution(starts_and_goals)
 	
-	print("Elapsed time: ", OS.get_ticks_usec() - time_start, 
-			" microseconds")
+	if paths.empty():
+		print("Path was not found")
+		return
+	
+	print("Elapsed time: {0}, size: {1}".format(
+				[OS.get_ticks_usec() - time_start, paths.size()])) 
 	# if there is only one path from single agent algorithm
-	if paths[0] is Vector2:
+	
+	
+	
+	if not paths[0] is Array:
 		
 		for vertex in paths:
-			grid.set_cellv(vertex, Grid.PATH)
+			grid.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
 		add_agent(paths)
 
 		# if there are multiple paths from multi agent algorithm
