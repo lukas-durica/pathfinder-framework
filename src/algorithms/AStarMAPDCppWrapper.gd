@@ -1,7 +1,7 @@
-class_name AStarSpaceTimeCppWrapperTest2 extends GridBasedAlgorithm
+class_name AStarMAPDCppWrapper extends GridBasedAlgorithm
 
 #var astar_cpp : = AStarCustom.new()
-var astar_cpp : = AStarSpaceTimeCppTest2.new()
+var astar_cpp : = AStarMAPDCpp.new()
 var added : = {}
 var connected : = {}
 func initialize(grd):

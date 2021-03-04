@@ -3,7 +3,7 @@
 [ext_resource path="res://bin/AStarCustom.gdnlib" type="GDNativeLibrary" id=1]
 
 [resource]
-resource_name = "a_star_2d"
-class_name = "AStar2D"
+resource_name = "a_star_2d_cpp"
+class_name = "AStar2DCpp"
 library = ExtResource( 1 )
 script_class_name = "AStar2DCpp"
