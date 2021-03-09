@@ -2,13 +2,12 @@ class_name AStarMAPDCppWrapper extends GridBasedAlgorithm
 
 #var astar_cpp : = AStarCustom.new()
 var astar_cpp : = AStarMAPDCpp.new()
-var added : = {}
-var connected : = {}
 func initialize(grd):
+	astar_cpp.actual_time_step = 15
+	astar_cpp.cycle_size = 30
+
 	.initialize(grd)
 	var start_time = OS.get_ticks_usec()
-	var added : = {}
-	var connected : = {}
 	var already_added : = {}
 	
 	# vertexes that already have their IDs but was not added to already_added
@@ -53,13 +52,13 @@ func find_solution(starts_and_goals : Array):
 	var initial_positions = []
 	for sag in starts_and_goals:
 		initial_positions.push_back(sag.start)
-	astar_cpp.add_initial_agent_positions(initial_positions)
+	#astar_cpp.add_initial_agent_positions(initial_positions)
 	
 	var paths : = []
 	for sag in starts_and_goals:
 		var start = sag.start
 		var goal = sag.goal
-		paths.push_back(astar_cpp.find_solution(Vector3(start.x, start.y, 27.0), 
+		paths.push_back(astar_cpp.find_solution(Vector3(start.x, start.y, 29.0), 
 				Vector3(goal.x, goal.y, 0.0), false))
 	return paths
 func clear():
