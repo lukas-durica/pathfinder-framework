@@ -45,6 +45,16 @@ _global_script_classes=[ {
 "path": "res://src/algorithms/AStarMAPDCppWrapper.gd"
 }, {
 "base": "Reference",
+"class": "AStarMAPDOrientedCpp",
+"language": "NativeScript",
+"path": "res://bin/AStarMAPDOriented.gdns"
+}, {
+"base": "GridBasedAlgorithm",
+"class": "AStarMAPDOrientedCppWrapper",
+"language": "GDScript",
+"path": "res://src/algorithms/AStarMAPDOrientedCppWrapper.gd"
+}, {
+"base": "Reference",
 "class": "AStarMAPFCpp",
 "language": "NativeScript",
 "path": "res://bin/AStarMAPF.gdns"
@@ -192,6 +202,8 @@ _global_script_class_icons={
 "AStarGodot": "",
 "AStarMAPDCpp": "",
 "AStarMAPDCppWrapper": "",
+"AStarMAPDOrientedCpp": "",
+"AStarMAPDOrientedCppWrapper": "",
 "AStarMAPFCpp": "",
 "AStarMAPFCppWrapper": "",
 "AStarRedBlob": "",
