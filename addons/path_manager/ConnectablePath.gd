@@ -101,17 +101,6 @@ func color_connection(area : PointArea, color : Color):
 			get_parent().get_node(path_name).color_path(color)
 	 
 
-func get_neighbor_paths(is_start : bool) -> Array:
-	var area = start_point_area if is_start else end_point_area
-	
-	if area and area.connection:
-		var paths = []
-		for path_name in area.connection.passable_connections[self.name]:
-			paths.push_back(get_parent().get_node(path_name))
-		return paths
-	
-	return []
-			
 
 func start_area_entered(area : Area2D):
 	print("area enterd")
@@ -152,6 +141,35 @@ func get_end_point():
 func set_end_point(value):
 	curve.set_point_position(curve.get_point_count() -1, value)
 
+func get_connections_or_areas():
+	var border_points : = []
+	if start_point_area:
+		if start_point_area.connection:
+			border_points.push_back(start_point_area.connection)
+		else:
+			border_points.push_back(start_point_area)
+	if end_point_area:
+		if end_point_area.connection:
+			border_points.push_back(end_point_area.connection)
+		else:
+			border_points.push_back(end_point_area)
+		
+
+func get_opposite_connection(connection):
+	if start_point_area and start_point_area.connection \
+			and start_point_area.connection != connection:
+		return start_point_area.connection
+	if end_point_area and end_point_area.connection \
+			and end_point_area.connection != connection:
+		return end_point_area.connection
+
+func get_opposite_area(connection):
+	if start_point_area and start_point_area.connection \
+			and start_point_area.connection == connection:
+		return end_point_area
+	if end_point_area and end_point_area.connection \
+			and end_point_area.connection == connection:
+		return start_point_area
 # when user move the border point from connection, but will not remove
 # area from connections, border point need to be adjusted
 func alling_border_points_with_connection():

@@ -82,7 +82,22 @@ func should_create_passable_connection(area1 : PointArea, area2 : PointArea) \
 	var normal2 = area2.path.get_connection_normal(area2.is_start)
 	print("angle to: ", rad2deg(normal2.angle_to(normal1)))
 	return false
-		
+
+# return positions of connections and not connected areas
+func get_neighbor_points() -> Array:
+	var border_points : = []
+	for path in get_connected_paths():
+		var point = path.get_connections_or_areas()
+		if point is PointArea or point is Connection and point != self:
+			border_points.push_back(point)
+	return border_points
+	
+
+func get_connected_paths() -> Array:
+	var paths : = []
+	for path_name in passable_connections:
+		paths.push_back(get_parent().get_node(path_name))
+	return paths
 
 func reconnect():
 	print("Reconnecting...")
