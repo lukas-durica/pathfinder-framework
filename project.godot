@@ -112,12 +112,17 @@ _global_script_classes=[ {
 "base": "Node2D",
 "class": "AgentContinuous",
 "language": "GDScript",
-"path": "res://src/tools/AgentContinuous.gd"
+"path": "res://src/tools/agents/AgentContinuous.gd"
+}, {
+"base": "PathFollow2D",
+"class": "AgentGraph",
+"language": "GDScript",
+"path": "res://src/tools/agents/AgentGraph.gd"
 }, {
 "base": "Node2D",
 "class": "AgentSIPP",
 "language": "GDScript",
-"path": "res://src/tools/AgentSIPP.gd"
+"path": "res://src/tools/agents/AgentSIPP.gd"
 }, {
 "base": "Reference",
 "class": "Algorithm",
@@ -144,15 +149,30 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/algorithms/CBS.gd"
 }, {
-"base": "Node2D",
-"class": "CircleWithText",
+"base": "Path2D",
+"class": "ConnectablePath",
 "language": "GDScript",
-"path": "res://CircleWithText.gd"
+"path": "res://addons/path_manager/ConnectablePath.gd"
+}, {
+"base": "Node2D",
+"class": "Connection",
+"language": "GDScript",
+"path": "res://addons/path_manager/Connection.gd"
+}, {
+"base": "Node2D",
+"class": "Graph",
+"language": "GDScript",
+"path": "res://src/tools/graph_based_ui/Graph.gd"
+}, {
+"base": "Node2D",
+"class": "GraphBasedUI",
+"language": "GDScript",
+"path": "res://src/tools/graph_based_ui/GraphBasedUI.gd"
 }, {
 "base": "TileMap",
 "class": "Grid",
 "language": "GDScript",
-"path": "res://src/tools/Grid.gd"
+"path": "res://src/tools/grid_based_ui/Grid.gd"
 }, {
 "base": "Reference",
 "class": "GridBasedAlgorithm",
@@ -162,7 +182,7 @@ _global_script_classes=[ {
 "base": "Node2D",
 "class": "GridBasedUI",
 "language": "GDScript",
-"path": "res://src/tools/GridBasedUI.gd"
+"path": "res://src/tools/grid_based_ui/GridBasedUI.gd"
 }, {
 "base": "GridBasedAlgorithm",
 "class": "ICTS",
@@ -172,7 +192,7 @@ _global_script_classes=[ {
 "base": "Node2D",
 "class": "MapLoader",
 "language": "GDScript",
-"path": "res://src/tools/MapLoader.gd"
+"path": "res://src/tools/grid_based_ui/MapLoader.gd"
 }, {
 "base": "Reference",
 "class": "MinBinaryHeap",
@@ -188,6 +208,11 @@ _global_script_classes=[ {
 "class": "MinPriorityQueueCpp",
 "language": "NativeScript",
 "path": "res://bin/MinPriorityQueue.gdns"
+}, {
+"base": "Area2D",
+"class": "PointArea",
+"language": "GDScript",
+"path": "res://addons/path_manager/PointArea.gd"
 }, {
 "base": "CanvasLayer",
 "class": "UserInteraface",
@@ -216,13 +241,17 @@ _global_script_class_icons={
 "AStarSpaceTimeTest": "",
 "AVLTree": "",
 "AgentContinuous": "",
+"AgentGraph": "",
 "AgentSIPP": "",
 "Algorithm": "",
 "BasicCamera": "",
 "BreadthFirstSearch": "",
 "BreadthFirstSearchDebug": "",
 "CBS": "",
-"CircleWithText": "",
+"ConnectablePath": "",
+"Connection": "",
+"Graph": "",
+"GraphBasedUI": "",
 "Grid": "",
 "GridBasedAlgorithm": "",
 "GridBasedUI": "",
@@ -231,6 +260,7 @@ _global_script_class_icons={
 "MinBinaryHeap": "",
 "MinBinaryHeapDict": "",
 "MinPriorityQueueCpp": "",
+"PointArea": "",
 "UserInteraface": ""
 }
 
@@ -244,6 +274,10 @@ config/icon="res://icon.png"
 
 window/size/width=1280
 window/size/height=960
+
+[editor_plugins]
+
+enabled=PoolStringArray( "path_manager" )
 
 [mono]
 

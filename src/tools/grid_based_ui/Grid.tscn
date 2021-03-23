@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://src/tools/Grid.gd" type="Script" id=1]
+[ext_resource path="res://src/tools/grid_based_ui/Grid.gd" type="Script" id=1]
 [ext_resource path="res://data/tilesets/Basic.tres" type="TileSet" id=2]
 
 [node name="Grid" type="TileMap"]

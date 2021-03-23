@@ -6,9 +6,9 @@ class_name GridBasedUI
 # overlap with the start position of the grid, just cosmetic treatment
 const GUI_ZOOM_FACTOR : = 1.13
 
-const START_SCENE = preload("res://src/tools/Start.tscn")
-const GOAL_SCENE = preload("res://src/tools/Goal.tscn")
-const AGENT_SCENE = preload("res://src/tools/AgentContinuous.tscn")
+const START_SCENE = preload("res://src/tools/grid_based_ui/Start.tscn")
+const GOAL_SCENE = preload("res://src/tools/grid_based_ui/Goal.tscn")
+const AGENT_SCENE = preload("res://src/tools/agents/AgentContinuous.tscn")
 
 # the pathfinding algorithm 
 var algorithm
