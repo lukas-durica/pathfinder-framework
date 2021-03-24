@@ -7,6 +7,7 @@ const POINT_ARENA_SCENE = preload("res://addons/path_manager/PointArea.tscn")
 signal area_entered(area, area_entered)
 signal area_with_connection_exited(area)
 signal area_without_connection_exited(area)
+signal area_was_clicked(area, button_type)
 
 export(Color) var default_color : = Color.gray
 export(Color) var highlight_color : = Color.green
@@ -20,6 +21,8 @@ var start_normal : = Vector2.INF
 var end_normal : = Vector2.INF
 
 func _ready():
+	
+	
 	if not curve:
 		curve = Curve2D.new()
 
@@ -32,7 +35,7 @@ func _notification(what):
 	match what:
 		NOTIFICATION_DRAW:
 			update_points()
-			update_normals()
+			#update_normals()
 		NOTIFICATION_TRANSFORM_CHANGED:
 			transform = Transform2D.IDENTITY
 
@@ -59,6 +62,7 @@ func create_point_area(is_start : bool) -> PointArea:
 	var area_exited = "start_area_exited" if is_start else "end_area_exited"
 	point_area.connect("area_entered", self, area_entered)
 	point_area.connect("area_exited", self, area_exited)
+	point_area.connect("area_was_clicked", self, "area_was_clicked")
 	# set its new position
 	if is_start:
 		start_point_area = point_area
@@ -77,8 +81,7 @@ func set_default_color():
 func update_normals():
 	if curve.get_point_count() < 2:
 		return
-	print("start_point: ",curve.get_baked_points()[1])
-	print("end_point: ", curve.get_baked_points()[curve.get_baked_points().size() - 2])
+	
 	var normal = get_connection_normal(true)
 	if start_normal != normal:
 		#print("updating start normal old: ", start_normal, " new: ", normal)
@@ -128,7 +131,10 @@ func end_area_exited(area : Area2D):
 		emit_signal("area_with_connection_exited", end_point_area)
 	else:
 		emit_signal("area_without_connection_exited", end_point_area)
-	
+
+func area_was_clicked(area : Area2D, button_type : int):
+	emit_signal("area_was_clicked", area, button_type)
+
 func get_start_point():
 	return curve.get_point_position(0)
 

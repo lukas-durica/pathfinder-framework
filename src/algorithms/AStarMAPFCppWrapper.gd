@@ -2,13 +2,10 @@ class_name AStarMAPFCppWrapper extends GridBasedAlgorithm
 
 #var astar_cpp : = AStarCustom.new()
 var astar_cpp : = AStarMAPFCpp.new()
-var added : = {}
-var connected : = {}
+
 func initialize(grd):
 	.initialize(grd)
-	var start_time = OS.get_ticks_usec()
-	var added : = {}
-	var connected : = {}
+	
 	var already_added : = {}
 	
 	# vertexes that already have their IDs but was not added to already_added

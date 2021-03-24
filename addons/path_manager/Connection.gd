@@ -6,6 +6,7 @@ class_name Connection extends Node2D
 # other path names as as value
 # making connections means making passable from one path to another
 # dont assign it with := {} Godots bug will share it through the instancies
+# for simplicity only the name is stored no the whole path
 export(Dictionary) var passable_connections
 
 # serves purely for reconnecting after loading the scene
@@ -16,9 +17,14 @@ export(Array) var connected_area_paths
 # connected areas
 var connected_areas : = []
 
+# only in run time
+var connected_paths : = []
+
 func _ready():
+	
 	set_notify_transform(true)
 	reconnect()
+	connected_paths = get_connected_paths()
 
 func _notification(what):
 	match what:
@@ -38,17 +44,18 @@ func update_areas_position():
 func add_to_connection(connected_area : PointArea):
 	if connected_area.connection:
 		push_error("connection already exists!")
+	
 	connected_area.connection = self
 	connected_area_paths.push_back(get_path_to(connected_area))
 	connected_areas += [connected_area]
 	# connect it to all connections there are
 	passable_connections[connected_area.path.name] = []
-	for connection in passable_connections:
-		if connection == connected_area.path.name:
+	for path_to_path_node in passable_connections:
+		if path_to_path_node == connected_area.path.name:
 			continue
 		
-		passable_connections[connection] += [connected_area.path.name]
-		passable_connections[connected_area.path.name] += [connection]
+		passable_connections[path_to_path_node] += [connected_area.path.name]
+		passable_connections[connected_area.path.name] += [path_to_path_node]
 	
 	var path = connected_area.path
 	path.update_border_point(connected_area)
@@ -88,15 +95,20 @@ func get_neighbor_points() -> Array:
 	var border_points : = []
 	for path in get_connected_paths():
 		var point = path.get_connections_or_areas()
-		if point is PointArea or point is Connection and point != self:
+		if point != self:
 			border_points.push_back(point)
 	return border_points
 	
 
 func get_connected_paths() -> Array:
+	if not connected_paths.empty():
+		return connected_paths
+	
 	var paths : = []
-	for path_name in passable_connections:
-		paths.push_back(get_parent().get_node(path_name))
+	for area in connected_areas:
+		# connection can hold both areas of one path
+		if not area.path in paths:
+			paths.push_back(area.path)
 	return paths
 
 func reconnect():
@@ -104,6 +116,7 @@ func reconnect():
 	
 	for path in connected_area_paths:
 		var area = get_node(path)
+		print("path: ", path)
 		print(area.path.name, "/", area.name)
 		area.connection = self
 		connected_areas += [area]

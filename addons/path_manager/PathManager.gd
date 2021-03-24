@@ -75,7 +75,7 @@ func clear():
 	print("clearing")
 
 func create_connection():
-	print(name, ": create_connection, returning")
+	print(name, ": create_connection")
 	var area = area_entered_data.area
 	var area_entered_to = area_entered_data.area_entered_to
 	area.global_transform.origin = area_entered_to.global_transform.origin
@@ -87,8 +87,12 @@ func create_connection():
 		if not get_root():
 			push_error("There is no root, please open scene!")
 			return
-		if not get_root().find_node("Connections"):
-			create_node_connections()
+			
+		var parent = path.get_parent()
+		if parent.get_parent():
+			parent = parent.get_parent()
+		if not parent.find_node("Connections"):
+			create_node_connections(parent)
 		
 		var con = add_new_connection(area_entered_to.global_transform.origin)
 		con.add_to_connection(area)
@@ -110,10 +114,10 @@ func add_new_connection(position : Vector2) -> Node2D:
 	return new_conn
 	
 
-func create_node_connections():
+func create_node_connections(parent):
 	var new_connections = Node2D.new()
 	new_connections.name = "Connections"
-	get_root().add_child(new_connections)
+	parent.add_child(new_connections)
 	new_connections.owner = get_root()
 
 func get_root() -> Node:

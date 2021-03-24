@@ -18,8 +18,6 @@ class GridPoint:
 func initialize(grd):
 	.initialize(grd)
 	
-	var added : = {}
-	var connected : = {}
 	var already_added : = {}
 	
 	# vertexes that already have their IDs but was not added to already_added

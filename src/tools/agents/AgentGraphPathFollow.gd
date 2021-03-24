@@ -1,22 +1,16 @@
-class_name AgentGraph extends Node2D
-
-const PATH_FOLLOW_SCENE : = \
-		preload("res://src/tools/agents/RemotePathFollow.tscn")
+class_name AgentGraphPathFollow extends PathFollow2D
 
 export var speed : = 40.0
 
-onready var path_follow : RemotePathFollow = PATH_FOLLOW_SCENE.instance()
 
 func _ready():
 	$Label.text = name
-	
 
 func _process(delta):
 	
-	path_follow.offset += delta * speed
-	print("path_follow.offset: ", path_follow.offset)
+	offset += delta * speed
 	
-	if path_follow.unit_offset >= 1.0:
+	if unit_offset >= 1.0:
 		var next_path = get_next_path()
 		if next_path:
 			align_to_path(next_path, global_position)
@@ -25,17 +19,11 @@ func _process(delta):
 		
 
 func align_to_path(path : Path2D, align_to : Vector2):
-	if path_follow.get_parent():
-		HelperFunctions.reparent(path_follow, path)
-	else:
-		path.add_child(path_follow)
-		path_follow.set_remote_node(self)
-	
-	print(path_follow.remote_transform.remote_path)
+	HelperFunctions.reparent(self, path)
 	
 	var local_origin = path.to_local(align_to)
 	var closest_offset = path.curve.get_closest_offset(local_origin)
-	path_follow.offset = closest_offset
+	offset = closest_offset
 	
 func get_closest_area() -> PointArea:
 	var parent : ConnectablePath = get_parent()

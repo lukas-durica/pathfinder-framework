@@ -22,107 +22,54 @@ onready var graph = $Graph
 # reference to user interface 
 onready var user_interface = $UserInterface
 
-var starts_and_goals : = []
+onready var start : = $Start
+
+onready var goal : = $Goal
+
 # for setting from the editor
 # x -> start.x
 # y -> start.y
 # z -> goal.x
 # w -> goal.y
 
-# variable that holds where was left mouse button pressed down 
-var line_start : = Vector2.INF
-
-# line_start to the line_end defines the line as well as start and end of the 
-# agent
-var line_end : = Vector2.INF
-
-export(Algorithm.Type) var default_algorithm = \
-		Algorithm.Type.A_STAR_SIPP
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	#adjusting the camera zoom to the size of the grid
-		
-	# set algorithm and update menu in gui
-	set_algorithm(default_algorithm, true)
+	
+	for path in graph.node_paths.get_children():
+		path = path as ConnectablePath
+		path.connect("area_was_clicked", self, "area_was_clicked")
+
+	#set_algorithm(default_algorithm, true)
 	
 	
-func _unhandled_input(event):
-	return
-	# if the any mouse button is pressed
-	if event is InputEventMouseButton:
-		
-		# get mouse position to the grid (vertex) position
-		var clicked_vertex = get_mouse_vertex()
-		var index = find_start_or_goal(clicked_vertex)
-		# if the cell is free, it can be assigned as start/goal if not return
-		if event.pressed:
-			if event.button_index == BUTTON_LEFT \
-					and not graph.is_cell_obstacle(clicked_vertex) \
-					and graph.is_cell_valid(clicked_vertex):
-						if line_start == Vector2.INF:
-							line_start = clicked_vertex
-						elif line_start != clicked_vertex:
-							add_start_and_goal(line_start, clicked_vertex)
-							line_start = Vector2.INF
-							line_end = Vector2.INF
-							update()
-			# clear with right button started line
-			elif event.button_index == BUTTON_RIGHT:
-				if line_start != Vector2.INF:
-					line_start = Vector2.INF
-					line_end = Vector2.INF
-				# if line exists delete it
-				elif index != -1:
-					starts_and_goals[index].start_sprite.queue_free()
-					starts_and_goals[index].goal_sprite.queue_free()
-					starts_and_goals.remove(index)
-				update()
-			
-	# update coords in UI with every mouse motion
-	elif event is InputEventMouseMotion:
-		user_interface.set_coords(get_mouse_vertex())
-		# if line is drawn update it 
-		if line_start != Vector2.INF:
-			line_end = get_mouse_vertex()
-			update()
+# button type is BUTTON_LEFT or BUTTON_RIGHT
+func area_was_clicked(area : PointArea, button_type : int):
+	
+	var target : Node2D = area if not area.connection else area.connection
+	var border : Node2D = start if button_type == BUTTON_LEFT else goal
 
-# called through update()
-func _draw():
-	if line_start != Vector2.INF:
-		draw_line(graph.to_world(line_start), graph.to_world(line_end), 
-				ColorN("greenyellow"), 5.0)
-	for sag in starts_and_goals:
-		 draw_line(graph.to_world(sag.start), graph.to_world(sag.goal),
-				ColorN("greenyellow"), 5.0)
-
-# add start position and goal position to UI and to starts_and_goals
-func add_start_and_goal(start_vertex : Vector2, goal_vertex : Vector2):
-	var start_scene = START_SCENE.instance()
-	var goal_scene = GOAL_SCENE.instance()
-	start_scene.position = graph.to_world(start_vertex)
-	goal_scene.position = graph.to_world(goal_vertex)
-	add_child(start_scene)
-	add_child(goal_scene)
-	starts_and_goals.push_back({start = start_vertex, goal = goal_vertex, 
-			start_sprite = start_scene, goal_sprite = goal_scene})
-
-# returns opposite index of and item in the starts_and_goal
-# if item doesnt exists it returns -1
-func find_start_or_goal(vertex) -> int:
-	for index in starts_and_goals.size():
-		if starts_and_goals[index].start == vertex \
-				or starts_and_goals[index].goal == vertex:
-			return index
-	return -1
-
-
+	border.global_transform.origin = target.global_transform.origin
+	border.set_meta("target", target)
+	border.visible = true
 
 # run the pathfinder
 func run():
+	
+	if not start.has_meta("target") or not start.get_meta("target"):
+		push_error("Start has no target!")
+		return
+	var target = start.get_meta("target")
+	var path : Path2D
+	if target is PointArea:
+		path = target.path
+		
+	var agent = AGENT_SCENE.instance()
+	$Agents.add_child(agent)
+	agent.align_to_path(path, start.global_position)
+		
 	# reset all cells to default (e.g. path cells to free)
 	
-	algorithm.clear()
+	
 	
 	# convert global positions to the grid (vertex) position
 	# start measuring time
@@ -131,33 +78,33 @@ func run():
 	#var start = Vector3(5, -5, 0)
 	#var goal = Vector3(5, 5,0 )
 	#if starts_and_goals.empty():
-	var time_start = OS.get_ticks_usec()
-	var paths = algorithm.find_solution(starts_and_goals)
+	#var time_start = OS.get_ticks_usec()
+	#var paths = algorithm.find_solution(starts_and_goals)
 	
-	if paths.empty():
-		print("Path was not found")
-		return
+	#if paths.empty():
+	#	print("Path was not found")
+	#	return
 	
-	print("Elapsed time: {0}, size: {1}".format(
-				[OS.get_ticks_usec() - time_start, paths.size()])) 
+	#print("Elapsed time: {0}, size: {1}".format(
+	#			[OS.get_ticks_usec() - time_start, paths.size()])) 
 	# if there is only one path from single agent algorithm
 	
 	
 	
-	if not paths[0] is Array:
-		
-		for vertex in paths:
-			graph.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
-		add_agent(paths)
-
-		# if there are multiple paths from multi agent algorithm
-	elif paths[0] is Array:
-		for path in paths:
-			for vertex in path:
-				graph.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
-			if not path.empty(): 
-				add_agent(path)
-		$Timer.start()
+#	if not paths[0] is Array:
+#
+#		for vertex in paths:
+#			graph.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
+#		add_agent(paths)
+#
+#		# if there are multiple paths from multi agent algorithm
+#	elif paths[0] is Array:
+#		for path in paths:
+#			for vertex in path:
+#				graph.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
+#			if not path.empty(): 
+#				add_agent(path)
+#		$Timer.start()
 	
 	
 	#for vertex in path:

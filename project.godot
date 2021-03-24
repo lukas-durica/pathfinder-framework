@@ -109,10 +109,15 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/tools/agents/AgentContinuous.gd"
 }, {
-"base": "PathFollow2D",
+"base": "Node2D",
 "class": "AgentGraph",
 "language": "GDScript",
 "path": "res://src/tools/agents/AgentGraph.gd"
+}, {
+"base": "PathFollow2D",
+"class": "AgentGraphPathFollow",
+"language": "GDScript",
+"path": "res://src/tools/agents/AgentGraphPathFollow.gd"
 }, {
 "base": "Node2D",
 "class": "AgentSIPP",
@@ -179,6 +184,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/tools/grid_based_ui/GridBasedUI.gd"
 }, {
+"base": "Reference",
+"class": "HelperFunctions",
+"language": "GDScript",
+"path": "res://src/tools/HelperFunctions.gd"
+}, {
 "base": "GridBasedAlgorithm",
 "class": "ICTS",
 "language": "GDScript",
@@ -209,6 +219,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/path_manager/PointArea.gd"
 }, {
+"base": "PathFollow2D",
+"class": "RemotePathFollow",
+"language": "GDScript",
+"path": "res://RemotePathFollow.gd"
+}, {
 "base": "CanvasLayer",
 "class": "UserInteraface",
 "language": "GDScript",
@@ -236,6 +251,7 @@ _global_script_class_icons={
 "AStarSpaceTimeTest": "",
 "AgentContinuous": "",
 "AgentGraph": "",
+"AgentGraphPathFollow": "",
 "AgentSIPP": "",
 "Algorithm": "",
 "BasicCamera": "",
@@ -249,19 +265,21 @@ _global_script_class_icons={
 "Grid": "",
 "GridBasedAlgorithm": "",
 "GridBasedUI": "",
+"HelperFunctions": "",
 "ICTS": "",
 "MapLoader": "",
 "MinBinaryHeap": "",
 "MinBinaryHeapDict": "",
 "MinPriorityQueueCpp": "",
 "PointArea": "",
+"RemotePathFollow": "",
 "UserInteraface": ""
 }
 
 [application]
 
 config/name="pathfinder-framework"
-run/main_scene="res://src/Main.tscn"
+run/main_scene="res://src/tools/graph_based_ui/GraphBasedUI.tscn"
 config/icon="res://icon.png"
 
 [display]
@@ -276,7 +294,3 @@ enabled=PoolStringArray( "path_manager" )
 [mono]
 
 profiler/enabled=true
-
-[rendering]
-
-quality/2d/use_pixel_snap=true

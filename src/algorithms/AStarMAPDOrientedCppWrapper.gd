@@ -7,7 +7,6 @@ func initialize(grd):
 	astar_cpp.cycle_size = 30
 
 	.initialize(grd)
-	var start_time = OS.get_ticks_usec()
 	var already_added : = {}
 	
 	# vertexes that already have their IDs but was not added to already_added
