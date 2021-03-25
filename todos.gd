@@ -52,3 +52,4 @@
 #62625438
 #21378487
 #16696864
+#bug v connectable paths oznacit a zmenit scenu, zmizne connection

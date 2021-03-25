@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://TestNode.gd" type="Script" id=1]
 [ext_resource path="res://data/textures/actors/rectangles/AgvLongOnMicro.png" type="Texture" id=2]
@@ -7,6 +7,8 @@
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 45.9547, 378.464, -423.785, -4.23785, 423.785, 4.23785, 493.578, 242.853, 0, 0, 0, 0, 967.687, 422.432 )
 }
+
+[sub_resource type="ConcavePolygonShape2D" id=2]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
@@ -17,8 +19,7 @@ texture = ExtResource( 2 )
 [node name="Path2D" type="Path2D" parent="."]
 curve = SubResource( 1 )
 
-[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
-position = Vector2( 45.9547, 378.464 )
-rotation = -1.29516
+[node name="Area2D" type="Area2D" parent="."]
 
-[node name="RemoteTransform2D" type="RemoteTransform2D" parent="Path2D/PathFollow2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 2 )

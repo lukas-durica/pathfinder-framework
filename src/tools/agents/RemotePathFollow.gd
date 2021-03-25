@@ -29,10 +29,9 @@ func get_next_path() -> ConnectablePath:
 	if not connection:
 		return null
 	
-	else:
-		if connection.connected_paths[0] != get_parent():
-			return connection.connected_paths[0]
-		return connection.connected_paths[1]
+	if connection.connected_paths[0] != get_parent():
+		return connection.connected_paths[0]
+	return connection.connected_paths[1]
 
 	
 	

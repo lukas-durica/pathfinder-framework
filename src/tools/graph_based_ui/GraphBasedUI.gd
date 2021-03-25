@@ -62,11 +62,15 @@ func run():
 	var path : Path2D
 	if target is PointArea:
 		path = target.path
+	elif target is Connection:
+		path = target.connected_paths[0]
 		
 	var agent = AGENT_SCENE.instance()
 	$Agents.add_child(agent)
 	agent.align_to_path(path, start.global_position)
-		
+	
+	
+	
 	# reset all cells to default (e.g. path cells to free)
 	
 	

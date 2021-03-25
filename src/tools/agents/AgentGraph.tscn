@@ -7,14 +7,14 @@
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ ExtResource( 1 ) ],
-"loop": true,
-"name": "on",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 2 ) ],
 "loop": true,
 "name": "off",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "on",
 "speed": 5.0
 } ]
 
@@ -26,12 +26,15 @@ font_data = ExtResource( 3 )
 
 [node name="AgentGraph" type="Node2D"]
 script = ExtResource( 4 )
+path_direction = -1
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+[node name="Visualization" type="Node2D" parent="."]
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="Visualization"]
 frames = SubResource( 1 )
 animation = "on"
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="Visualization"]
 margin_left = -45.0
 margin_top = -34.0
 margin_right = 43.0
