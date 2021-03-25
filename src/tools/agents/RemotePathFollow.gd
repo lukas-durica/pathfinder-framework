@@ -1,35 +1,16 @@
-class_name AgentGraphPathFollow extends PathFollow2D
+class_name RemotePathFollow extends PathFollow2D
 
-export var speed : = 40.0
+onready var remote_transform : = $RemoteTransform2D
 
+func set_remote_node(node : Node):
+	remote_transform.remote_path = remote_transform.get_path_to(node)
 
-func _ready():
-	$Label.text = name
-
-func _process(delta):
-	
-	offset += delta * speed
-	
-	if unit_offset >= 1.0:
-		var next_path = get_next_path()
-		if next_path:
-			align_to_path(next_path, global_position)
-		else:
-			set_process(false)
-		
-
-func align_to_path(path : Path2D, align_to : Vector2):
-	HelperFunctions.reparent(self, path)
-	
-	var local_origin = path.to_local(align_to)
-	var closest_offset = path.curve.get_closest_offset(local_origin)
-	offset = closest_offset
-	
 func get_closest_area() -> PointArea:
 	var parent : ConnectablePath = get_parent()
 	if not parent:
 		push_error(name + ": Invalid Path")
 		return null
+	
 	var start : = parent.start_point_area.global_transform.origin
 	var end : = parent.end_point_area.global_transform.origin
 	
@@ -40,7 +21,7 @@ func get_closest_area() -> PointArea:
 			else parent.end_point_area
 	
 func get_next_path() -> ConnectablePath:
-	var closest_area : = get_closest_area()
+	var closest_area : PointArea = get_closest_area()
 	if not closest_area:
 		return null 
 	
@@ -55,5 +36,3 @@ func get_next_path() -> ConnectablePath:
 
 	
 	
-	
-

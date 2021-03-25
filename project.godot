@@ -114,11 +114,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/tools/agents/AgentGraph.gd"
 }, {
-"base": "PathFollow2D",
-"class": "AgentGraphPathFollow",
-"language": "GDScript",
-"path": "res://src/tools/agents/AgentGraphPathFollow.gd"
-}, {
 "base": "Node2D",
 "class": "AgentSIPP",
 "language": "GDScript",
@@ -168,6 +163,11 @@ _global_script_classes=[ {
 "class": "GraphBasedUI",
 "language": "GDScript",
 "path": "res://src/tools/graph_based_ui/GraphBasedUI.gd"
+}, {
+"base": "Node2D",
+"class": "GraphBasedUITransition",
+"language": "GDScript",
+"path": "res://src/tools/graph_based_ui/GraphBasedUITransition.gd"
 }, {
 "base": "TileMap",
 "class": "Grid",
@@ -222,7 +222,7 @@ _global_script_classes=[ {
 "base": "PathFollow2D",
 "class": "RemotePathFollow",
 "language": "GDScript",
-"path": "res://RemotePathFollow.gd"
+"path": "res://src/tools/agents/RemotePathFollow.gd"
 }, {
 "base": "CanvasLayer",
 "class": "UserInteraface",
@@ -251,7 +251,6 @@ _global_script_class_icons={
 "AStarSpaceTimeTest": "",
 "AgentContinuous": "",
 "AgentGraph": "",
-"AgentGraphPathFollow": "",
 "AgentSIPP": "",
 "Algorithm": "",
 "BasicCamera": "",
@@ -262,6 +261,7 @@ _global_script_class_icons={
 "Connection": "",
 "Graph": "",
 "GraphBasedUI": "",
+"GraphBasedUITransition": "",
 "Grid": "",
 "GridBasedAlgorithm": "",
 "GridBasedUI": "",
@@ -281,6 +281,10 @@ _global_script_class_icons={
 config/name="pathfinder-framework"
 run/main_scene="res://src/tools/graph_based_ui/GraphBasedUI.tscn"
 config/icon="res://icon.png"
+
+[debug]
+
+settings/stdout/verbose_stdout=true
 
 [display]
 
