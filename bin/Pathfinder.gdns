@@ -1,0 +1,9 @@
+[gd_resource type="NativeScript" load_steps=2 format=2]
+
+[ext_resource path="res://bin/Pathfinder.gdnlib" type="GDNativeLibrary" id=1]
+
+[resource]
+resource_name = "aa_sipp_tester"
+class_name = "AA_SIPPTester"
+library = ExtResource( 1 )
+script_class_name = "AASippTesterCpp"

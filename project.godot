@@ -10,6 +10,11 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "",
+"class": "AASippTesterCpp",
+"language": "NativeScript",
+"path": "res://bin/Pathfinder.gdns"
+}, {
+"base": "",
 "class": "AStar2DCpp",
 "language": "NativeScript",
 "path": "res://bin/AStar2D.gdns"
@@ -230,6 +235,7 @@ _global_script_classes=[ {
 "path": "res://src/ui/UI.gd"
 } ]
 _global_script_class_icons={
+"AASippTesterCpp": "",
 "AStar2DCpp": "",
 "AStar2DCppWrapper": "",
 "AStarCBS": "",
@@ -279,7 +285,7 @@ _global_script_class_icons={
 [application]
 
 config/name="pathfinder-framework"
-run/main_scene="res://src/tools/graph_based_ui/GraphBasedUI.tscn"
+run/main_scene="res://src/tests/PathfinderCpp.tscn"
 config/icon="res://icon.png"
 
 [display]

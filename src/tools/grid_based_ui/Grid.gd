@@ -1,6 +1,4 @@
-extends TileMap
-
-class_name Grid
+class_name Grid extends TileMap
 
 enum {NONE = -1, FREE, OBSTACLE, OPEN, CLOSED, PATH}
 
