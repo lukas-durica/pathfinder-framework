@@ -45,6 +45,8 @@ func add_to_connection(connected_area : PointArea):
 	if connected_area.connection:
 		push_error("connection already exists!")
 	
+	print(name, " adding to connection:", connected_area.path.name, "/", 
+			connected_area.name)
 	connected_area.connection = self
 	connected_area_paths.push_back(get_path_to(connected_area))
 	connected_areas += [connected_area]
@@ -64,7 +66,7 @@ func add_to_connection(connected_area : PointArea):
 		should_create_passable_connection(area, connected_area)
 
 func remove_from_connection(connected_area : Area2D):
-	print("removing from connection: ", connected_area.path.name, "/", 
+	print(name, ": removing from connection: ", connected_area.path.name, "/", 
 			connected_area.name)
 	connected_area_paths.erase(get_path_to(connected_area))
 	connected_areas.erase(connected_area)
@@ -112,7 +114,7 @@ func get_connected_paths() -> Array:
 	return paths
 
 func reconnect():
-	print("Reconnecting...")
+	print(name, ": Reconnecting...")
 	
 	for path in connected_area_paths:
 		var area = get_node(path)

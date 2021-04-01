@@ -53,43 +53,31 @@ script = ExtResource( 4 )
 self_modulate = Color( 0.75, 0.75, 0.75, 1 )
 curve = SubResource( 1 )
 script = ExtResource( 7 )
-default_color = Color( 0.75, 0.75, 0.75, 1 )
-highlight_color = Color( 0, 1, 0, 1 )
 
 [node name="ConnectablePath2" type="Path2D" parent="Graph/Paths"]
 self_modulate = Color( 0.75, 0.75, 0.75, 1 )
 curve = SubResource( 2 )
 script = ExtResource( 7 )
-default_color = Color( 0.75, 0.75, 0.75, 1 )
-highlight_color = Color( 0, 1, 0, 1 )
 
 [node name="ConnectablePath3" type="Path2D" parent="Graph/Paths"]
 self_modulate = Color( 0.75, 0.75, 0.75, 1 )
 curve = SubResource( 3 )
 script = ExtResource( 7 )
-default_color = Color( 0.75, 0.75, 0.75, 1 )
-highlight_color = Color( 0, 1, 0, 1 )
 
 [node name="ConnectablePath4" type="Path2D" parent="Graph/Paths"]
 self_modulate = Color( 0.75, 0.75, 0.75, 1 )
 curve = SubResource( 4 )
 script = ExtResource( 7 )
-default_color = Color( 0.75, 0.75, 0.75, 1 )
-highlight_color = Color( 0, 1, 0, 1 )
 
 [node name="ConnectablePath5" type="Path2D" parent="Graph/Paths"]
 self_modulate = Color( 0.75, 0.75, 0.75, 1 )
 curve = SubResource( 5 )
 script = ExtResource( 7 )
-default_color = Color( 0.75, 0.75, 0.75, 1 )
-highlight_color = Color( 0, 1, 0, 1 )
 
 [node name="ConnectablePath6" type="Path2D" parent="Graph/Paths"]
 self_modulate = Color( 0.75, 0.75, 0.75, 1 )
 curve = SubResource( 6 )
 script = ExtResource( 7 )
-default_color = Color( 0.75, 0.75, 0.75, 1 )
-highlight_color = Color( 0, 1, 0, 1 )
 
 [node name="Connections" type="Node2D" parent="Graph"]
 

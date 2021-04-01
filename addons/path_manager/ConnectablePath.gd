@@ -54,6 +54,7 @@ func process_point(is_start : bool):
 	point_area.position = get_start_point() if is_start else get_end_point()
 	
 func create_point_area(is_start : bool) -> PointArea:
+	print(name, ": CreatingPointArea: ", "Start" if is_start else "End")
 	var point_area = POINT_ARENA_SCENE.instance()
 	point_area.is_start = is_start
 	point_area.path = self
@@ -106,31 +107,34 @@ func color_connection(area : PointArea, color : Color):
 
 
 func start_area_entered(area : Area2D):
-	print("area enterd")
+	
 	if not start_point_area.connection:
 		emit_signal("area_entered", start_point_area, area)
-		print(name, ": start_point_area entered")
+		print(name, ": start area entered without connection")
 
 func start_area_exited(area : Area2D):
-	print(name, "area exited")
 	
 	if start_point_area.connection:
 		emit_signal("area_with_connection_exited", start_point_area)
+		print(name, ": start area entered with connection")
 	else:
 		emit_signal("area_without_connection_exited", start_point_area)
+		print(name, ": start area entered without connection")
 	
 func end_area_entered(area : Area2D):
-	print("area enterd")
+	
 	if not end_point_area.connection:
 		emit_signal("area_entered", end_point_area, area)
-		print(name, ": end_point_area entered")
+		print(name, ": end area entered without connection")
 	
 func end_area_exited(area : Area2D):
 	
 	if end_point_area.connection:
 		emit_signal("area_with_connection_exited", end_point_area)
+		print(name, ": end area entered with connection")
 	else:
 		emit_signal("area_without_connection_exited", end_point_area)
+		print(name, ": end area entered without connection")
 
 func area_was_clicked(area : Area2D, button_type : int):
 	emit_signal("area_was_clicked", area, button_type)
@@ -160,7 +164,6 @@ func get_connections_or_areas():
 		else:
 			border_points.push_back(end_point_area)
 		
-
 func get_opposite_connection(connection):
 	if start_point_area and start_point_area.connection \
 			and start_point_area.connection != connection:
