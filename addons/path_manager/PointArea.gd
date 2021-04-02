@@ -23,7 +23,6 @@ func _on_Area2D_area_exited(area):
 	if Engine.editor_hint:
 		update()
 
-
 func _on_Area2D_input_event(viewport : Node, event : InputEvent, shape_idx : int):
 	if not Engine.editor_hint and event is InputEventMouseButton \
 			and event.pressed:
@@ -31,8 +30,9 @@ func _on_Area2D_input_event(viewport : Node, event : InputEvent, shape_idx : int
 			BUTTON_LEFT, BUTTON_RIGHT:
 				emit_signal("area_was_clicked", self, event.button_index)
 			
-			
-			
-		
-			
-		
+func get_compound_name() -> String:
+	return path.name + "/" + name
+
+func _exit_tree():
+	print(get_compound_name(), ": ExitTree")
+

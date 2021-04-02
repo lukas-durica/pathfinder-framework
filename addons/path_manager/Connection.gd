@@ -62,8 +62,8 @@ func add_to_connection(connected_area : PointArea):
 	var path = connected_area.path
 	path.update_border_point(connected_area)
 	
-	for area in connected_areas:
-		should_create_passable_connection(area, connected_area)
+	#for area in connected_areas:
+	#	should_create_passable_connection(area, connected_area)
 
 func remove_from_connection(connected_area : Area2D):
 	print(name, ": removing from connection: ", connected_area.path.name, "/", 
@@ -122,3 +122,6 @@ func reconnect():
 		print(area.path.name, "/", area.name)
 		area.connection = self
 		connected_areas += [area]
+
+func _exit_tree():
+	print(name, "Exiting tree!")

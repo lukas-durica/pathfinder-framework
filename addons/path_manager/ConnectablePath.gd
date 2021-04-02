@@ -38,6 +38,7 @@ func _notification(what):
 			#update_normals()
 		NOTIFICATION_TRANSFORM_CHANGED:
 			transform = Transform2D.IDENTITY
+		
 
 
 func update_points():
@@ -64,6 +65,7 @@ func create_point_area(is_start : bool) -> PointArea:
 	point_area.connect("area_entered", self, area_entered)
 	point_area.connect("area_exited", self, area_exited)
 	point_area.connect("area_was_clicked", self, "area_was_clicked")
+	point_area.connect("tree_exiting", self, "_on_tree_exiting")
 	# set its new position
 	if is_start:
 		start_point_area = point_area
@@ -71,6 +73,9 @@ func create_point_area(is_start : bool) -> PointArea:
 		end_point_area = point_area
 	add_child(point_area)
 	return point_area
+
+func _on_tree_exiting():
+	print(name,": area exitinggggggggggggggggggg")
 
 func color_path(color : Color):
 	self_modulate = color
@@ -109,32 +114,45 @@ func color_connection(area : PointArea, color : Color):
 func start_area_entered(area : Area2D):
 	
 	if not start_point_area.connection:
-		emit_signal("area_entered", start_point_area, area)
 		print(name, ": start area entered without connection")
+		emit_signal("area_entered", start_point_area, area)
+		
 
 func start_area_exited(area : Area2D):
+	if area.is_inside_tree():
+		print(area.get_compound_name(),": is still inside tree")
+	else:
+		print(area.get_compound_name(),": is not  inside tree")
 	
 	if start_point_area.connection:
+		print(name, ": start area exited with connection")
 		emit_signal("area_with_connection_exited", start_point_area)
-		print(name, ": start area entered with connection")
+		
 	else:
+		print(name, ": start area exited without connection")
 		emit_signal("area_without_connection_exited", start_point_area)
-		print(name, ": start area entered without connection")
+		
 	
 func end_area_entered(area : Area2D):
 	
 	if not end_point_area.connection:
-		emit_signal("area_entered", end_point_area, area)
 		print(name, ": end area entered without connection")
+		emit_signal("area_entered", end_point_area, area)
+		
 	
 func end_area_exited(area : Area2D):
-	
-	if end_point_area.connection:
-		emit_signal("area_with_connection_exited", end_point_area)
-		print(name, ": end area entered with connection")
+	if area.is_inside_tree():
+		print(area.get_compound_name(),": is still inside tree")
 	else:
+		print(area.get_compound_name(),": is not  inside tree")
+	if end_point_area.connection:
+		print(name, ": end area exited with connection")
+		emit_signal("area_with_connection_exited", end_point_area)
+		
+	else:
+		print(name, ": end area exited without connection")
 		emit_signal("area_without_connection_exited", end_point_area)
-		print(name, ": end area entered without connection")
+		
 
 func area_was_clicked(area : Area2D, button_type : int):
 	emit_signal("area_was_clicked", area, button_type)
@@ -205,3 +223,6 @@ func get_connection_normal(is_start : bool) -> Vector2:
 	var point0 = curve.get_baked_points()[point0_idx]
 	var point1 = curve.get_baked_points()[point1_idx]
 	return point1.direction_to(point0)
+
+func _exit_tree():
+	print(name, ": exit_tree")
