@@ -1,6 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://addons/path_manager/ConnectablePath.gd" type="Script" id=1]
+[ext_resource path="res://addons/path_manager/Connection.tscn" type="PackedScene" id=2]
+[ext_resource path="res://addons/path_manager/Connection.gd" type="Script" id=3]
 
 [sub_resource type="Curve2D" id=1]
 _data = {
@@ -37,6 +39,24 @@ curve = SubResource( 3 )
 script = ExtResource( 1 )
 
 [node name="Connections" type="Node2D" parent="."]
+
+[node name="Connection" type="Node2D" parent="Connections" instance=ExtResource( 2 )]
+position = Vector2( 633.894, 219.285 )
+script = ExtResource( 3 )
+passable_connections = {
+"ConnectablePath2": [ "ConnectablePath3" ],
+"ConnectablePath3": [ "ConnectablePath2" ]
+}
+connected_area_paths = [ NodePath("../../Paths/ConnectablePath2/Start"), NodePath("../../Paths/ConnectablePath3/Start") ]
+
+[node name="Connection2" type="Node2D" parent="Connections" instance=ExtResource( 2 )]
+position = Vector2( 346.599, 311.141 )
+script = ExtResource( 3 )
+passable_connections = {
+"ConnectablePath": [ "ConnectablePath2" ],
+"ConnectablePath2": [ "ConnectablePath" ]
+}
+connected_area_paths = [ NodePath("../../Paths/ConnectablePath2/End"), NodePath("../../Paths/ConnectablePath/End") ]
 [connection signal="area_entered" from="Paths/ConnectablePath/Start" to="Paths/ConnectablePath/Start" method="_on_Area2D_area_entered"]
 [connection signal="area_exited" from="Paths/ConnectablePath/Start" to="Paths/ConnectablePath/Start" method="_on_Area2D_area_exited"]
 [connection signal="input_event" from="Paths/ConnectablePath/Start" to="Paths/ConnectablePath/Start" method="_on_Area2D_input_event"]

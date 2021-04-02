@@ -59,7 +59,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/algorithms/AStarMAPDOrientedCppWrapper.gd"
 }, {
-"base": "Reference",
+"base": "",
 "class": "AStarMAPFCpp",
 "language": "NativeScript",
 "path": "res://bin/AStarMAPF.gdns"
@@ -214,7 +214,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/data_strunctures/MinBinaryHeapDict.gd"
 }, {
-"base": "Reference",
+"base": "",
 "class": "MinPriorityQueueCpp",
 "language": "NativeScript",
 "path": "res://bin/MinPriorityQueue.gdns"

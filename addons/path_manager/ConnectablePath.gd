@@ -60,12 +60,10 @@ func create_point_area(is_start : bool) -> PointArea:
 	point_area.is_start = is_start
 	point_area.path = self
 	point_area.name = "Start" if is_start else "End"
-	var area_entered = "start_area_entered" if is_start else "end_area_entered"
-	var area_exited = "start_area_exited" if is_start else "end_area_exited"
-	point_area.connect("area_entered", self, area_entered)
-	point_area.connect("area_exited", self, area_exited)
+	point_area.connect("point_area_entered", self, "area_entered")
+	point_area.connect("point_area_exited", self, "area_exited")
 	point_area.connect("area_was_clicked", self, "area_was_clicked")
-	point_area.connect("tree_exiting", self, "_on_tree_exiting")
+	
 	# set its new position
 	if is_start:
 		start_point_area = point_area
@@ -111,48 +109,23 @@ func color_connection(area : PointArea, color : Color):
 	 
 
 
-func start_area_entered(area : Area2D):
+func area_entered(my_area : PointArea, entered_area : PointArea):
 	
 	if not start_point_area.connection:
-		print(name, ": start area entered without connection")
-		emit_signal("area_entered", start_point_area, area)
+		print(name, ": area entered without connection")
+		emit_signal("area_entered", my_area, entered_area)
 		
 
-func start_area_exited(area : Area2D):
-	if area.is_inside_tree():
-		print(area.get_compound_name(),": is still inside tree")
-	else:
-		print(area.get_compound_name(),": is not  inside tree")
-	
+func area_exited(my_area : PointArea, exited_area : PointArea):
+
 	if start_point_area.connection:
 		print(name, ": start area exited with connection")
-		emit_signal("area_with_connection_exited", start_point_area)
+		emit_signal("area_with_connection_exited", my_area, start_point_area)
 		
 	else:
 		print(name, ": start area exited without connection")
-		emit_signal("area_without_connection_exited", start_point_area)
-		
-	
-func end_area_entered(area : Area2D):
-	
-	if not end_point_area.connection:
-		print(name, ": end area entered without connection")
-		emit_signal("area_entered", end_point_area, area)
-		
-	
-func end_area_exited(area : Area2D):
-	if area.is_inside_tree():
-		print(area.get_compound_name(),": is still inside tree")
-	else:
-		print(area.get_compound_name(),": is not  inside tree")
-	if end_point_area.connection:
-		print(name, ": end area exited with connection")
-		emit_signal("area_with_connection_exited", end_point_area)
-		
-	else:
-		print(name, ": end area exited without connection")
-		emit_signal("area_without_connection_exited", end_point_area)
-		
+		emit_signal("area_without_connection_exited", my_area, start_point_area)
+
 
 func area_was_clicked(area : Area2D, button_type : int):
 	emit_signal("area_was_clicked", area, button_type)
