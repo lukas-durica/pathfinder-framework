@@ -82,15 +82,8 @@ func remove_from_connection(connected_area : Area2D):
 		last_connected_area.connection = null
 		queue_free()
 
-func should_create_passable_connection(area1 : PointArea, area2 : PointArea) \
-		-> bool:
-			
-	if not area1 or not area2:
-		return false
-	var normal1 = area1.path.get_connection_normal(area1.is_start)
-	var normal2 = area2.path.get_connection_normal(area2.is_start)
-	print("angle to: ", rad2deg(normal2.angle_to(normal1)))
-	return false
+func update_path_name(old_name : String, new_name : String):
+	
 
 # return positions of connections and not connected areas
 func get_neighbor_points() -> Array:

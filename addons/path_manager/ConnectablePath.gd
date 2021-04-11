@@ -7,6 +7,7 @@ const POINT_ARENA_SCENE = preload("res://addons/path_manager/PointArea.tscn")
 signal point_area_entered(my_area, area_entered)
 signal point_area_exited(my_area, area_exited)
 signal point_area_was_clicked(area, button_type)
+signal path_renamed(old_name, new_name)
 
 export(Color) var default_color : = Color.gray
 export(Color) var highlight_color : = Color.green
@@ -19,6 +20,9 @@ var end_point_area : PointArea = null
 var start_normal : = Vector2.INF
 var end_normal : = Vector2.INF
 
+# used for updating connections with new name
+onready var path_name : = name
+
 func _ready():
 	
 	
@@ -29,7 +33,8 @@ func _ready():
 	update_points()
 	update_normals()
 	self_modulate = Color.gray
-	connect("tree_exiting", self, "tree_exiting")
+	connect("renamed", self, "_renamed")
+	
 
 func _notification(what):
 	match what:
@@ -134,7 +139,15 @@ func get_end_point():
 func set_end_point(value):
 	curve.set_point_position(curve.get_point_count() -1, value)
 
-func get_connections_or_areas():
+func get_connections() -> Array:
+	var connections = []
+	if start_point_area and start_point_area.connection:
+		connections.push_back(start_point_area.connection)
+	if end_point_area and end_point_area.connection:
+		connections.push_back(end_point_area.connection)
+	return connections
+
+func get_connections_or_areas() -> Array:
 	var border_points : = []
 	if start_point_area:
 		if start_point_area.connection:
@@ -146,6 +159,7 @@ func get_connections_or_areas():
 			border_points.push_back(end_point_area.connection)
 		else:
 			border_points.push_back(end_point_area)
+	return border_points
 		
 func get_opposite_connection(connection):
 	if start_point_area and start_point_area.connection \
@@ -189,8 +203,9 @@ func get_connection_normal(is_start : bool) -> Vector2:
 	var point1 = curve.get_baked_points()[point1_idx]
 	return point1.direction_to(point0)
 
-func _exit_tree():
-	print(name, ": exit_tree")
-
-func tree_exiting():
-	print(name, ": tree exiting")
+func _renamed():
+	var connections : = get_connections()
+	for connection in connections:
+		connection.update_path_name(path_name, name)
+		
+	path_name = name

@@ -27,7 +27,6 @@ func _enter_tree():
 	Physics2DServer.set_active(true)
 	
 	editor_selection.connect("selection_changed", self, "_on_selection_changed")
-	connect("scene_changed", self, "_on_scene_changed")
 
 
 	
@@ -38,10 +37,7 @@ func _input(event):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
 		if event.pressed:
 			is_left_mouse_button_pressed = true
-			print("left button mouse pressed")
 		else:
-			print("left button mouse released")
-			print("setting is dragging and dragging position to false")
 			is_left_mouse_button_pressed = false
 			is_dragging = false
 			start_dragging_position = Vector2.INF
@@ -53,16 +49,14 @@ func _input(event):
 	if event is InputEventMouseMotion:
 		if is_left_mouse_button_pressed:
 			if start_dragging_position == Vector2.INF:
-				print("setting dragging position")
 				start_dragging_position = event.position
 			elif start_dragging_position != event.position and not is_dragging:
-				print("start dragging")
 				is_dragging = true
 			
 
 func _exit_tree():
 	remove_custom_type("ConnectablePath")
-	print("EditorPlugin disabled")
+	print("---===EditorPlugin disabled===---")
 
 # chceck the type of the object, if it will return true the edit(object) is 
 # called
@@ -76,44 +70,29 @@ func handles(object : Object) -> bool:
 			deselect_edited_path()
 	return object is ConnectablePath
 
-	
-	
 func edit(object : Object):
 	select_edited_path(object)
 
 func _on_selection_changed():
-	print(name, ": Selection changed")
-	
-	print("selected objects: ")
-	for node in editor_selection.get_selected_nodes():
-		print(node.name)
-	
-	# unclicking the edited path
+	#print(name, ": Selection changed")
+	#print("selected objects: ")
+	#for node in editor_selection.get_selected_nodes():
+	#	print(node.name)
+	# if unclicked the edited path
 	if edited_path and editor_selection.get_selected_nodes().empty():
 		deselect_edited_path()
 
-func _on_scene_changed(scene_root):
-	print("scene changed")
-
-func build():
-	print("builllllllllllllllllldd")
-
-func clear():
-	print(name, "cleareeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer")
-	if edited_path:
-		print(name, ": Clearing ", edited_path.name)
-		deselect_edited_path()
 
 func select_edited_path(object):
-	print(name, ": Editing new path, connecting signals to: ", object.name)
+	#print(name, ": Editing new path, connecting signals to: ", object.name)
 	object.connect("point_area_entered", self, "point_area_entered")
 	object.connect("point_area_exited", self, "point_area_exited")
 	object.color_passable_connections(true)
 	edited_path = object
 
 func deselect_edited_path():
-	print(name, ": Edited path is no longer selected, disconnecting signals", \
-			" from: ", edited_path.name)
+	#print(name, ": Edited path is no longer selected, disconnecting signals", \
+	#		" from: ", edited_path.name)
 	edited_path.disconnect("point_area_entered", self, "point_area_entered")
 	edited_path.disconnect("point_area_exited", self, "point_area_exited")
 	edited_path.color_passable_connections(false)
@@ -121,7 +100,7 @@ func deselect_edited_path():
 
 
 func create_connection():
-	print(name, ": Create connection")
+	#print(name, ": Create connection")
 	var area = area_entered_data.area
 	var area_entered_to = area_entered_data.area_entered_to
 	area.global_transform.origin = area_entered_to.global_transform.origin
@@ -139,11 +118,9 @@ func create_connection():
 		# root can be only one
 		if parent.get_parent() and parent != get_root():
 			parent = parent.get_parent()
+		
 		if not parent.find_node("Connections"):
 			create_node_connections(parent)
-			
-		if not parent.find_node("Connections"):
-			print("connections was not found anyway")
 		
 		var con = add_new_connection(area_entered_to.global_transform.origin)
 		con.add_to_connection(area)
@@ -157,7 +134,7 @@ func create_connection():
 	area_entered_data.clear()
 
 func add_new_connection(position : Vector2) -> Node2D:
-	print(name, ": Add new connection")
+	#print(name, ": Add new connection")
 	var new_conn = CONNECTION_SCENE.instance()
 	var connections = get_root().find_node("Connections")
 	
@@ -168,7 +145,7 @@ func add_new_connection(position : Vector2) -> Node2D:
 	
 
 func create_node_connections(parent):
-	print(name, ": Creating Connections node")
+	#print(name, ": Creating Connections node")
 	var new_connections = Node2D.new()
 	new_connections.name = "Connections"
 	parent.add_child(new_connections)
