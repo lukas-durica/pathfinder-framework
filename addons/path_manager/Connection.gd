@@ -7,10 +7,13 @@ class_name Connection extends Node2D
 # making connections means making passable from one path to another
 # dont assign it with := {} Godots bug will share it through the instancies
 # for simplicity only the name is stored no the whole path
+# passable_connections["ConnectablePath2/End"]
 export(Dictionary) var passable_connections
 
 # serves purely for reconnecting after loading the scene
+# e.g.: ../../Paths/ConnectablePath2/End
 export(Array) var connected_area_paths
+
 
 # managing connected areas for position update as connection will change its
 # position, and as well as destroying connection if there is no other
@@ -20,12 +23,18 @@ var connected_areas : = []
 # only in run time
 var connected_paths : = []
 
+
 func _ready():
 	
 	set_notify_transform(true)
-	reconnect()
+	
+	if not connected_area_paths.empty():
+		reconnect()
+	
 	connected_paths = get_connected_paths()
-
+	
+	
+	
 func _notification(what):
 	match what:
 		NOTIFICATION_TRANSFORM_CHANGED:
@@ -82,8 +91,34 @@ func remove_from_connection(connected_area : Area2D):
 		last_connected_area.connection = null
 		queue_free()
 
-func update_path_name(old_name : String, new_name : String):
+func update_path_name(old_name : String, area : PointArea):
 	
+	for path_to_area in connected_area_paths:
+		var idx : = test_string.rfindn("/")
+		var idx2 : = test_string.rfindn("/", idx - 1)
+		var substr : = test_string.substr(idx2 + 1, idx - idx2 - 1)
+		print("substr: ", substr)
+		test_string.erase(idx2 + 1, "ConnectablePath2".length())
+		passable_connection
+	
+	for node_path in passable_connections:
+		
+		for passable_connection in passable_connections[node_path]:
+			var idx : = test_string.rfindn("/")
+			var idx2 : = test_string.rfindn("/", idx - 1)
+			var substr : = test_string.substr(idx2 + 1, idx - idx2 - 1)
+			print("substr: ", substr)
+			test_string.erase(idx2 + 1, "ConnectablePath2".length())
+			passable_connection
+	
+	for  passable_connections 
+	
+	var test_string : = "../../Paths/ConnectablePath/End"
+	var idx : = test_string.rfindn("/")
+	var idx2 : = test_string.rfindn("/", idx - 1)
+	test_string.erase(idx2 + 1, "ConnectablePath".length())
+	print(test_string)
+	var new_str : = test_string.insert(idx2 + 1, "ConnectablePath2")
 
 # return positions of connections and not connected areas
 func get_neighbor_points() -> Array:
@@ -109,12 +144,18 @@ func get_connected_paths() -> Array:
 func reconnect():
 	print(name, ": Reconnecting...")
 	
+	for path in passable_connections:
+		print("passable_connections: ", passable_connections)
+	
 	for path in connected_area_paths:
 		var area = get_node(path)
 		print("path: ", path)
 		print(area.path.name, "/", area.name)
 		area.connection = self
 		connected_areas += [area]
+
+func update_name_passable_connection():
+	
 
 func _exit_tree():
 	print(name, "Exiting tree!")
