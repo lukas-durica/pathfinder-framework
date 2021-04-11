@@ -4,10 +4,9 @@ class_name ConnectablePath extends Path2D
 
 const POINT_ARENA_SCENE = preload("res://addons/path_manager/PointArea.tscn")
 
-signal area_entered(area, area_entered)
-signal area_with_connection_exited(area)
-signal area_without_connection_exited(area)
-signal area_was_clicked(area, button_type)
+signal point_area_entered(my_area, area_entered)
+signal point_area_exited(my_area, area_exited)
+signal point_area_was_clicked(area, button_type)
 
 export(Color) var default_color : = Color.gray
 export(Color) var highlight_color : = Color.green
@@ -30,6 +29,7 @@ func _ready():
 	update_points()
 	update_normals()
 	self_modulate = Color.gray
+	connect("tree_exiting", self, "tree_exiting")
 
 func _notification(what):
 	match what:
@@ -60,9 +60,9 @@ func create_point_area(is_start : bool) -> PointArea:
 	point_area.is_start = is_start
 	point_area.path = self
 	point_area.name = "Start" if is_start else "End"
-	point_area.connect("point_area_entered", self, "area_entered")
-	point_area.connect("point_area_exited", self, "area_exited")
-	point_area.connect("area_was_clicked", self, "area_was_clicked")
+	point_area.connect("point_area_entered", self, "point_area_entered")
+	point_area.connect("point_area_exited", self, "point_area_exited")
+	point_area.connect("point_area_was_clicked", self, "point_area_was_clicked")
 	
 	# set its new position
 	if is_start:
@@ -109,26 +109,18 @@ func color_connection(area : PointArea, color : Color):
 	 
 
 
-func area_entered(my_area : PointArea, entered_area : PointArea):
+func point_area_entered(my_area : PointArea, entered_area : PointArea):
 	
-	if not start_point_area.connection:
-		print(name, ": area entered without connection")
-		emit_signal("area_entered", my_area, entered_area)
+	if not my_area.connection:
+		print(name, ": area entered")
+		emit_signal("point_area_entered", my_area, entered_area)
 		
 
-func area_exited(my_area : PointArea, exited_area : PointArea):
-
-	if start_point_area.connection:
-		print(name, ": start area exited with connection")
-		emit_signal("area_with_connection_exited", my_area, start_point_area)
-		
-	else:
-		print(name, ": start area exited without connection")
-		emit_signal("area_without_connection_exited", my_area, start_point_area)
-
+func point_area_exited(my_area : PointArea, exited_area : PointArea):
+		emit_signal("point_area_exited", my_area, exited_area)
 
 func area_was_clicked(area : Area2D, button_type : int):
-	emit_signal("area_was_clicked", area, button_type)
+	emit_signal("point_area_was_clicked", area, button_type)
 
 func get_start_point():
 	return curve.get_point_position(0)
@@ -199,3 +191,6 @@ func get_connection_normal(is_start : bool) -> Vector2:
 
 func _exit_tree():
 	print(name, ": exit_tree")
+
+func tree_exiting():
+	print(name, ": tree exiting")

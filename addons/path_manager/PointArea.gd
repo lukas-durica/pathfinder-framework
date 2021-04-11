@@ -2,9 +2,8 @@ tool
 class_name PointArea extends Area2D
 
 signal point_area_entered(my_area, entered_area)
-signal point_area_exited_wit_connection(my_area, exited_area)
-signal point_area_exited_without_connection(my_area, exited_area)
-signal area_was_clicked(area, button_type)
+signal point_area_exited(my_area, exited_area)
+signal point_area_was_clicked(area, button_type)
 
 var path
 var is_start
@@ -30,20 +29,17 @@ func _on_Area2D_area_entered(area : Area2D):
 func _on_Area2D_area_exited(area : Area2D):
 	if area.is_in_group("point_areas"):
 		overlapped_point_areas.erase(area)
-		if area.connection:
-			emit_signal("point_area_exited_wit_connection", self, area)
-		else:
-			emit_signal("point_area_exited_without_connection", self, area)
-	
+		emit_signal("point_area_exited", self, area)
 		if Engine.editor_hint:
 			update()
 
-func _on_Area2D_input_event(viewport : Node, event : InputEvent, shape_idx : int):
+func _on_Area2D_input_event(viewport : Node, event : InputEvent, 
+		shape_idx : int):
 	if not Engine.editor_hint and event is InputEventMouseButton \
 			and event.pressed:
 		match event.button_index:
 			BUTTON_LEFT, BUTTON_RIGHT:
-				emit_signal("area_was_clicked", self, event.button_index)
+				emit_signal("point_area_was_clicked", self, event.button_index)
 			
 func get_compound_name() -> String:
 	return path.name + "/" + name
