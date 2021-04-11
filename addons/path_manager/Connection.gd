@@ -6,8 +6,9 @@ class_name Connection extends Node2D
 # other path names as as value
 # making connections means making passable from one path to another
 # dont assign it with := {} Godots bug will share it through the instancies
-# for simplicity only the name is stored no the whole path
-# passable_connections["ConnectablePath2/End"]
+# for simplicity only the names are stored, not a the whole path
+# passable_connections["ConnectablePath2"] = ["ConnectablePath", 
+#		"ConnectablePath3"]
 export(Dictionary) var passable_connections
 
 # serves purely for reconnecting after loading the scene
@@ -33,8 +34,6 @@ func _ready():
 	
 	connected_paths = get_connected_paths()
 	
-	
-	
 func _notification(what):
 	match what:
 		NOTIFICATION_TRANSFORM_CHANGED:
@@ -54,8 +53,7 @@ func add_to_connection(connected_area : PointArea):
 	if connected_area.connection:
 		push_error("connection already exists!")
 	
-	print(name, " adding to connection:", connected_area.path.name, "/", 
-			connected_area.name)
+	print(name, " adding to connection:", connected_area.get_compound_name())
 	connected_area.connection = self
 	connected_area_paths.push_back(get_path_to(connected_area))
 	connected_areas += [connected_area]
@@ -65,10 +63,14 @@ func add_to_connection(connected_area : PointArea):
 		if path_to_path_node == connected_area.path.name:
 			continue
 		
+		# add to this connection to every already added path
 		passable_connections[path_to_path_node] += [connected_area.path.name]
+		
+		#add the already added connections to this path
 		passable_connections[connected_area.path.name] += [path_to_path_node]
 	
 	var path = connected_area.path
+	print(name, ": Updating border point: ", connected_area.get_compound_name())
 	path.update_border_point(connected_area)
 	
 	#for area in connected_areas:
@@ -91,34 +93,31 @@ func remove_from_connection(connected_area : Area2D):
 		last_connected_area.connection = null
 		queue_free()
 
-func update_path_name(old_name : String, area : PointArea):
+func update_path_name(old_name : String, new_name : PointArea):
 	
 	for path_to_area in connected_area_paths:
-		var idx : = test_string.rfindn("/")
-		var idx2 : = test_string.rfindn("/", idx - 1)
-		var substr : = test_string.substr(idx2 + 1, idx - idx2 - 1)
-		print("substr: ", substr)
-		test_string.erase(idx2 + 1, "ConnectablePath2".length())
-		passable_connection
+		var idx : int = path_to_area.rfindn("/")
+		var idx2 : int = path_to_area.rfindn("/", idx - 1)
+		if old_name == path_to_area.substr(idx2 + 1, idx - idx2 - 1):
+			connected_area_paths.erase(path_to_area)
+			path_to_area.erase(idx2 + 1, old_name.length())
+			path_to_area.insert(idx2 + 1, new_name)
+			break
 	
-	for node_path in passable_connections:
-		
-		for passable_connection in passable_connections[node_path]:
-			var idx : = test_string.rfindn("/")
-			var idx2 : = test_string.rfindn("/", idx - 1)
-			var substr : = test_string.substr(idx2 + 1, idx - idx2 - 1)
-			print("substr: ", substr)
-			test_string.erase(idx2 + 1, "ConnectablePath2".length())
-			passable_connection
+	#update the key of the dictionary wih new name
+	var path_names = passable_connections[old_name]
+	passable_connections.erase(old_name)
+	passable_connections[new_name] = path_names
 	
-	for  passable_connections 
+	# find all passable connections and update it ith new name
+	for path_name in passable_connections:
+		for passable_path_name in passable_connections[path_name]:
+			if passable_path_name == old_name:
+				passable_connections[path_name].erase(old_name)
+				passable_connections[path_name].push_back(new_name)
+				continue
 	
-	var test_string : = "../../Paths/ConnectablePath/End"
-	var idx : = test_string.rfindn("/")
-	var idx2 : = test_string.rfindn("/", idx - 1)
-	test_string.erase(idx2 + 1, "ConnectablePath".length())
-	print(test_string)
-	var new_str : = test_string.insert(idx2 + 1, "ConnectablePath2")
+	#for  passable_connections
 
 # return positions of connections and not connected areas
 func get_neighbor_points() -> Array:
@@ -153,9 +152,3 @@ func reconnect():
 		print(area.path.name, "/", area.name)
 		area.connection = self
 		connected_areas += [area]
-
-func update_name_passable_connection():
-	
-
-func _exit_tree():
-	print(name, "Exiting tree!")

@@ -8,6 +8,10 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	pass
+	#$Area2D/CollisionShape2D.shape.segments = $Path2D.curve.tessellate()
+
+func find():
 	var test_string : = "../../Paths/ConnectablePath/End"
 	var idx : = test_string.rfindn("/")
 	var idx2 : = test_string.rfindn("/", idx - 1)
@@ -20,10 +24,8 @@ func _ready():
 	#test_string.erase(idx, "ConnectablePath".length())
 	#var new_str = test_string.insert(idx, "Boogar")
 	#print(new_str)
-
-func find():
-	pass
 	
-	#$Area2D/CollisionShape2D.shape.segments = $Path2D.curve.tessellate()
+func find2():
+	var test_string : = "ConnectablePath/End"
 	
 	

@@ -44,6 +44,8 @@ func _input(event):
 			if not area_entered_data.empty():
 				create_connection()
 			else:
+				print("released mouse button")
+				area_entered_data.clear()
 				edited_path.alling_border_points_with_connection()
 	
 	if event is InputEventMouseMotion:
@@ -97,6 +99,8 @@ func deselect_edited_path():
 	edited_path.disconnect("point_area_exited", self, "point_area_exited")
 	edited_path.color_passable_connections(false)
 	edited_path = null
+	#editor_selection.clear()
+	#print("deselecting")
 
 
 func create_connection():

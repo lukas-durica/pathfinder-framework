@@ -77,9 +77,6 @@ func create_point_area(is_start : bool) -> PointArea:
 	add_child(point_area)
 	return point_area
 
-func _on_tree_exiting():
-	print(name,": area exitinggggggggggggggggggg")
-
 func color_path(color : Color):
 	self_modulate = color
 
@@ -137,6 +134,7 @@ func get_end_point():
 	return curve.get_point_position(curve.get_point_count() -1)
 
 func set_end_point(value):
+	print("curve.get_point_count() -1: ", curve.get_point_count() -1)
 	curve.set_point_position(curve.get_point_count() -1, value)
 
 func get_connections() -> Array:
@@ -190,8 +188,10 @@ func alling_border_points_with_connection():
 
 func update_border_point(area : PointArea):
 	if area.is_start:
+		print(name, ": updating start border point: ", area.get_compound_name())
 		set_start_point(area.connection.global_transform.origin)
-	else: 
+	else:
+		print(name, ": updating end border point: ", area.get_compound_name())
 		set_end_point(area.connection.global_transform.origin)
 
 # the direction of last two points or first two points
@@ -204,6 +204,7 @@ func get_connection_normal(is_start : bool) -> Vector2:
 	return point1.direction_to(point0)
 
 func _renamed():
+	print("renamed")
 	var connections : = get_connections()
 	for connection in connections:
 		connection.update_path_name(path_name, name)
