@@ -20,9 +20,13 @@ func get_root() -> Node:
 func _enter_tree():
 	print("---===EditorPlugin enabled===---")
 	
+	
+	
 	add_custom_type("ConnectablePath", "Path2D", 
 			preload("ConnectablePath.gd"),
 			preload("res://addons/path_manager/Path2D.svg"))
+	
+	
 	
 	Physics2DServer.set_active(true)
 	
@@ -44,9 +48,9 @@ func _input(event):
 			if not area_entered_data.empty():
 				create_connection()
 			else:
-				print("released mouse button")
-				area_entered_data.clear()
+				print("alling_border_points_with_connection")
 				edited_path.alling_border_points_with_connection()
+				
 	
 	if event is InputEventMouseMotion:
 		if is_left_mouse_button_pressed:

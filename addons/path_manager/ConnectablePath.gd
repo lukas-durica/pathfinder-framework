@@ -110,7 +110,6 @@ func color_connection(area : PointArea, color : Color):
 			get_parent().get_node(path_name).color_path(color)
 	 
 
-
 func point_area_entered(my_area : PointArea, entered_area : PointArea):
 	
 	if not my_area.connection:
@@ -129,13 +128,15 @@ func get_start_point():
 
 func set_start_point(value):
 	curve.set_point_position(0, value)
+	update()
 
 func get_end_point():
 	return curve.get_point_position(curve.get_point_count() -1)
 
 func set_end_point(value):
-	print("curve.get_point_count() -1: ", curve.get_point_count() -1)
 	curve.set_point_position(curve.get_point_count() -1, value)
+	print("setting endpoint to: ", value)
+	update()
 
 func get_connections() -> Array:
 	var connections = []
@@ -177,6 +178,7 @@ func get_opposite_area(connection):
 # when user move the border point from connection, but will not remove
 # area from connections, border point need to be adjusted
 func alling_border_points_with_connection():
+	print(name, "alling_border_points_with_connection")
 	if start_point_area and start_point_area.connection:
 		start_point_area.global_transform.origin = \
 				start_point_area.connection.global_transform.origin
