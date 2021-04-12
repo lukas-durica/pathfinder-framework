@@ -8,6 +8,9 @@
 
 [node name="GridBasedUI" type="Node2D"]
 script = ExtResource( 6 )
+load_path = true
+map_path = "res://data/maps/dao-map/lak506d.map"
+default_algorithm = 2
 
 [node name="UserInterface" parent="." instance=ExtResource( 1 )]
 

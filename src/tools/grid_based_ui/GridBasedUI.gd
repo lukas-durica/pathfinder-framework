@@ -8,7 +8,8 @@ const GUI_ZOOM_FACTOR : = 1.13
 
 const START_SCENE = preload("res://src/tools/grid_based_ui/Start.tscn")
 const GOAL_SCENE = preload("res://src/tools/grid_based_ui/Goal.tscn")
-const AGENT_SCENE = preload("res://src/tools/agents/AgentContinuous.tscn")
+#const AGENT_SCENE = preload("res://src/tools/agents/AgentContinuous.tscn")
+const AGENT_SCENE = preload("res://src/tools/agents/AgentContinuousOriented.tscn")
 
 # the pathfinding algorithm 
 var algorithm

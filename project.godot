@@ -14,6 +14,11 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://bin/Pathfinder.gdns"
 }, {
+"base": "Node2D",
+"class": "ASIPPTask",
+"language": "GDScript",
+"path": "res://src/tests/Task.gd"
+}, {
 "base": "",
 "class": "AStar2DCpp",
 "language": "NativeScript",
@@ -236,6 +241,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "AASippTesterCpp": "",
+"ASIPPTask": "",
 "AStar2DCpp": "",
 "AStar2DCppWrapper": "",
 "AStarCBS": "",
