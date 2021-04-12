@@ -8,5 +8,9 @@ _data = {
 }
 
 [node name="EditablePath" type="Path2D"]
+self_modulate = Color( 0, 1, 0, 1 )
 curve = SubResource( 1 )
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}

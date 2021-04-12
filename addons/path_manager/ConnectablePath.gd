@@ -4,10 +4,10 @@ class_name ConnectablePath extends Path2D
 
 const POINT_ARENA_SCENE = preload("res://addons/path_manager/PointArea.tscn")
 
-signal area_entered(area, area_entered)
-signal area_with_connection_exited(area)
-signal area_without_connection_exited(area)
-signal area_was_clicked(area, button_type)
+signal point_area_entered(my_area, area_entered)
+signal point_area_exited(my_area, area_exited)
+signal point_area_was_clicked(area, button_type)
+signal path_renamed(old_name, new_name)
 
 export(Color) var default_color : = Color.gray
 export(Color) var highlight_color : = Color.green
@@ -20,6 +20,9 @@ var end_point_area : PointArea = null
 var start_normal : = Vector2.INF
 var end_normal : = Vector2.INF
 
+# used for updating connections with new name
+onready var path_name : = name
+
 func _ready():
 	
 	
@@ -30,6 +33,8 @@ func _ready():
 	update_points()
 	update_normals()
 	self_modulate = Color.gray
+	connect("renamed", self, "_renamed")
+	
 
 func _notification(what):
 	match what:
@@ -38,6 +43,7 @@ func _notification(what):
 			#update_normals()
 		NOTIFICATION_TRANSFORM_CHANGED:
 			transform = Transform2D.IDENTITY
+		
 
 
 func update_points():
@@ -54,15 +60,15 @@ func process_point(is_start : bool):
 	point_area.position = get_start_point() if is_start else get_end_point()
 	
 func create_point_area(is_start : bool) -> PointArea:
+	print(name, ": CreatingPointArea: ", "Start" if is_start else "End")
 	var point_area = POINT_ARENA_SCENE.instance()
 	point_area.is_start = is_start
 	point_area.path = self
 	point_area.name = "Start" if is_start else "End"
-	var area_entered = "start_area_entered" if is_start else "end_area_entered"
-	var area_exited = "start_area_exited" if is_start else "end_area_exited"
-	point_area.connect("area_entered", self, area_entered)
-	point_area.connect("area_exited", self, area_exited)
-	point_area.connect("area_was_clicked", self, "area_was_clicked")
+	point_area.connect("point_area_entered", self, "point_area_entered")
+	point_area.connect("point_area_exited", self, "point_area_exited")
+	point_area.connect("point_area_was_clicked", self, "point_area_was_clicked")
+	
 	# set its new position
 	if is_start:
 		start_point_area = point_area
@@ -105,35 +111,18 @@ func color_connection(area : PointArea, color : Color):
 	 
 
 
-func start_area_entered(area : Area2D):
-	print("area enterd")
-	if not start_point_area.connection:
-		emit_signal("area_entered", start_point_area, area)
-		print(name, ": start_point_area entered")
+func point_area_entered(my_area : PointArea, entered_area : PointArea):
+	
+	if not my_area.connection:
+		print(name, ": area entered")
+		emit_signal("point_area_entered", my_area, entered_area)
+		
 
-func start_area_exited(area : Area2D):
-	print(name, "area exited")
-	
-	if start_point_area.connection:
-		emit_signal("area_with_connection_exited", start_point_area)
-	else:
-		emit_signal("area_without_connection_exited", start_point_area)
-	
-func end_area_entered(area : Area2D):
-	print("area enterd")
-	if not end_point_area.connection:
-		emit_signal("area_entered", end_point_area, area)
-		print(name, ": end_point_area entered")
-	
-func end_area_exited(area : Area2D):
-	
-	if end_point_area.connection:
-		emit_signal("area_with_connection_exited", end_point_area)
-	else:
-		emit_signal("area_without_connection_exited", end_point_area)
+func point_area_exited(my_area : PointArea, exited_area : PointArea):
+		emit_signal("point_area_exited", my_area, exited_area)
 
 func area_was_clicked(area : Area2D, button_type : int):
-	emit_signal("area_was_clicked", area, button_type)
+	emit_signal("point_area_was_clicked", area, button_type)
 
 func get_start_point():
 	return curve.get_point_position(0)
@@ -145,9 +134,18 @@ func get_end_point():
 	return curve.get_point_position(curve.get_point_count() -1)
 
 func set_end_point(value):
+	print("curve.get_point_count() -1: ", curve.get_point_count() -1)
 	curve.set_point_position(curve.get_point_count() -1, value)
 
-func get_connections_or_areas():
+func get_connections() -> Array:
+	var connections = []
+	if start_point_area and start_point_area.connection:
+		connections.push_back(start_point_area.connection)
+	if end_point_area and end_point_area.connection:
+		connections.push_back(end_point_area.connection)
+	return connections
+
+func get_connections_or_areas() -> Array:
 	var border_points : = []
 	if start_point_area:
 		if start_point_area.connection:
@@ -159,8 +157,8 @@ func get_connections_or_areas():
 			border_points.push_back(end_point_area.connection)
 		else:
 			border_points.push_back(end_point_area)
+	return border_points
 		
-
 func get_opposite_connection(connection):
 	if start_point_area and start_point_area.connection \
 			and start_point_area.connection != connection:
@@ -190,8 +188,10 @@ func alling_border_points_with_connection():
 
 func update_border_point(area : PointArea):
 	if area.is_start:
+		print(name, ": updating start border point: ", area.get_compound_name())
 		set_start_point(area.connection.global_transform.origin)
-	else: 
+	else:
+		print(name, ": updating end border point: ", area.get_compound_name())
 		set_end_point(area.connection.global_transform.origin)
 
 # the direction of last two points or first two points
@@ -202,3 +202,11 @@ func get_connection_normal(is_start : bool) -> Vector2:
 	var point0 = curve.get_baked_points()[point0_idx]
 	var point1 = curve.get_baked_points()[point1_idx]
 	return point1.direction_to(point0)
+
+func _renamed():
+	print("renamed")
+	var connections : = get_connections()
+	for connection in connections:
+		connection.update_path_name(path_name, name)
+		
+	path_name = name
