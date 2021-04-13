@@ -299,10 +299,6 @@ config/icon="res://icon.png"
 window/size/width=1280
 window/size/height=960
 
-[editor_plugins]
-
-enabled=PoolStringArray( "path_manager" )
-
 [mono]
 
 profiler/enabled=true

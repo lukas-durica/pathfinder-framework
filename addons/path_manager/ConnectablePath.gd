@@ -79,6 +79,9 @@ func create_point_area(is_start : bool) -> PointArea:
 	add_child(point_area)
 	return point_area
 
+func update_collision_shape():
+	pass
+
 func get_start_point() -> Vector2:
 	return curve.get_point_position(0)
 

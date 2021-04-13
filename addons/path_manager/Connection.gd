@@ -39,7 +39,7 @@ func _notification(what):
 			update()
 
 func _draw():
-	var c = Color.palegreen
+	var c = Color.blue
 	draw_circle(Vector2.ZERO, 10.0, Color(c.r, c.g, c.b, 0.5))
 
 func update_areas_position():

@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://TestNode.gd" type="Script" id=1]
 [ext_resource path="res://data/textures/actors/rectangles/AgvLongOnMicro.png" type="Texture" id=2]
 [ext_resource path="res://Node2D.gd" type="Script" id=3]
+[ext_resource path="res://src/tools/Camera.tscn" type="PackedScene" id=4]
 
 [sub_resource type="Curve2D" id=1]
 _data = {
@@ -33,3 +34,6 @@ script = ExtResource( 3 )
 
 [node name="Node2D3" type="Node2D" parent="."]
 script = ExtResource( 3 )
+
+[node name="Camera" parent="." instance=ExtResource( 4 )]
+[connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]
