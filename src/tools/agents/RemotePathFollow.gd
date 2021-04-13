@@ -11,8 +11,8 @@ func get_closest_area() -> PointArea:
 		push_error(name + ": Invalid Path")
 		return null
 	
-	var start : = parent.start_point_area.global_transform.origin
-	var end : = parent.end_point_area.global_transform.origin
+	var start : = parent.start_point_area.global_position
+	var end : = parent.end_point_area.global_position
 	
 	var dist_to_start = global_position.distance_squared_to(start)
 	var dist_to_end = global_position.distance_squared_to(end)
