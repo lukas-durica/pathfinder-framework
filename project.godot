@@ -125,6 +125,11 @@ _global_script_classes=[ {
 "path": "res://src/tools/agents/AgentGraph.gd"
 }, {
 "base": "Node2D",
+"class": "AgentPathfinder",
+"language": "GDScript",
+"path": "res://src/tools/agents/AgentPathfinder.gd"
+}, {
+"base": "Node2D",
 "class": "AgentSIPP",
 "language": "GDScript",
 "path": "res://src/tools/agents/AgentSIPP.gd"
@@ -263,6 +268,7 @@ _global_script_class_icons={
 "AStarSpaceTimeTest": "",
 "AgentContinuous": "",
 "AgentGraph": "",
+"AgentPathfinder": "",
 "AgentSIPP": "",
 "Algorithm": "",
 "BasicCamera": "",

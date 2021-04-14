@@ -37,8 +37,8 @@ curve = SubResource( 1 )
 script = ExtResource( 7 )
 
 [node name="RemotePathFollow" parent="Graph/Paths/ConnectablePath" instance=ExtResource( 10 )]
-position = Vector2( 491.073, 142 )
-rotation = 0.430296
+position = Vector2( 490.652, 142.42 )
+rotation = 0.425125
 offset = 391.692
 lookahead = 3.0
 

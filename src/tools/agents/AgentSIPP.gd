@@ -25,7 +25,7 @@ func _on_Timer_timeout():
 	# path denotes, when it is time to leave current vertex
 	# while this is discrete movement we update position one
 	# timestep later to move agent to new vertex
-	if last_start + 1  == time_step:
+	if last_start + 1 == time_step:
 		update_position()
 
 func update_position():
