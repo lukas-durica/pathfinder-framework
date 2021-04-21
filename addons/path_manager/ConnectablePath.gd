@@ -3,6 +3,7 @@ tool
 class_name ConnectablePath extends Path2D
 
 const POINT_ARENA_SCENE = preload("res://addons/path_manager/PointArea.tscn")
+const PATH_AREA_SCENE = preload("res://addons/path_manager/PathArea.tscn")
 const DEFAULT_COLOR : = Color.gray
 const HIGHLIGHT_COLOR : = Color.green
 
@@ -10,6 +11,10 @@ signal point_area_entered(my_area, area_entered)
 signal point_area_exited(my_area, area_exited)
 signal point_area_was_clicked(area, button_type)
 signal path_renamed(old_name, new_name)
+signal path_area_entered(my_area, path_area_entered)
+signal path_area_exited(my_area, path_area_entered)
+
+var path_area : Area2D
 
 var start_point_area : PointArea = null
 var end_point_area : PointArea = null
@@ -30,8 +35,10 @@ func _notification(what : int):
 	match what:
 		NOTIFICATION_DRAW:
 			update_points()
+			update_collision_shape()
 		NOTIFICATION_TRANSFORM_CHANGED:
 			transform = Transform2D.IDENTITY
+
 
 func _point_area_entered(my_area : PointArea, entered_area : PointArea):
 	if not my_area.is_connection_valid():
@@ -42,6 +49,12 @@ func _point_area_exited(my_area : PointArea, exited_area : PointArea):
 
 func _area_was_clicked(area : Area2D, button_type : int):
 	emit_signal("point_area_was_clicked", area, button_type)
+
+func _path_area_entered(myArea : PointArea, path_area : PathArea):
+	emit_signal("path_area_entered", myArea, path_area)
+
+func _path_area_exited(myArea : PointArea, path_area : PathArea):
+	emit_signal("path_area_exited", myArea, path_area)
 
 func _renamed():
 	var connections : = get_connections()
@@ -70,6 +83,9 @@ func create_point_area(is_start : bool) -> PointArea:
 	point_area.connect("point_area_exited", self, "_point_area_exited")
 	point_area.connect("point_area_was_clicked", self, 
 			"_point_area_was_clicked")
+	point_area.connect("path_area_entered", self, "_path_area_entered")
+	point_area.connect("path_area_exited", self, "_path_area_exited")
+	
 	
 	# set its new position
 	if is_start:
@@ -80,7 +96,23 @@ func create_point_area(is_start : bool) -> PointArea:
 	return point_area
 
 func update_collision_shape():
-	pass
+	if not curve.get_point_count() > 1:
+		return
+	
+	if not path_area:
+		path_area = PATH_AREA_SCENE.instance()
+		path_area.name = name + "PathArea"
+		path_area.path = self
+		add_child(path_area)
+		
+	var vec2_pool = PoolVector2Array()
+	var prev_point : = Vector2.INF
+	for point in curve.tessellate():
+		if prev_point != Vector2.INF:
+			vec2_pool.push_back(prev_point)
+			vec2_pool.push_back(point)
+		prev_point = point
+	path_area.collision_shape.shape.segments = vec2_pool
 
 func get_start_point() -> Vector2:
 	return curve.get_point_position(0)

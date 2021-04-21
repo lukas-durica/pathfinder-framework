@@ -65,7 +65,6 @@ func add_to_connection(connected_area : PointArea):
 		#add the already added connections to this path
 		passable_connections[connected_area.path.name] += [path_to_path_node]
 	
-	var path = connected_area.path
 	#path.update_border_point(connected_area)
 	
 	#for area in connected_areas:

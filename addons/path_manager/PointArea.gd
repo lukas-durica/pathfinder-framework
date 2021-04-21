@@ -4,14 +4,17 @@ class_name PointArea extends Area2D
 signal point_area_entered(my_area, entered_area)
 signal point_area_exited(my_area, exited_area)
 signal point_area_was_clicked(area, button_type)
+signal path_area_entered(my_area, entered_area)
+signal path_area_exited(my_area, exited_area)
 
 var path
 var is_start
 var connection
 var overlapped_point_areas : = []
+var entered_path_area : Area2D
 
 func _draw():
-	if not overlapped_point_areas.empty():
+	if not overlapped_point_areas.empty() or entered_path_area:
 		var c = Color.azure
 		c.a = 0.25 if connection else 0.5
 		draw_circle(Vector2.ZERO, 10.0, c)
@@ -26,11 +29,22 @@ func _on_Area2D_area_entered(area : Area2D):
 		emit_signal("point_area_entered", self, area)
 		if Engine.editor_hint and overlapped_point_areas.size() == 1:
 			update()
+	elif area.is_in_group("path_areas") and overlapped_point_areas.empty() \
+			and area.path != path:
+		entered_path_area = area
+		emit_signal("path_area_entered", self, area)
+		if Engine.editor_hint:
+			update()
 
 func _on_Area2D_area_exited(area : Area2D):
 	if area.is_in_group("point_areas"):
 		overlapped_point_areas.erase(area)
 		emit_signal("point_area_exited", self, area)
+		if Engine.editor_hint:
+			update()
+	elif area.is_in_group("path_areas") and entered_path_area:
+		entered_path_area = null
+		emit_signal("path_area_exited", self, area)
 		if Engine.editor_hint:
 			update()
 
