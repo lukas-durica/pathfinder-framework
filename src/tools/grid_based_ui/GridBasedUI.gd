@@ -92,44 +92,7 @@ func adjust_camera_to_grid():
 # algorithm is initialized
 # process this input as unhadled due to higher priority of the UserInterface
 
-func _unhandled_input(event):
-	# if the any mouse button is pressed
-	if event is InputEventMouseButton:
-		
-		# get mouse position to the grid (vertex) position
-		var clicked_vertex = get_mouse_vertex()
-		var index = find_start_or_goal(clicked_vertex)
-		# if the cell is free, it can be assigned as start/goal if not return
-		if event.pressed:
-			if event.button_index == BUTTON_LEFT \
-					and not grid.is_cell_obstacle(clicked_vertex) \
-					and grid.is_cell_valid(clicked_vertex):
-						if line_start == Vector2.INF:
-							line_start = clicked_vertex
-						elif line_start != clicked_vertex:
-							add_start_and_goal(line_start, clicked_vertex)
-							line_start = Vector2.INF
-							line_end = Vector2.INF
-							update()
-			# clear with right button started line
-			elif event.button_index == BUTTON_RIGHT:
-				if line_start != Vector2.INF:
-					line_start = Vector2.INF
-					line_end = Vector2.INF
-				# if line exists delete it
-				elif index != -1:
-					starts_and_goals[index].start_sprite.queue_free()
-					starts_and_goals[index].goal_sprite.queue_free()
-					starts_and_goals.remove(index)
-				update()
-			
-	# update coords in UI with every mouse motion
-	elif event is InputEventMouseMotion:
-		user_interface.set_coords(get_mouse_vertex())
-		# if line is drawn update it 
-		if line_start != Vector2.INF:
-			line_end = get_mouse_vertex()
-			update()
+
 
 # called through update()
 func _draw():

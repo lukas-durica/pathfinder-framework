@@ -1,19 +1,28 @@
 class_name ASIPPTask extends Node2D
 
-
+var test_task : = {}
 
 # Default parameters
-enum {DEFAULT_PARAMETERS = -1, START, GOAL, SIZE, MOVE_SPEED, ROTATION_SPEED, 
-		START_HEADING, GOAL_HEADING}
+enum {DEFAULT_PARAMETERS = -1, START, GOAL, SIZE, MOVEMENT_SPEED, 
+		ROTATION_SPEED, START_HEADING, GOAL_HEADING}
 
+func _ready():
+	test_task = create_task()
 
+func get_task() -> Dictionary:
+	return test_task
+
+func get_parameter(agent_id : int, parameter_type : int):
+	return test_task[agent_id][parameter_type] \
+			if test_task[agent_id].has(parameter_type) \
+			else test_task[DEFAULT_PARAMETERS][parameter_type]
 
 static func create_task() -> Dictionary:
 	var task : = {}
 	
 	task[DEFAULT_PARAMETERS] = {}
 	task[DEFAULT_PARAMETERS][SIZE] = 0.4
-	task[DEFAULT_PARAMETERS][MOVE_SPEED] = 0.25
+	task[DEFAULT_PARAMETERS][MOVEMENT_SPEED] = 0.25
 	task[DEFAULT_PARAMETERS][ROTATION_SPEED] = 0.2
 	task[DEFAULT_PARAMETERS][START_HEADING] = 180
 	task[DEFAULT_PARAMETERS][GOAL_HEADING] = 90
@@ -38,7 +47,7 @@ static func create_task() -> Dictionary:
 	task[3] = {}
 	task[3][START] = Vector2(28, 1)
 	task[3][GOAL] = Vector2(11, 38)
-	task[3][MOVE_SPEED] = 3.0
+	task[3][MOVEMENT_SPEED] = 3.0
 	task[3][ROTATION_SPEED] = 2.0
 	
 	task[4] = {}

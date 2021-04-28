@@ -95,6 +95,7 @@ margin_left = 154.0
 margin_top = 64.0
 margin_right = 174.0
 margin_bottom = 84.0
+
 [connection signal="pressed" from="UIRoot/HBoxContainer/Run" to="." method="_on_Run_pressed"]
 [connection signal="pressed" from="UIRoot/HBoxContainer/Algorithm" to="." method="_on_Algorithm_pressed"]
 [connection signal="pressed" from="UIRoot/HBoxContainer/Options" to="." method="_on_Options_pressed"]

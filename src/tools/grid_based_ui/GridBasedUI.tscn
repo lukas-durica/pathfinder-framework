@@ -26,6 +26,7 @@ script = ExtResource( 7 )
 [node name="Agents" type="Node2D" parent="."]
 
 [node name="Timer" type="Timer" parent="."]
+
 [connection signal="algorithms_id_pressed" from="UserInterface" to="." method="_on_UserInterface_algorithms_id_pressed"]
 [connection signal="button_pressed" from="UserInterface" to="." method="_on_UserInterface_button_pressed"]
 [connection signal="options_id_pressed" from="UserInterface" to="." method="_on_UserInterface_options_id_pressed"]
