@@ -11,8 +11,8 @@ signal point_area_entered(my_area, area_entered)
 signal point_area_exited(my_area, area_exited)
 signal point_area_was_clicked(area, button_type)
 signal path_renamed(old_name, new_name)
-signal path_area_entered(my_area, path_area_entered)
-signal path_area_exited(my_area, path_area_entered)
+#signal path_area_entered(my_area, path_area_entered)
+#signal path_area_exited(my_area, path_area_entered)
 
 var path_area : Area2D
 
@@ -47,14 +47,14 @@ func _point_area_entered(my_area : PointArea, entered_area : PointArea):
 func _point_area_exited(my_area : PointArea, exited_area : PointArea):
 	emit_signal("point_area_exited", my_area, exited_area)
 
-func _area_was_clicked(area : Area2D, button_type : int):
+func _point_area_was_clicked(area : Area2D, button_type : int):
 	emit_signal("point_area_was_clicked", area, button_type)
 
-func _path_area_entered(myArea : PointArea, path_area : PathArea):
-	emit_signal("path_area_entered", myArea, path_area)
-
-func _path_area_exited(myArea : PointArea, path_area : PathArea):
-	emit_signal("path_area_exited", myArea, path_area)
+#func _path_area_entered(myArea : PointArea, path_area : PathArea):
+#	emit_signal("path_area_entered", myArea, path_area)
+#
+#func _path_area_exited(myArea : PointArea, path_area : PathArea):
+#	emit_signal("path_area_exited", myArea, path_area)
 
 func _renamed():
 	var connections : = get_connections()
@@ -83,8 +83,8 @@ func create_point_area(is_start : bool) -> PointArea:
 	point_area.connect("point_area_exited", self, "_point_area_exited")
 	point_area.connect("point_area_was_clicked", self, 
 			"_point_area_was_clicked")
-	point_area.connect("path_area_entered", self, "_path_area_entered")
-	point_area.connect("path_area_exited", self, "_path_area_exited")
+#	point_area.connect("path_area_entered", self, "_path_area_entered")
+#	point_area.connect("path_area_exited", self, "_path_area_exited")
 	
 	
 	# set its new position
@@ -98,13 +98,13 @@ func create_point_area(is_start : bool) -> PointArea:
 func update_collision_shape():
 	if not curve.get_point_count() > 1:
 		return
-	
+
 	if not path_area:
 		path_area = PATH_AREA_SCENE.instance()
 		path_area.name = name + "PathArea"
 		path_area.path = self
 		add_child(path_area)
-		
+
 	var vec2_pool = PoolVector2Array()
 	var prev_point : = Vector2.INF
 	for point in curve.tessellate():

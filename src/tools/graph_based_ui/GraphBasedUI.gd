@@ -37,7 +37,7 @@ func _ready():
 	
 	for path in graph.node_paths.get_children():
 		path = path as ConnectablePath
-		path.connect("area_was_clicked", self, "area_was_clicked")
+		path.connect("point_area_was_clicked", self, "area_was_clicked")
 
 	#set_algorithm(default_algorithm, true)
 	
