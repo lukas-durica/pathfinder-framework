@@ -1,21 +1,22 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://data/textures/actors/rectangles/AgvLongOnMini.png" type="Texture" id=1]
 [ext_resource path="res://data/textures/actors/rectangles/AgvLongOffMini.png" type="Texture" id=2]
 [ext_resource path="res://data/fonts/Montserrat-Bold.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://src/tools/agents/AgentGraph.gd" type="Script" id=4]
 [ext_resource path="res://src/tools/agents/Area2D.gd" type="Script" id=5]
+[ext_resource path="res://src/tools/agents/RemotePathFollow.tscn" type="PackedScene" id=6]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ ExtResource( 2 ) ],
-"loop": true,
-"name": "off",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 1 ) ],
 "loop": true,
 "name": "on",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 2 ) ],
+"loop": true,
+"name": "off",
 "speed": 5.0
 } ]
 
@@ -60,6 +61,6 @@ script = ExtResource( 5 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 3 )
 
-[connection signal="mouse_entered" from="Visualization/Label" to="." method="_on_Label_mouse_entered"]
-[connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]
-[connection signal="area_exited" from="Area2D" to="." method="_on_Area2D_area_exited"]
+[node name="ResetTransform" type="Node" parent="."]
+
+[node name="RemotePathFollow" parent="ResetTransform" instance=ExtResource( 6 )]

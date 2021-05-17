@@ -5,7 +5,7 @@ class_name Connection extends Node2D
 # connections is dictionary with the key of path name and array of connected 
 # other path names as as value
 # making connections means making passable from one path to another
-# dont assign it with := {} Godots bug will share it through the instancies
+# dont assign it with := {} Godots bug will share it through the all instancies
 # for simplicity only the names are stored, not a the whole path
 # passable_connections["ConnectablePath2"] = ["ConnectablePath", 
 #		"ConnectablePath3"]
@@ -20,8 +20,11 @@ export(Array) var connected_area_paths
 # connected areas
 var connected_areas : = []
 
-# only in run time
+# only in run time for creating pathfindig graph
 var connected_paths : = []
+
+# only in run time for finding connected paths
+var passable_paths : = {}
 
 
 func _ready():
@@ -31,6 +34,9 @@ func _ready():
 		reconnect()
 	
 	connected_paths = get_connected_paths()
+	
+	create_passable_paths()
+	print(name, ": passable_paths: ", passable_paths)
 	
 func _notification(what):
 	match what:
@@ -47,6 +53,7 @@ func update_areas_position():
 		connected_area.update_border_point(global_position)
 
 func add_to_connection(connected_area : PointArea):
+	print("add to connection")
 	if connected_area.is_connection_valid():
 		push_error("connection already exists!")
 	
@@ -65,10 +72,6 @@ func add_to_connection(connected_area : PointArea):
 		#add the already added connections to this path
 		passable_connections[connected_area.path.name] += [path_to_path_node]
 	
-	#path.update_border_point(connected_area)
-	
-	#for area in connected_areas:
-	#	should_create_passable_connection(area, connected_area)
 
 func remove_from_connection(connected_area : Area2D):
 	connected_area_paths.erase(String(get_path_to(connected_area)))
@@ -88,6 +91,7 @@ func remove_from_connection(connected_area : Area2D):
 func update_path_name(old_name : String, new_name : String):
 	print("new_name: ", new_name)
 	for path_to_area in connected_area_paths:
+		
 		var idx : int = path_to_area.rfindn("/")
 		var idx2 : int = path_to_area.rfindn("/", idx - 1)
 		if old_name == path_to_area.substr(idx2 + 1, idx - idx2 - 1):
@@ -110,21 +114,48 @@ func update_path_name(old_name : String, new_name : String):
 			if passable_path_name == old_name:
 				passable_connections[path_name].erase(old_name)
 				passable_connections[path_name].push_back(new_name)
-	
-	for path_name in passable_connections:
-		print("path_name: ", path_name)
-		for passable_path_name in passable_connections[path_name]:
-			print("passable_path_name: ", passable_path_name)
-		
+
+
+func extract_path_name(node_path_area : String) -> String:
+	var idx : int = node_path_area.rfindn("/")
+	var idx2 : int = node_path_area.rfindn("/", idx - 1)
+	return node_path_area.substr(idx2 + 1, idx - idx2 - 1)
+	 
 
 # return positions of connections and not connected areas
-func get_neighbor_points() -> Array:
-	var border_points : = []
-	for path in get_connected_paths():
-		var point = path.get_connections_or_areas()
-		if point != self:
-			border_points.push_back(point)
-	return border_points
+#func get_neighbor_points() -> Array:
+#	var border_points : = []
+#	for path in get_connected_paths():
+#		var point = path.get_connections_or_areas()
+#		if point != self:
+#			border_points.push_back(point)
+#	return border_points
+
+func get_neighbor_points(path : ConnectablePath) -> Array:
+	var neighbor_points : = []
+	for path in passable_paths[path]:
+		var points : Array = path.get_connections_or_areas()
+		for point in points:
+			if point != self:
+				neighbor_points.push_back(point)
+	return neighbor_points
+	
+
+func create_passable_paths():
+	for path_name in passable_connections:
+		var path = get_node(get_relative_node_path_to_path(path_name))
+		
+		passable_paths[path] = []
+		for connected_path in passable_connections[path_name]:
+			passable_paths[path].push_back(get_node(
+					get_relative_node_path_to_path(connected_path)))
+
+func get_relative_node_path_to_path(path_name : String) -> String:
+	for path_to_area in connected_area_paths:
+		if extract_path_name(path_to_area) == path_name:
+			var idx : int = path_to_area.rfindn("/")
+			return path_to_area.substr(0, idx)
+	return String()
 	
 
 func get_connected_paths() -> Array:

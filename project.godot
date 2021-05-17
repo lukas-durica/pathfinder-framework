@@ -174,6 +174,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/tools/graph_based_ui/Graph.gd"
 }, {
+"base": "AStar2D",
+"class": "GraphBasedAlgorithm",
+"language": "GDScript",
+"path": "res://src/algorithms/GraphBasedAlgorithm.gd"
+}, {
 "base": "Node2D",
 "class": "GraphBasedUI",
 "language": "GDScript",
@@ -283,6 +288,7 @@ _global_script_class_icons={
 "ConnectablePath": "",
 "Connection": "",
 "Graph": "",
+"GraphBasedAlgorithm": "",
 "GraphBasedUI": "",
 "GraphBasedUITransition": "",
 "Grid": "",
@@ -303,7 +309,7 @@ _global_script_class_icons={
 [application]
 
 config/name="pathfinder-framework"
-run/main_scene="res://src/tests/Paths.tscn"
+run/main_scene="res://src/tools/graph_based_ui/GraphBasedUI.tscn"
 config/icon="res://icon.png"
 
 [display]

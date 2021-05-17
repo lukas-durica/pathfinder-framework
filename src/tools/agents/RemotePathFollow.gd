@@ -1,20 +1,20 @@
-tool
-
 class_name RemotePathFollow extends PathFollow2D
 
 onready var remote_transform : = $RemoteTransform2D
 
 func set_remote_node(node : Node):
+	print("setting node: ", node.name)
 	remote_transform.remote_path = remote_transform.get_path_to(node)
 
 func get_closest_area() -> PointArea:
-	var parent : ConnectablePath = get_parent()
-	if not parent:
+	var parent : = get_parent()
+	print(parent.name)
+	if not parent is ConnectablePath:
 		push_error(name + ": Invalid Path")
 		return null
 	
-	var start : = parent.start_point_area.global_position
-	var end : = parent.end_point_area.global_position
+	var start : Vector2 = parent.start_point_area.global_position
+	var end : Vector2 = parent.end_point_area.global_position
 	
 	var dist_to_start = global_position.distance_squared_to(start)
 	var dist_to_end = global_position.distance_squared_to(end)
@@ -31,9 +31,10 @@ func get_next_path() -> ConnectablePath:
 	if not connection:
 		return null
 	
-	if connection.connected_paths[0] != get_parent():
-		return connection.connected_paths[0]
-	return connection.connected_paths[1]
+	if connection.passable_paths[get_parent()].empty():
+		return null
+	
+	return connection.passable_paths[get_parent()][0]
 
 	
 	

@@ -1,6 +1,4 @@
-extends Reference
-
-class_name GridBasedAlgorithm
+class_name GridBasedAlgorithm extends Reference
 
 var grid #: Grid
 
