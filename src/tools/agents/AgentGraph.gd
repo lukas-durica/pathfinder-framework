@@ -27,6 +27,8 @@ func _ready():
 			align_to_path(path, global_position)
 		else:
 			push_warning(name + "node path to path is empty!")
+			
+		set_process(false)
 
 	$Visualization/Label.text = name
 	

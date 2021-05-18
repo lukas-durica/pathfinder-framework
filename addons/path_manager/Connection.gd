@@ -34,9 +34,9 @@ func _ready():
 		reconnect()
 	
 	connected_paths = get_connected_paths()
+	if not Engine.editor_hint:
+		create_passable_paths()
 	
-	create_passable_paths()
-	print(name, ": passable_paths: ", passable_paths)
 	
 func _notification(what):
 	match what:
@@ -47,6 +47,10 @@ func _notification(what):
 func _draw():
 	var c = Color.blue
 	draw_circle(Vector2.ZERO, 10.0, Color(c.r, c.g, c.b, 0.5))
+
+
+func _to_string():
+	return name
 
 func update_areas_position():
 	for connected_area in connected_areas:

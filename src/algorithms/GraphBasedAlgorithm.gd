@@ -1,18 +1,12 @@
-class_name GraphBasedAlgorithm extends AStar2D
+class_name GraphBasedAlgorithm extends Reference
 
 var graph #: Grid
 
 func initialize(grph):
 	graph = grph
 	
-func find_solution(_starts_and_goals : Array):
+func find_solution(start_path : ConnectablePath, goal_point : Node2D):
 	pass
 
 func clear():
-	pass
-
-func _compute_cost(from_id: int, to_id: int):
-	pass
-	
-func _estimate_cost(from_id: int, to_id: int):
 	pass

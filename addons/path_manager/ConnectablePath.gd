@@ -63,6 +63,9 @@ func _renamed():
 
 	path_name = name
 
+func _to_string():
+	return name
+
 func update_points():
 	if curve.get_point_count() > 0:
 		process_point(true)
@@ -158,6 +161,8 @@ func alling_border_points_with_connection():
 		set_start_point(start_point_area.connection.global_position)
 	if end_point_area and end_point_area.is_connection_valid():
 		set_end_point(end_point_area.connection.global_position)
+
+
 
 func color_path(color : Color):
 	self_modulate = color

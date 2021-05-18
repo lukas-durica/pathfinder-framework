@@ -44,6 +44,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/algorithms/AstarGodot.gd"
 }, {
+"base": "Reference",
+"class": "AStarGraph",
+"language": "GDScript",
+"path": "res://src/algorithms/AStarGraph.gd"
+}, {
 "base": "",
 "class": "AStarMAPDCpp",
 "language": "NativeScript",
@@ -174,7 +179,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/tools/graph_based_ui/Graph.gd"
 }, {
-"base": "AStar2D",
+"base": "Reference",
 "class": "GraphBasedAlgorithm",
 "language": "GDScript",
 "path": "res://src/algorithms/GraphBasedAlgorithm.gd"
@@ -262,6 +267,7 @@ _global_script_class_icons={
 "AStarCBS": "",
 "AStarDefault": "",
 "AStarGodot": "",
+"AStarGraph": "",
 "AStarMAPDCpp": "",
 "AStarMAPDCppWrapper": "",
 "AStarMAPDOrientedCpp": "",

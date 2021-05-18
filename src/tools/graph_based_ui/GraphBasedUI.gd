@@ -64,10 +64,12 @@ func run():
 		path = target.path
 	elif target is Connection:
 		path = target.connected_paths[0]
+	
+	
 		
-	var agent = AGENT_SCENE.instance()
-	$Agents.add_child(agent)
-	agent.align_to_path(path, start.global_position)
+	#var agent = AGENT_SCENE.instance()
+	#$Agents.add_child(agent)
+	#agent.align_to_path(path, start.global_position)
 	
 	
 	
