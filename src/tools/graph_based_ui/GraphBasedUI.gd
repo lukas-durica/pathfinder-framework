@@ -49,94 +49,43 @@ func area_was_clicked(area : PointArea, button_type : int):
 	var border : Node2D = start if button_type == BUTTON_LEFT else goal
 
 	border.global_transform.origin = target.global_transform.origin
-	border.set_meta("target", target)
+	border.set_meta("point", target)
 	border.visible = true
 
 # run the pathfinder
 func run():
-	
-	if not start.has_meta("target") or not start.get_meta("target"):
-		push_error("Start has no target!")
+	var start_path : ConnectablePath
+	var agent : AgentGraph
+	# if the agent is set runtime
+	if $Agents.get_children().empty():
+		if not start.has_meta("point") or not start.get_meta("point"):
+			push_error("Start has no target!")
 		return
-	var target = start.get_meta("target")
-	var path : Path2D
-	if target is PointArea:
-		path = target.path
-	elif target is Connection:
-		path = target.connected_paths[0]
-	
-	
+		var start_point = start.get_meta("point")
 		
-	#var agent = AGENT_SCENE.instance()
-	#$Agents.add_child(agent)
-	#agent.align_to_path(path, start.global_position)
-	
-	
-	
-	# reset all cells to default (e.g. path cells to free)
-	
-	
-	
-	# convert global positions to the grid (vertex) position
-	# start measuring time
-	
-	
-	#var start = Vector3(5, -5, 0)
-	#var goal = Vector3(5, 5,0 )
-	#if starts_and_goals.empty():
-	#var time_start = OS.get_ticks_usec()
-	#var paths = algorithm.find_solution(starts_and_goals)
-	
-	#if paths.empty():
-	#	print("Path was not found")
-	#	return
-	
-	#print("Elapsed time: {0}, size: {1}".format(
-	#			[OS.get_ticks_usec() - time_start, paths.size()])) 
-	# if there is only one path from single agent algorithm
-	
-	
-	
-#	if not paths[0] is Array:
-#
-#		for vertex in paths:
-#			graph.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
-#		add_agent(paths)
-#
-#		# if there are multiple paths from multi agent algorithm
-#	elif paths[0] is Array:
-#		for path in paths:
-#			for vertex in path:
-#				graph.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
-#			if not path.empty(): 
-#				add_agent(path)
-#		$Timer.start()
-	
-	
-	#for vertex in path:
-	#	if grid.is_cell_free(Vector2(vertex.x, vertex.y)):
-	#		grid.set_cellv(Vector2(vertex.x, vertex.y), Grid.PATH)
-	#	push_error("There are no starts and goals!")
-	#	return
-	
-	# if it is single agent algorithm it will take only first pair of start and
-	# goal
-	
-	
-	
-	
-	# find the path
-	#var paths = algorithm.find_solution(starts_and_goals)
+		if start_point is PointArea:
+			start_path = start_point.path
+		elif start_point is Connection:
+			start_path = start_point.connected_paths[0]
+		agent = AGENT_SCENE.instance()
+		$Agents.add_child(agent)
+		agent.align_to_path(start_path, start.global_position)
 		
-	# print elapsed time
+	else:
+		agent = $Agents.get_children()[0]
+		var path_follow_parent = agent.path_follow.get_parent()
+		if path_follow_parent and path_follow_parent is ConnectablePath:
+			start_path = path_follow_parent
 	
+	var goal_point : Node2D = goal.get_meta("point")
+	if not goal_point:
+		push_error("Goal Point is invalid")
+		return
+	
+	var astar : = AStarGraph.new($Graph)
+	print(astar.find_solution(start_path, agent.path_follow.offset, goal_point))
 
-	
-#	if not paths.empty():
-#		
-	# color the path
-	
-		
+
 func add_agent(path):
 	var agent = AGENT_SCENE.instance()
 	$Agents.add_child(agent)

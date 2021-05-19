@@ -14,6 +14,7 @@ signal path_renamed(old_name, new_name)
 #signal path_area_entered(my_area, path_area_entered)
 #signal path_area_exited(my_area, path_area_entered)
 
+var id : = -1
 var path_area : Area2D
 
 var start_point_area : PointArea = null
@@ -142,18 +143,46 @@ func get_connections() -> Array:
 
 func get_connections_or_areas() -> Array:
 	var border_points : = []
-	if start_point_area:
-		if start_point_area.is_connection_valid():
-			border_points.push_back(start_point_area.connection)
-		else:
-			border_points.push_back(start_point_area)
-	if end_point_area:
-		if end_point_area.is_connection_valid():
-			border_points.push_back(end_point_area.connection)
-		else:
-			border_points.push_back(end_point_area)
+	border_points.push_back(get_connection_or_area(true))
+	border_points.push_back(get_connection_or_area(false))
 	return border_points
-		
+
+func get_connection_or_area(is_start : bool) -> Node2D:
+	var area = start_point_area if is_start else end_point_area
+	if area:
+		if area.is_connection_valid():
+			return area.connection
+		else:
+			return area
+	return null
+
+func get_opposite_point(point : Node2D) -> Node2D:
+	var area : PointArea
+	if point is PointArea:
+		area = point 
+	elif point is Connection:
+		if start_point_area.is_connection_valid() \
+				and point == start_point_area.connection:
+				area = start_point_area
+		elif end_point_area.is_connection_valid() \
+				and point == end_point_area.connection:
+				area = end_point_area
+		else:
+			push_error("Connection {0} is not part of this path {1}".format(
+						[point.name, name]))
+			return Node2D.new()
+	else:
+		push_error("Point {0} is not area nor connection! ".format(
+				[point.name]))
+		return Node2D.new()
+	
+	var opposite_area : = end_point_area if area.is_start else start_point_area
+	var opposite_point = opposite_area.connection \
+			if opposite_area.is_connection_valid() else opposite_area
+	
+	return opposite_point
+	
+	
 # when user move the border point from connection, but will not remove
 # area from connections, border point need to be adjusted
 func alling_border_points_with_connection():
@@ -162,7 +191,8 @@ func alling_border_points_with_connection():
 	if end_point_area and end_point_area.is_connection_valid():
 		set_end_point(end_point_area.connection.global_position)
 
-
+func get_length() -> float:
+	return curve.get_baked_length()
 
 func color_path(color : Color):
 	self_modulate = color

@@ -26,6 +26,7 @@ var connected_paths : = []
 # only in run time for finding connected paths
 var passable_paths : = {}
 
+var id : = -1
 
 func _ready():
 	set_notify_transform(true)
@@ -93,17 +94,14 @@ func remove_from_connection(connected_area : Area2D):
 		queue_free()
 
 func update_path_name(old_name : String, new_name : String):
-	print("new_name: ", new_name)
 	for path_to_area in connected_area_paths:
 		
 		var idx : int = path_to_area.rfindn("/")
 		var idx2 : int = path_to_area.rfindn("/", idx - 1)
 		if old_name == path_to_area.substr(idx2 + 1, idx - idx2 - 1):
 			connected_area_paths.erase(path_to_area)
-			print("path_to_area: ", path_to_area)
 			path_to_area.erase(idx2 + 1, old_name.length())
 			path_to_area = path_to_area.insert(idx2 + 1, new_name)
-			print("path_to_area: ", path_to_area)
 			connected_area_paths.push_back(path_to_area)
 			break
 	
@@ -135,7 +133,7 @@ func extract_path_name(node_path_area : String) -> String:
 #			border_points.push_back(point)
 #	return border_points
 
-func get_neighbor_points(path : ConnectablePath) -> Array:
+func get_neighbor_points(path) -> Array:
 	var neighbor_points : = []
 	for path in passable_paths[path]:
 		var points : Array = path.get_connections_or_areas()

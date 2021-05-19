@@ -32,7 +32,12 @@ www.redblobgames.com/pathfinding/a-star/implementation.html#algorithm
 
 var graph 
 
-func find_solution(start_path : ConnectablePath, goal_point : Node2D) -> Array:
+func _init(grph : Node2D):
+	graph = grph
+
+func find_solution(start_path : ConnectablePath, offset : float, 
+		goal_point : Node2D) -> Array:
+	print("start_path: ", start_path)
 	
 	
 	# The key idea for all of these algorithms is that we keep track of an 
@@ -42,9 +47,7 @@ func find_solution(start_path : ConnectablePath, goal_point : Node2D) -> Array:
 	#var start = starts_and_goals[0].start
 	#var goal = starts_and_goals[0].goal
 	
-	#var frontier = MinBinaryHeap.new()
-	#frontier.insert_key({value = 0, vertex = start})
-	frontier.push(0, start_path)
+	
 	
 	# came_from for each location points to the place where we came from. These 
 	# are like “breadcrumbs”. They’re enough to reconstruct the entire path.
@@ -55,8 +58,20 @@ func find_solution(start_path : ConnectablePath, goal_point : Node2D) -> Array:
 	var cost_so_far = {}
 	
 	# add start position to came_from and add 0 as total movemenbt cost
-	came_from[start_path] = null
-	cost_so_far[start_path] = 0
+	var start_point = start_path.get_connection_or_area(true)
+	var end_point = start_path.get_connection_or_area(false)
+	var length = start_path.get_length()
+	
+	#var frontier = MinBinaryHeap.new()
+	#frontier.insert_key({value = 0, vertex = start})
+	frontier.push(offset, {path = start_path, point = start_point})
+	frontier.push(length - offset, {path = start_path, point = end_point})
+	
+	came_from[{path = start_path, point = start_point}] = null
+	came_from[{path = start_path, point = end_point}] = null
+	
+	cost_so_far[{path = start_path, point = start_point}] = offset
+	cost_so_far[{path = start_path, point = end_point}] = length - offset
 
 	
 	while not frontier.empty():
@@ -65,42 +80,45 @@ func find_solution(start_path : ConnectablePath, goal_point : Node2D) -> Array:
 		frontier.pop()
 		#grid.set_cellv(current, Grid.CLOSED)
 		# if the goal is found reconstruct the path, i.e. early exit
-		if current == goal_point:
-			return reconstruct_path(goal, came_from)
+		if current.point == goal_point:
+			return reconstruct_path(current, came_from)
 		#Expand it by looking at its neighbors
-		for neighbor_path in graph.paths[current]:
+		print("key: ", current)
+		print(graph.paths_and_points)
+		for neighbor_data in graph.paths_and_points[current]:
 			
 			# get cost from the start of the current node and add the cost
 			# of the movement between current node and neighbor (e.g. 
 			# horizontal/vertical - 10, diagonal - 14)
 			var new_cost = cost_so_far[current] \
-				+ grid.get_cost(current, neighbor)
+					+ neighbor_data.path.get_length()
+				
 			
 			# Less obviously, we may end up visiting a location multiple times, 
 			# with different costs, so we need to alter the logic a little bit. 
 			# Instead of adding a location to the frontier if the location has 
 			# never been reached, we’ll add it if the new path to the location 
 			# is better than the best previous path.
-			if not neighbor in cost_so_far or new_cost < cost_so_far[neighbor]:
-				cost_so_far[neighbor] = new_cost
+			if not neighbor_data in cost_so_far \
+					or new_cost < cost_so_far[neighbor_data]:
+				cost_so_far[neighbor_data] = new_cost
 				
 				# The location closest to the goal will be explored first.
-				var heuristic = grid.get_manhattan_distance(goal, 
-						neighbor)
+				var heuristic =  neighbor_data.point.global_position.distance_to(
+						goal_point.global_position)
 				var priority = new_cost + heuristic
 						
 				# insert it to the frontier
-				frontier.push(priority, neighbor)
+				frontier.push(priority, neighbor_data)
 				
 				# add current as place where we came from to neighbor
-				came_from[neighbor] = current
+				came_from[neighbor_data] = current
 				#grid.set_cellv(neighbor, Grid.OPEN)
-	
 	return Array()
 
-func reconstruct_path(goal : Vector2, came_from : Dictionary) -> Array:
+func reconstruct_path(goal_data : Dictionary, came_from : Dictionary) -> Array:
 	var path : = []
-	var current = goal
+	var current = goal_data
 	# if this cell is not start (only start has no previous cell)
 	# and if there is no path to goal, than there is no previous cell for
 	# goal
