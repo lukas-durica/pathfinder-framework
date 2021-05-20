@@ -60,7 +60,7 @@ func run():
 	if $Agents.get_children().empty():
 		if not start.has_meta("point") or not start.get_meta("point"):
 			push_error("Start has no target!")
-		return
+			return
 		var start_point = start.get_meta("point")
 		
 		if start_point is PointArea:
@@ -77,13 +77,16 @@ func run():
 		if path_follow_parent and path_follow_parent is ConnectablePath:
 			start_path = path_follow_parent
 	
-	var goal_point : Node2D = goal.get_meta("point")
-	if not goal_point:
+	if not goal.has_meta("point") or not goal.get_meta("point"):
 		push_error("Goal Point is invalid")
 		return
+	var goal_point = goal.get_meta("point")
 	
 	var astar : = AStarGraph.new($Graph)
 	print(astar.find_solution(start_path, agent.path_follow.offset, goal_point))
+	#var path_data = astar.find_solution(start_path, agent.path_follow.offset, 
+	#		goal_point)
+	#agent.paths = path_data
 
 
 func add_agent(path):

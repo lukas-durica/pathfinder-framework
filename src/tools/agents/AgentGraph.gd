@@ -7,6 +7,7 @@ const PATH_FOLLOW_SCENE : = preload(PATH_FOLLOW_PATH)
 
 var is_left_button_down : = false
 var is_agent_dragged : = false
+var paths : = []
 
 export (NodePath) var node_path_to_path
 export var speed : = 150.0
@@ -18,7 +19,6 @@ onready var collision_shape : = $Area2D/CollisionShape2D
 onready var area : = $Area2D
 
 func _ready():
-	
 	if Engine.editor_hint:
 		set_notify_transform(true)
 	else:
@@ -27,12 +27,9 @@ func _ready():
 			align_to_path(path, global_position)
 		else:
 			push_warning(name + "node path to path is empty!")
-			
 		set_process(false)
-
 	$Visualization/Label.text = name
-	
-	
+
 func _process(delta):
 	if Engine.editor_hint:
 		if Input.is_mouse_button_pressed(BUTTON_LEFT) \
@@ -54,16 +51,13 @@ func _process(delta):
 	path_follow.offset += delta * speed * path_direction
 	
 	if can_update_path():
-		var next_path = path_follow.get_next_path()
-		if next_path:
+		var next_path_data = paths.front()
+		if next_path_data:
 			var old_unit_offset = path_follow.unit_offset
-			align_to_path(next_path, global_position)
+			align_to_path(next_path_data.path, global_position)
 			var new_unit_offset = path_follow.unit_offset
 			if can_invert_direction(old_unit_offset, new_unit_offset):
-				print("old_unit_offset: ", old_unit_offset)
-				print("new_unit_offset: ", new_unit_offset)
 				invert_direction()
-			
 		else:
 			set_process(false)
 
@@ -84,7 +78,6 @@ func is_in_area() -> bool:
 	var rect = Rect2(-extents.x, -extents.y, extents.x * 2, extents.y * 2)
 	return rect.has_point(to_local(get_global_mouse_position()))
 		
-
 func find_overlapped_path() -> ConnectablePath:
 	# find last overlapped path
 	for area_idx in range(area.get_overlapping_areas().size() - 1, -1, -1):
@@ -122,3 +115,6 @@ func can_invert_direction(old_unit_offset : float,
 func invert_direction():
 	visualization.rotate(PI)
 	path_direction *= -1
+
+func _exit_tree():
+	paths.clear()

@@ -37,17 +37,14 @@ func _init(grph : Node2D):
 
 func find_solution(start_path : ConnectablePath, offset : float, 
 		goal_point : Node2D) -> Array:
-	print("start_path: ", start_path)
-	
 	
 	# The key idea for all of these algorithms is that we keep track of an 
 	# expanding cells called the frontier.
 	var frontier = MinPriorityQueueCpp.new()
+	#var frontier = MinBinaryHeap.new()
 	
 	#var start = starts_and_goals[0].start
 	#var goal = starts_and_goals[0].goal
-	
-	
 	
 	# came_from for each location points to the place where we came from. These 
 	# are like “breadcrumbs”. They’re enough to reconstruct the entire path.
@@ -57,23 +54,39 @@ func find_solution(start_path : ConnectablePath, offset : float,
 	# location.
 	var cost_so_far = {}
 	
+	var start_path_data_0 = graph.paths_data[start_path][0]
+	var start_path_data_1 = graph.paths_data[start_path][1]
+	
 	# add start position to came_from and add 0 as total movemenbt cost
-	var start_point = start_path.get_connection_or_area(true)
-	var end_point = start_path.get_connection_or_area(false)
+	#var start_point = start_path.get_connection_or_area(true)
+	#var end_point = start_path.get_connection_or_area(false)
 	var length = start_path.get_length()
 	
 	#var frontier = MinBinaryHeap.new()
 	#frontier.insert_key({value = 0, vertex = start})
-	frontier.push(offset, {path = start_path, point = start_point})
-	frontier.push(length - offset, {path = start_path, point = end_point})
+	frontier.push(offset, start_path_data_0)
+	print("start_path_data_0: ", start_path_data_0)
+	start_path_data_0.unreference()
+	#print("unreference start_path_data_0: ", start_path_data_0.unreference())
+	#print("start_path_data_0: ", start_path_data_0)
+	#print("length - offset: ", length - offset)
+	frontier.push(length - offset, start_path_data_1)
+	print("start_path_data_1: ", start_path_data_1)
+	start_path_data_1.unreference()
+	for neighbor in start_path_data_1.neighbors:
+		neighbor.unreference()
 	
-	came_from[{path = start_path, point = start_point}] = null
-	came_from[{path = start_path, point = end_point}] = null
+	#print("start_path_data_1: ", start_path_data_1)
+	#print("start_path_data_1.unreference(): ",start_path_data_1.unreference())
 	
-	cost_so_far[{path = start_path, point = start_point}] = offset
-	cost_so_far[{path = start_path, point = end_point}] = length - offset
+	return []
+	
+	came_from[start_path_data_0] = null
+	came_from[start_path_data_1] = null
+	
+	cost_so_far[start_path_data_0] = offset
+	cost_so_far[start_path_data_1] = length - offset
 
-	
 	while not frontier.empty():
 		#Pick and remove a cell from the frontier.
 		var current = frontier.top()
@@ -83,15 +96,11 @@ func find_solution(start_path : ConnectablePath, offset : float,
 		if current.point == goal_point:
 			return reconstruct_path(current, came_from)
 		#Expand it by looking at its neighbors
-		print("key: ", current)
-		print(graph.paths_and_points)
-		for neighbor_data in graph.paths_and_points[current]:
-			
+		for neighbor in current.neighbors:
 			# get cost from the start of the current node and add the cost
 			# of the movement between current node and neighbor (e.g. 
 			# horizontal/vertical - 10, diagonal - 14)
-			var new_cost = cost_so_far[current] \
-					+ neighbor_data.path.get_length()
+			var new_cost = cost_so_far[current] + neighbor.path.get_length()
 				
 			
 			# Less obviously, we may end up visiting a location multiple times, 
@@ -99,24 +108,24 @@ func find_solution(start_path : ConnectablePath, offset : float,
 			# Instead of adding a location to the frontier if the location has 
 			# never been reached, we’ll add it if the new path to the location 
 			# is better than the best previous path.
-			if not neighbor_data in cost_so_far \
-					or new_cost < cost_so_far[neighbor_data]:
-				cost_so_far[neighbor_data] = new_cost
+			if not neighbor in cost_so_far or new_cost < cost_so_far[neighbor]:
+				cost_so_far[neighbor] = new_cost
 				
 				# The location closest to the goal will be explored first.
-				var heuristic =  neighbor_data.point.global_position.distance_to(
+				var heuristic = neighbor.point.global_position.distance_to(
 						goal_point.global_position)
+				
 				var priority = new_cost + heuristic
 						
 				# insert it to the frontier
-				frontier.push(priority, neighbor_data)
-				
+				#frontier.push(priority, neighbor)
+				#neighbor.unreference()
 				# add current as place where we came from to neighbor
-				came_from[neighbor_data] = current
+				came_from[neighbor] = current
 				#grid.set_cellv(neighbor, Grid.OPEN)
 	return Array()
 
-func reconstruct_path(goal_data : Dictionary, came_from : Dictionary) -> Array:
+func reconstruct_path(goal_data, came_from : Dictionary) -> Array:
 	var path : = []
 	var current = goal_data
 	# if this cell is not start (only start has no previous cell)

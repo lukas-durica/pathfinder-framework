@@ -1,41 +1,60 @@
 class_name Graph extends Node2D
 
 
-var paths_and_points : = {}
+var paths_data : = {}
 
 class PathData extends Reference:
 	var path
 	var point
+	var neighbors : = []
 	
 	func _init(pth, pnt):
 		path = pth
 		point = pnt
+	
+	#func _to_string():
+	#	return "path: {0} -> point: {1}".format([path, point])
+	
 
 onready var node_paths : = $Paths
 onready var node_connections : = $Connections
 
 func _ready():
-	#create_ids()
+	create_path_data()
+	assign_neighbors()
+
+func create_path_data():
 	for path in node_paths.get_children():
 		if path is ConnectablePath:
+			paths_data[path] = []
 			var points = path.get_connections_or_areas()
 			for point in points:
-				print("key: ", {path = path, point = point})
-				paths_and_points[{path = path, point = point}] \
-						= get_paths_and_points({path = path, point = point})
-				
+				var new_path_data = PathData.new(path, point)
+				print(new_path_data , " ", path.name, point.name)
+				paths_data[path] += [new_path_data]
+	
+func assign_neighbors():
+	for path in paths_data:
+		for path_data in paths_data[path]:
+			path_data.neighbors = get_neighbors(path_data)
 
-func get_paths_and_points(path_and_point : Dictionary) -> Array:
-	if path_and_point.point is PointArea:
+
+func get_neighbors(path_data : PathData)  -> Array:
+	if path_data.point is PointArea:
 		return []
-	var paths_data : = []
-	for path in path_and_point.point.passable_paths[path_and_point.path]:
-		#print("data: ", {path = path, 
-		#		point = path.get_opposite_point(path_and_point.point)})
-		
-		paths_data.push_back({path = path, 
-				point = path.get_opposite_point(path_and_point.point)})
-	return paths_data
+	var neighbors : = []
+	for path in path_data.point.passable_paths[path_data.path]:
+		neighbors.push_back(get_path_data(path, 
+			path.get_opposite_point(path_data.point)))
+	return neighbors
+
+func get_path_data(path, point) -> PathData:
+	for path_data in paths_data[path]:
+		if path_data.point == point:
+			return path_data
+	push_error("Path data: {0} {1} was not found".format(
+			[path.name, point.name]))
+	return null
 	
 func create_ids():
 	var id = 0

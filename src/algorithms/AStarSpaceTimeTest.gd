@@ -176,7 +176,7 @@ func find_solution(starts_and_goals : Array):
 				var priority = new_cost + heuristic
 				
 				# insert it to the frontier
-				frontier.push(priority, {point = neighbor_point,
+				frontier.push(priority, {point = neighbor_point, 
 						time_step = state.z})
 				neighbor_point.unreference()
 				# add current as place where we came from to neighbor
