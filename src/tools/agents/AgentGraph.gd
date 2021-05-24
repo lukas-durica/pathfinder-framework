@@ -5,9 +5,9 @@ class_name AgentGraph extends Node2D
 const PATH_FOLLOW_PATH : = "res://src/tools/agents/RemotePathFollow.tscn"
 const PATH_FOLLOW_SCENE : = preload(PATH_FOLLOW_PATH)
 
-var is_left_button_down : = false
-var is_agent_dragged : = false
-var paths : = []
+var _is_left_button_down : = false
+var _is_agent_dragged : = false
+var paths_data : = []
 
 export (NodePath) var node_path_to_path
 export var speed : = 150.0
@@ -33,28 +33,28 @@ func _ready():
 func _process(delta):
 	if Engine.editor_hint:
 		if Input.is_mouse_button_pressed(BUTTON_LEFT) \
-				and not is_left_button_down:
-			is_left_button_down = true
+				and not _is_left_button_down:
+			_is_left_button_down = true
 		elif not Input.is_mouse_button_pressed(BUTTON_LEFT) \
-				and is_left_button_down:
-			if is_agent_dragged:
+				and _is_left_button_down:
+			if _is_agent_dragged:
 				var entered_path = find_overlapped_path()
 				if entered_path:
 					align_to_path_editor(entered_path, global_position)
 				else:
 					node_path_to_path = ""
-			is_left_button_down = false
+			_is_left_button_down = false
 			#entered_path = null
-			is_agent_dragged = false
+			_is_agent_dragged = false
 		return
 	# update_position
 	path_follow.offset += delta * speed * path_direction
 	
 	if can_update_path():
-		var next_path_data = paths.front()
-		if next_path_data:
+		var path_data = paths_data.pop_front()
+		if path_data:
 			var old_unit_offset = path_follow.unit_offset
-			align_to_path(next_path_data.path, global_position)
+			align_to_path(path_data.path, global_position)
 			var new_unit_offset = path_follow.unit_offset
 			if can_invert_direction(old_unit_offset, new_unit_offset):
 				invert_direction()
@@ -65,11 +65,33 @@ func _notification(what):
 	if Engine.editor_hint:
 		match what:
 			NOTIFICATION_TRANSFORM_CHANGED:
-				if is_left_button_down and not is_agent_dragged \
+				if _is_left_button_down and not _is_agent_dragged \
 						and is_in_area():
-					is_agent_dragged = true
-				if is_agent_dragged:
+					_is_agent_dragged = true
+				if _is_agent_dragged:
 					path_follow.global_position = global_position
+
+func run(pths_data : Array):
+	if pths_data.empty():
+		push_error(name + "paths data is empty!")
+		return
+	paths_data = pths_data
+	# compute initial direction
+	var path : ConnectablePath = paths_data.front().path
+	var point : Node2D = paths_data.front().point
+	# the point is start
+	if point == path.get_connection_or_area(true):
+		path_direction = -1
+	elif point == path.get_connection_or_area(false):
+		path_direction = 1
+	else:
+		push_error("Point does not match!")
+	
+	# agent is already alligned to this path, thus pop front it
+	paths_data.pop_front()
+	set_process(true)
+
+
 
 func is_in_area() -> bool:
 	if not collision_shape:
@@ -116,5 +138,4 @@ func invert_direction():
 	visualization.rotate(PI)
 	path_direction *= -1
 
-func _exit_tree():
-	paths.clear()
+

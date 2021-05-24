@@ -318,10 +318,6 @@ config/name="pathfinder-framework"
 run/main_scene="res://src/tools/graph_based_ui/GraphBasedUI.tscn"
 config/icon="res://icon.png"
 
-[debug]
-
-settings/stdout/verbose_stdout=true
-
 [display]
 
 window/size/width=1280

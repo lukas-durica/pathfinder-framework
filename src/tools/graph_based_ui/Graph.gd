@@ -3,12 +3,16 @@ class_name Graph extends Node2D
 
 var paths_data : = {}
 
+var paths_data_by_id : = {}
+
 class PathData extends Reference:
+	var id : = -1
 	var path
 	var point
 	var neighbors : = []
 	
-	func _init(pth, pnt):
+	func _init(idx : int, pth, pnt):
+		id = idx
 		path = pth
 		point = pnt
 	
@@ -24,20 +28,22 @@ func _ready():
 	assign_neighbors()
 
 func create_path_data():
+	var id : = 0
 	for path in node_paths.get_children():
 		if path is ConnectablePath:
 			paths_data[path] = []
 			var points = path.get_connections_or_areas()
 			for point in points:
-				var new_path_data = PathData.new(path, point)
+				var new_path_data = PathData.new(id, path, point)
 				print(new_path_data , " ", path.name, point.name)
 				paths_data[path] += [new_path_data]
-	
+				paths_data_by_id[id] = new_path_data
+				id += 1
+
 func assign_neighbors():
 	for path in paths_data:
 		for path_data in paths_data[path]:
 			path_data.neighbors = get_neighbors(path_data)
-
 
 func get_neighbors(path_data : PathData)  -> Array:
 	if path_data.point is PointArea:

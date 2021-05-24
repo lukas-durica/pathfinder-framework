@@ -28,7 +28,7 @@ www.redblobgames.com/pathfinding/a-star/implementation.html#algorithm
 	rather expensive initialize step that many other implementations have. For 
 	large game maps, the initialization of those arrays is often slower than 
 	the rest of A*.
-	"""
+"""
 
 var graph 
 
@@ -64,22 +64,15 @@ func find_solution(start_path : ConnectablePath, offset : float,
 	
 	#var frontier = MinBinaryHeap.new()
 	#frontier.insert_key({value = 0, vertex = start})
-	frontier.push(offset, start_path_data_0)
-	print("start_path_data_0: ", start_path_data_0)
-	start_path_data_0.unreference()
+	frontier.push(offset, start_path_data_0.id)
+	
 	#print("unreference start_path_data_0: ", start_path_data_0.unreference())
 	#print("start_path_data_0: ", start_path_data_0)
 	#print("length - offset: ", length - offset)
-	frontier.push(length - offset, start_path_data_1)
-	print("start_path_data_1: ", start_path_data_1)
-	start_path_data_1.unreference()
-	for neighbor in start_path_data_1.neighbors:
-		neighbor.unreference()
+	frontier.push(length - offset, start_path_data_1.id)
 	
 	#print("start_path_data_1: ", start_path_data_1)
 	#print("start_path_data_1.unreference(): ",start_path_data_1.unreference())
-	
-	return []
 	
 	came_from[start_path_data_0] = null
 	came_from[start_path_data_1] = null
@@ -89,7 +82,7 @@ func find_solution(start_path : ConnectablePath, offset : float,
 
 	while not frontier.empty():
 		#Pick and remove a cell from the frontier.
-		var current = frontier.top()
+		var current = graph.paths_data_by_id[frontier.top()]
 		frontier.pop()
 		#grid.set_cellv(current, Grid.CLOSED)
 		# if the goal is found reconstruct the path, i.e. early exit
@@ -118,8 +111,8 @@ func find_solution(start_path : ConnectablePath, offset : float,
 				var priority = new_cost + heuristic
 						
 				# insert it to the frontier
-				#frontier.push(priority, neighbor)
-				#neighbor.unreference()
+				frontier.push(priority, neighbor.id)
+				
 				# add current as place where we came from to neighbor
 				came_from[neighbor] = current
 				#grid.set_cellv(neighbor, Grid.OPEN)

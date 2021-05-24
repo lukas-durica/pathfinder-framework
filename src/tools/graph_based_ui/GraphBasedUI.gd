@@ -83,10 +83,10 @@ func run():
 	var goal_point = goal.get_meta("point")
 	
 	var astar : = AStarGraph.new($Graph)
-	print(astar.find_solution(start_path, agent.path_follow.offset, goal_point))
-	#var path_data = astar.find_solution(start_path, agent.path_follow.offset, 
-	#		goal_point)
-	#agent.paths = path_data
+	agent.run(astar.find_solution(start_path, agent.path_follow.offset, 
+			goal_point))
+	
+	
 
 
 func add_agent(path):
