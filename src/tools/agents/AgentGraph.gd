@@ -2,9 +2,6 @@ tool
 
 class_name AgentGraph extends Node2D
 
-const PATH_FOLLOW_PATH : = "res://src/tools/agents/RemotePathFollow.tscn"
-const PATH_FOLLOW_SCENE : = preload(PATH_FOLLOW_PATH)
-
 var _is_left_button_down : = false
 var _is_agent_dragged : = false
 var paths_data : = []
@@ -13,7 +10,8 @@ export (NodePath) var node_path_to_path
 export var speed : = 150.0
 export (int, -1, 1, 1) var path_direction : = 1
 
-onready var path_follow : = PATH_FOLLOW_SCENE.instance()
+onready var path_follow : = $ResetTransform/RemotePathFollow
+#var path_follow
 onready var visualization : = $Visualization/AnimatedSprite
 onready var collision_shape : = $Area2D/CollisionShape2D
 onready var area : = $Area2D
@@ -48,6 +46,9 @@ func _process(delta):
 			_is_agent_dragged = false
 		return
 	# update_position
+	print("update offset")
+	print("path_follow.offset: ", path_follow.offset)
+	
 	path_follow.offset += delta * speed * path_direction
 	
 	if can_update_path():
@@ -102,7 +103,7 @@ func is_in_area() -> bool:
 		
 func find_overlapped_path() -> ConnectablePath:
 	# find last overlapped path
-	for area_idx in range(area.get_overlapping_areas().size() - 1, -1, -1):
+	for area_idx in range(area.get_overlapping_areas().size()):
 		if area.get_overlapping_areas()[area_idx] is PathArea:
 			return area.get_overlapping_areas()[area_idx].path
 	return null
@@ -114,7 +115,8 @@ func align_to_path(path : Path2D, align_to : Vector2):
 		path.add_child(path_follow)
 		# set the remote node at the beginning when aligning to path
 		# and path follow has no parent
-		path_follow.set_remote_node(self)
+	
+	path_follow.set_remote_node(self)
 	
 	var local_origin = path.to_local(align_to)
 	var closest_offset = path.curve.get_closest_offset(local_origin)
@@ -138,4 +140,14 @@ func invert_direction():
 	visualization.rotate(PI)
 	path_direction *= -1
 
+func _exit_tree():
+	print("agent exiting tree")
+	print("path_follow: ", path_follow)
+	print("is_instance_valid(path_follow): ", is_instance_valid(path_follow))
+	if is_instance_valid(path_follow):
+		print("path_follow.is_inside_tree(): ", 
+				path_follow.is_inside_tree())
+	if is_instance_valid(path_follow) and not path_follow.is_inside_tree():
+		print("pathfollow queue_free")
+		path_follow.free()
 

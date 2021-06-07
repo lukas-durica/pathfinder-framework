@@ -4,8 +4,10 @@ class_name ConnectablePath extends Path2D
 
 const POINT_ARENA_SCENE = preload("res://addons/path_manager/PointArea.tscn")
 const PATH_AREA_SCENE = preload("res://addons/path_manager/PathArea.tscn")
+const MONTESERRAT_FONT : = preload("res://data/fonts/Montserrat-Medium.ttf")
 const DEFAULT_COLOR : = Color.gray
 const HIGHLIGHT_COLOR : = Color.green
+
 
 signal point_area_entered(my_area, area_entered)
 signal point_area_exited(my_area, area_exited)
@@ -16,7 +18,7 @@ signal path_renamed(old_name, new_name)
 
 var id : = -1
 var path_area : Area2D
-
+var name_font : = DynamicFont.new()
 var start_point_area : PointArea = null
 var end_point_area : PointArea = null
 
@@ -26,7 +28,13 @@ onready var path_name : = name
 func _ready():
 	if not curve:
 		curve = Curve2D.new()
-
+	
+	if Engine.editor_hint:
+		name_font.font_data = MONTESERRAT_FONT
+		name_font.size = 12
+		name_font.use_mipmaps = true
+		name_font.use_filter = true
+	
 	set_notify_transform(true)
 	connect("renamed", self, "_renamed")
 	self_modulate = DEFAULT_COLOR
@@ -37,6 +45,8 @@ func _notification(what : int):
 		NOTIFICATION_DRAW:
 			update_points()
 			update_collision_shape()
+			if Engine.editor_hint:
+				draw_name()
 		NOTIFICATION_TRANSFORM_CHANGED:
 			transform = Transform2D.IDENTITY
 
@@ -117,6 +127,10 @@ func update_collision_shape():
 			vec2_pool.push_back(point)
 		prev_point = point
 	path_area.collision_shape.shape.segments = vec2_pool
+
+func draw_name():
+	var string_pos = curve.interpolate_baked(curve.get_baked_length() / 2.0)
+	draw_string(name_font, string_pos, name, Color.white)
 
 func get_start_point() -> Vector2:
 	return curve.get_point_position(0)
