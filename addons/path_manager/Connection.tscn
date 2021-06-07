@@ -4,3 +4,5 @@
 
 [node name="Connection" type="Node2D"]
 script = ExtResource( 1 )
+passable_connections = {
+}

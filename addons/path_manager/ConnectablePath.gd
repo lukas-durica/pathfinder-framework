@@ -2,19 +2,20 @@ tool
 
 class_name ConnectablePath extends Path2D
 
-const POINT_ARENA_SCENE = preload("res://addons/path_manager/PointArea.tscn")
-const PATH_AREA_SCENE = preload("res://addons/path_manager/PathArea.tscn")
-const MONTESERRAT_FONT : = preload("res://data/fonts/Montserrat-Medium.ttf")
-const DEFAULT_COLOR : = Color.gray
-const HIGHLIGHT_COLOR : = Color.green
-
-
 signal point_area_entered(my_area, area_entered)
 signal point_area_exited(my_area, area_exited)
 signal point_area_was_clicked(area, button_type)
 signal path_renamed(old_name, new_name)
 #signal path_area_entered(my_area, path_area_entered)
 #signal path_area_exited(my_area, path_area_entered)
+
+const POINT_ARENA_SCENE = preload("res://addons/path_manager/PointArea.tscn")
+const PATH_AREA_SCENE = preload("res://addons/path_manager/PathArea.tscn")
+const MONTESERRAT_FONT : = preload("res://data/fonts/Montserrat-Medium.ttf")
+const DEFAULT_COLOR : = Color.gray
+const HIGHLIGHT_COLOR : = Color.green
+
+export var passable_angle_max_diff : = 10.0
 
 var id : = -1
 var path_area : Area2D
@@ -196,7 +197,14 @@ func get_opposite_point(point : Node2D) -> Node2D:
 	
 	return opposite_point
 	
-	
+
+func get_connection_normal(is_start : bool) -> Vector2:
+	var point0_idx = 0 if is_start else curve.get_baked_points().size() - 1
+	var point1_idx = 1 if is_start else curve.get_baked_points().size() - 2 
+	var point0 = curve.get_baked_points()[point0_idx]
+	var point1 = curve.get_baked_points()[point1_idx]
+	return point1.direction_to(point0)
+
 # when user move the border point from connection, but will not remove
 # area from connections, border point need to be adjusted
 func alling_border_points_with_connection():

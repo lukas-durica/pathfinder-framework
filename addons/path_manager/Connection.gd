@@ -16,8 +16,8 @@ export(Dictionary) var passable_connections
 export(Array) var connected_area_paths
 
 # managing connected areas for position update as connection will change its
-# position, and as well as destroying connection if there is no other
-# connected areas
+# position, and as well as destroying connection if there are no other
+# connected areas, objects
 var connected_areas : = []
 
 # only in run time for creating pathfindig graph
@@ -58,7 +58,7 @@ func update_areas_position():
 		connected_area.update_border_point(global_position)
 
 func add_to_connection(connected_area : PointArea):
-	print("add to connection")
+	print(name, ": passable_connections: ", passable_connections)
 	if connected_area.is_connection_valid():
 		push_error("connection already exists!")
 	
@@ -67,15 +67,19 @@ func add_to_connection(connected_area : PointArea):
 	connected_areas += [connected_area]
 	# connect it to all connections there are
 	passable_connections[connected_area.path.name] = []
-	for path_to_path_node in passable_connections:
-		if path_to_path_node == connected_area.path.name:
+	print("connected_area.path.name: ", connected_area.path.name)
+	for path_name in passable_connections:
+		print("path_name: ", path_name)
+		if path_name == connected_area.path.name:
 			continue
-		
-		# add to this connection to every already added path
-		passable_connections[path_to_path_node] += [connected_area.path.name]
-		
-		#add the already added connections to this path
-		passable_connections[connected_area.path.name] += [path_to_path_node]
+
+		#if can_create_passable_connection(connected_area, path_name):
+		#	print("can connect")
+			# add to this connection to every already added path
+		passable_connections[path_name] += [connected_area.path.name]
+			
+			#add the already added connections to this path
+		passable_connections[connected_area.path.name] += [path_name]
 	
 
 func remove_from_connection(connected_area : Area2D):
@@ -117,21 +121,17 @@ func update_path_name(old_name : String, new_name : String):
 				passable_connections[path_name].erase(old_name)
 				passable_connections[path_name].push_back(new_name)
 
-
 func extract_path_name(node_path_area : String) -> String:
 	var idx : int = node_path_area.rfindn("/")
 	var idx2 : int = node_path_area.rfindn("/", idx - 1)
 	return node_path_area.substr(idx2 + 1, idx - idx2 - 1)
 	 
-
-# return positions of connections and not connected areas
-#func get_neighbor_points() -> Array:
-#	var border_points : = []
-#	for path in get_connected_paths():
-#		var point = path.get_connections_or_areas()
-#		if point != self:
-#			border_points.push_back(point)
-#	return border_points
+func can_create_passable_connection(area1 : PointArea, path_name : String):
+	
+	var normal1 = area1.path.get_connection_normal(area1.is_start)
+	#var normal2 = area2.path.get_connection_normal(area2.is_start)
+	var max_diff = area1.path.passable_angle_max_diff
+	#return PI - abs(normal1.angle_to(normal2)) <= max_diff
 
 func get_neighbor_points(path) -> Array:
 	var neighbor_points : = []
@@ -141,7 +141,11 @@ func get_neighbor_points(path) -> Array:
 			if point != self:
 				neighbor_points.push_back(point)
 	return neighbor_points
-	
+
+func get_areas_with_path_name(path_name : String):
+	var path = get_node(get_relative_node_path_to_path(path_name))
+	for connected_area in connected_areas:
+		pass
 
 func create_passable_paths():
 	for path_name in passable_connections:
@@ -159,7 +163,6 @@ func get_relative_node_path_to_path(path_name : String) -> String:
 			return path_to_area.substr(0, idx)
 	return String()
 	
-
 func get_connected_paths() -> Array:
 	if not connected_paths.empty():
 		return connected_paths

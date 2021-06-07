@@ -325,7 +325,7 @@ window/size/height=960
 
 [editor_plugins]
 
-enabled=PoolStringArray( "path_manager" )
+enabled=PoolStringArray( "res://addons/path_manager/plugin.cfg" )
 
 [mono]
 

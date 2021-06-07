@@ -46,8 +46,6 @@ func _process(delta):
 			_is_agent_dragged = false
 		return
 	# update_position
-	print("update offset")
-	print("path_follow.offset: ", path_follow.offset)
 	
 	path_follow.offset += delta * speed * path_direction
 	
