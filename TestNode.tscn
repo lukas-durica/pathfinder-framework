@@ -1,30 +1,13 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://TestNode.gd" type="Script" id=1]
-[ext_resource path="res://addons/path_manager/ConnectablePath.gd" type="Script" id=2]
-
-[sub_resource type="Curve2D" id=1]
-_data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 288.309, 214.192, 0, 0, 0, 0, 643.643, 586.192, 0, 0, 0, 0, 975.643, 302.859 )
-}
+[ext_resource path="res://icon.png" type="Texture" id=2]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 1 )
 
-[node name="ConnectablePath" type="Path2D" parent="."]
-self_modulate = Color( 0.75, 0.75, 0.75, 1 )
-curve = SubResource( 1 )
-script = ExtResource( 2 )
-
-[connection signal="area_entered" from="ConnectablePath/Start" to="ConnectablePath/Start" method="_on_Area2D_area_entered"]
-[connection signal="area_exited" from="ConnectablePath/Start" to="ConnectablePath/Start" method="_on_Area2D_area_exited"]
-[connection signal="input_event" from="ConnectablePath/Start" to="ConnectablePath/Start" method="_on_Area2D_input_event"]
-[connection signal="area_entered" from="ConnectablePath/End" to="ConnectablePath/End" method="_on_Area2D_area_entered"]
-[connection signal="area_exited" from="ConnectablePath/End" to="ConnectablePath/End" method="_on_Area2D_area_exited"]
-[connection signal="input_event" from="ConnectablePath/End" to="ConnectablePath/End" method="_on_Area2D_input_event"]
-[connection signal="area_entered" from="ConnectablePath/Start2" to="ConnectablePath/Start2" method="_on_Area2D_area_entered"]
-[connection signal="area_exited" from="ConnectablePath/Start2" to="ConnectablePath/Start2" method="_on_Area2D_area_exited"]
-[connection signal="input_event" from="ConnectablePath/Start2" to="ConnectablePath/Start2" method="_on_Area2D_input_event"]
-[connection signal="area_entered" from="ConnectablePath/End2" to="ConnectablePath/End2" method="_on_Area2D_area_entered"]
-[connection signal="area_exited" from="ConnectablePath/End2" to="ConnectablePath/End2" method="_on_Area2D_area_exited"]
-[connection signal="input_event" from="ConnectablePath/End2" to="ConnectablePath/End2" method="_on_Area2D_input_event"]
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+__meta__ = {
+"_edit_lock_": true
+}

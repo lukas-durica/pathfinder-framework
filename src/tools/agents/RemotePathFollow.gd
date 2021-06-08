@@ -5,7 +5,7 @@ onready var remote_transform : = $RemoteTransform2D
 func set_remote_node(node : Node):
 	remote_transform.remote_path = remote_transform.get_path_to(node)
 
-#func get_closest_area() -> PointArea:
+#func get_closest_area() -> MarginalPointArea:
 #	var parent : = get_parent()
 #	print(parent.name)
 #	if not parent is ConnectablePath:
@@ -22,7 +22,7 @@ func set_remote_node(node : Node):
 #			else parent.end_point_area
 
 #func get_next_path() -> ConnectablePath:
-#	var closest_area : PointArea = get_closest_area()
+#	var closest_area : MarginalPointArea = get_closest_area()
 #	if not closest_area:
 #		return null 
 #

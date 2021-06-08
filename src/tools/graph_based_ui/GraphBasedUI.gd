@@ -43,7 +43,7 @@ func _ready():
 	
 	
 # button type is BUTTON_LEFT or BUTTON_RIGHT
-func area_was_clicked(area : PointArea, button_type : int):
+func area_was_clicked(area : MarginalPointArea, button_type : int):
 	
 	var target : Node2D = area if not area.connection else area.connection
 	var border : Node2D = start if button_type == BUTTON_LEFT else goal
@@ -63,7 +63,7 @@ func run():
 			return
 		var start_point = start.get_meta("point")
 		
-		if start_point is PointArea:
+		if start_point is MarginalPointArea:
 			start_path = start_point.path
 		elif start_point is Connection:
 			start_path = start_point.connected_paths[0]

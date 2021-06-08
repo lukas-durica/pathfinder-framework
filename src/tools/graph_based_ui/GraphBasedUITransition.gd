@@ -43,7 +43,7 @@ func _ready():
 	
 	
 # button type is BUTTON_LEFT or BUTTON_RIGHT
-func area_was_clicked(area : PointArea, button_type : int):
+func area_was_clicked(area : MarginalPointArea, button_type : int):
 	
 	var target : Node2D = area if not area.connection else area.connection
 	var border : Node2D = start if button_type == BUTTON_LEFT else goal
@@ -66,7 +66,7 @@ func run():
 	
 	#var target = start.get_meta("target")
 	#var path : Path2D
-	#if target is PointArea:
+	#if target is MarginalPointArea:
 	#	path = target.path
 		
 	#var agent = AGENT_SCENE.instance()

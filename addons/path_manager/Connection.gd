@@ -66,7 +66,7 @@ func update_areas_position():
 	for connected_area in connected_areas:
 		connected_area.update_border_point(global_position)
 
-func add_to_connection(connected_area : PointArea):
+func add_to_connection(connected_area : MarginalPointArea):
 	print(name, ": passable_connections: ", passable_connections)
 	if connected_area.is_connection_valid():
 		push_error("connection already exists!")
@@ -136,7 +136,7 @@ func extract_path_name(node_path_area : String) -> String:
 	var idx2 : int = node_path_area.rfindn("/", idx - 1)
 	return node_path_area.substr(idx2 + 1, idx - idx2 - 1)
 	 
-func can_create_passable_connection(area1 : PointArea, path_name : String):
+func can_create_passable_connection(area1 : MarginalPointArea, path_name : String):
 	
 	var normal1 = area1.path.get_connection_normal(area1.is_start)
 	#var normal2 = area2.path.get_connection_normal(area2.is_start)

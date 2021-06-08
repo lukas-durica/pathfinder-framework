@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://addons/path_manager/PointArea.gd" type="Script" id=1]
+[ext_resource path="res://addons/path_manager/MarginalPointArea.gd" type="Script" id=1]
 
 [sub_resource type="CircleShape2D" id=1]
 

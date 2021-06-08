@@ -46,7 +46,7 @@ func assign_neighbors():
 			path_data.neighbors = get_neighbors(path_data)
 
 func get_neighbors(path_data : PathData)  -> Array:
-	if path_data.point is PointArea:
+	if path_data.point is MarginalPointArea:
 		return []
 	var neighbors : = []
 	for path in path_data.point.passable_paths[path_data.path]:

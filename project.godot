@@ -224,6 +224,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/tools/grid_based_ui/MapLoader.gd"
 }, {
+"base": "Area2D",
+"class": "MarginalPointArea",
+"language": "GDScript",
+"path": "res://addons/path_manager/MarginalPointArea.gd"
+}, {
 "base": "Reference",
 "class": "MinBinaryHeap",
 "language": "GDScript",
@@ -243,11 +248,6 @@ _global_script_classes=[ {
 "class": "PathArea",
 "language": "GDScript",
 "path": "res://addons/path_manager/PathArea.gd"
-}, {
-"base": "Area2D",
-"class": "PointArea",
-"language": "GDScript",
-"path": "res://addons/path_manager/PointArea.gd"
 }, {
 "base": "PathFollow2D",
 "class": "RemotePathFollow",
@@ -303,11 +303,11 @@ _global_script_class_icons={
 "HelperFunctions": "",
 "ICTS": "",
 "MapLoader": "",
+"MarginalPointArea": "",
 "MinBinaryHeap": "",
 "MinBinaryHeapDict": "",
 "MinPriorityQueueCpp": "",
 "PathArea": "",
-"PointArea": "",
 "RemotePathFollow": "",
 "UserInteraface": ""
 }
@@ -329,7 +329,7 @@ window/size/height=960
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/path_manager/plugin.cfg" )
+enabled=PoolStringArray(  )
 
 [mono]
 

@@ -145,12 +145,12 @@ func create_node_connections(parent):
 	parent.add_child(new_connections)
 	new_connections.owner = get_root()
 
-func point_area_entered(area : PointArea, area_entered_to : PointArea):
+func point_area_entered(area : MarginalPointArea, area_entered_to : MarginalPointArea):
 	if area.path == edited_path:
 		point_area_entered_data = {area = area, 
 				area_entered_to = area_entered_to}
 
-func point_area_exited(area : PointArea, area_exited_from : PointArea):
+func point_area_exited(area : MarginalPointArea, area_exited_from : MarginalPointArea):
 	if not area.path == edited_path:
 		return
 
@@ -171,11 +171,11 @@ func point_area_exited(area : PointArea, area_exited_from : PointArea):
 	elif not point_area_entered_data.empty():
 		point_area_entered_data.clear()
 
-#func path_area_entered(area : PointArea, path_area : PathArea):
+#func path_area_entered(area : MarginalPointArea, path_area : PathArea):
 #	if area.path == edited_path:
 #		path_area_entered_data = {area = area, path_area = path_area}
 
-#func path_area_exited(area : PointArea, path_area : PathArea):
+#func path_area_exited(area : MarginalPointArea, path_area : PathArea):
 #	if not area.path == edited_path:
 #		return
 #	path_area_entered_data.clear()
