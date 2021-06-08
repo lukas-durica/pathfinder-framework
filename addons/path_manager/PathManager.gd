@@ -130,8 +130,9 @@ func create_connection():
 func add_new_connection(position : Vector2) -> Node2D:
 	#print(name, ": Add new connection")
 	var new_conn = CONNECTION_SCENE.instance()
+	new_conn.is_initiated = false
 	var connections = get_root().find_node("Connections")
-	
+	connections
 	connections.add_child(new_conn)
 	new_conn.owner = get_root()
 	new_conn.global_position = position

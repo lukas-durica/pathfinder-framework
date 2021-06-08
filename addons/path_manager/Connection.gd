@@ -7,13 +7,16 @@ class_name Connection extends Node2D
 # making connections means making passable from one path to another
 # dont assign it with := {} Godots bug will share it through the all instancies
 # for simplicity only the names are stored, not a the whole path
+# https://github.com/godotengine/godot/issues/48038
 # passable_connections["ConnectablePath2"] = ["ConnectablePath", 
 #		"ConnectablePath3"]
-export(Dictionary) var passable_connections
+export(Dictionary) var passable_connections 
 
 # serves purely for reconnecting after loading the scene
 # e.g.: ../../Paths/ConnectablePath2/End
 export(Array) var connected_area_paths
+
+var is_initiated : = true
 
 # managing connected areas for position update as connection will change its
 # position, and as well as destroying connection if there are no other
@@ -29,8 +32,14 @@ var passable_paths : = {}
 var id : = -1
 
 func _ready():
-	set_notify_transform(true)
 	
+	if not is_initiated:
+		passable_connections = passable_connections.duplicate(true)
+		passable_connections.clear()
+		is_initiated = true
+	
+	set_notify_transform(true)
+
 	if not connected_area_paths.empty():
 		reconnect()
 	
@@ -66,10 +75,10 @@ func add_to_connection(connected_area : PointArea):
 	connected_area_paths.push_back(String(get_path_to(connected_area)))
 	connected_areas += [connected_area]
 	# connect it to all connections there are
+	# connecting start and end of the one path to the connection
 	passable_connections[connected_area.path.name] = []
-	print("connected_area.path.name: ", connected_area.path.name)
+
 	for path_name in passable_connections:
-		print("path_name: ", path_name)
 		if path_name == connected_area.path.name:
 			continue
 
@@ -77,8 +86,9 @@ func add_to_connection(connected_area : PointArea):
 		#	print("can connect")
 			# add to this connection to every already added path
 		passable_connections[path_name] += [connected_area.path.name]
-			
-			#add the already added connections to this path
+
+		
+		#add the already added connections to this path
 		passable_connections[connected_area.path.name] += [path_name]
 	
 

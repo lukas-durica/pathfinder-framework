@@ -84,6 +84,7 @@ func find_solution(start_path : ConnectablePath, offset : float,
 		#Pick and remove a cell from the frontier.
 		var current = graph.paths_data_by_id[frontier.top()]
 		frontier.pop()
+		print("current: ", current)
 		#grid.set_cellv(current, Grid.CLOSED)
 		# if the goal is found reconstruct the path, i.e. early exit
 		if current.point == goal_point:

@@ -16,8 +16,8 @@ class PathData extends Reference:
 		path = pth
 		point = pnt
 	
-	#func _to_string():
-	#	return "path: {0} -> point: {1}".format([path, point])
+	func _to_string():
+		return "path: {0} -> point: {1}".format([path, point])
 	
 
 onready var node_paths : = $Paths
@@ -35,7 +35,7 @@ func create_path_data():
 			var points = path.get_connections_or_areas()
 			for point in points:
 				var new_path_data = PathData.new(id, path, point)
-				print(new_path_data , " ", path.name, point.name)
+				print(new_path_data , " ", path.name, " ",  point.name)
 				paths_data[path] += [new_path_data]
 				paths_data_by_id[id] = new_path_data
 				id += 1

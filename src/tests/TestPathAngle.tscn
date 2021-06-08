@@ -1,7 +1,62 @@
-[gd_scene format=2]
+[gd_scene load_steps=6 format=2]
 
-[node name="Node2D" type="Node2D"]
+[ext_resource path="res://addons/path_manager/Connection.tscn" type="PackedScene" id=1]
+[ext_resource path="res://addons/path_manager/ConnectablePath.gd" type="Script" id=2]
+[ext_resource path="res://addons/path_manager/Connection.gd" type="Script" id=3]
+
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 302.776, 537.605, 0, 0, 0, 0, 566.18, 663.32, 0, 0, 0, 0, 808.632, 357.262, 0, 0, 0, 0, 409.784, 140.253, 0, 0, 0, 0, 322.232, 256.241, 0, 0, 0, 0, 307.266, 495.699 )
+}
+
+[sub_resource type="Curve2D" id=2]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 302.776, 537.605, 0, 0, 0, 0, 223.455, 271.955, 0, 0, 0, 0, 111.958, 437.331, 0, 0, 0, 0, 307.266, 495.699 )
+}
+
+[node name="TestPathAngle" type="Node2D"]
 
 [node name="Paths" type="Node2D" parent="."]
 
+[node name="ConnectablePath" type="Path2D" parent="Paths"]
+self_modulate = Color( 0.75, 0.75, 0.75, 1 )
+curve = SubResource( 1 )
+script = ExtResource( 2 )
+
+[node name="ConnectablePath2" type="Path2D" parent="Paths"]
+self_modulate = Color( 0.75, 0.75, 0.75, 1 )
+curve = SubResource( 2 )
+script = ExtResource( 2 )
+
 [node name="Connections" type="Node2D" parent="."]
+
+[node name="Connection" type="Node2D" parent="Connections" instance=ExtResource( 1 )]
+position = Vector2( 307.266, 495.699 )
+script = ExtResource( 3 )
+passable_connections = {
+"ConnectablePath": [ "ConnectablePath2" ],
+"ConnectablePath2": [ "ConnectablePath" ]
+}
+connected_area_paths = [ "../../Paths/ConnectablePath2/End", "../../Paths/ConnectablePath/End" ]
+
+[node name="Connection2" type="Node2D" parent="Connections" instance=ExtResource( 1 )]
+position = Vector2( 302.776, 537.605 )
+script = ExtResource( 3 )
+passable_connections = {
+"ConnectablePath": [ "ConnectablePath2" ],
+"ConnectablePath2": [ "ConnectablePath" ]
+}
+connected_area_paths = [ "../../Paths/ConnectablePath2/Start", "../../Paths/ConnectablePath/Start" ]
+
+[connection signal="area_entered" from="Paths/ConnectablePath/Start" to="Paths/ConnectablePath/Start" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="Paths/ConnectablePath/Start" to="Paths/ConnectablePath/Start" method="_on_Area2D_area_exited"]
+[connection signal="input_event" from="Paths/ConnectablePath/Start" to="Paths/ConnectablePath/Start" method="_on_Area2D_input_event"]
+[connection signal="area_entered" from="Paths/ConnectablePath/End" to="Paths/ConnectablePath/End" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="Paths/ConnectablePath/End" to="Paths/ConnectablePath/End" method="_on_Area2D_area_exited"]
+[connection signal="input_event" from="Paths/ConnectablePath/End" to="Paths/ConnectablePath/End" method="_on_Area2D_input_event"]
+[connection signal="area_entered" from="Paths/ConnectablePath2/Start" to="Paths/ConnectablePath2/Start" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="Paths/ConnectablePath2/Start" to="Paths/ConnectablePath2/Start" method="_on_Area2D_area_exited"]
+[connection signal="input_event" from="Paths/ConnectablePath2/Start" to="Paths/ConnectablePath2/Start" method="_on_Area2D_input_event"]
+[connection signal="area_entered" from="Paths/ConnectablePath2/End" to="Paths/ConnectablePath2/End" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="Paths/ConnectablePath2/End" to="Paths/ConnectablePath2/End" method="_on_Area2D_area_exited"]
+[connection signal="input_event" from="Paths/ConnectablePath2/End" to="Paths/ConnectablePath2/End" method="_on_Area2D_input_event"]

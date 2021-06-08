@@ -11,7 +11,7 @@ var path
 var is_start
 var connection
 var overlapped_point_areas : = []
-#var entered_path_area : Area2D
+
 
 func _draw():
 	if not overlapped_point_areas.empty():
@@ -24,29 +24,18 @@ func _draw():
 
 func _on_Area2D_area_entered(area : Area2D):
 	# avoid the cyclic reference
-	if area.is_in_group("point_areas"):
+	if area.is_in_group("point_areas") and area.path != path:
 		overlapped_point_areas.push_back(area)
 		emit_signal("point_area_entered", self, area)
 		if Engine.editor_hint and overlapped_point_areas.size() == 1:
 			update()
-#	elif area.is_in_group("path_areas") and overlapped_point_areas.empty() \
-#			and area.path != path:
-#		entered_path_area = area
-#		emit_signal("path_area_entered", self, area)
-#		if Engine.editor_hint:
-#			update()
 
 func _on_Area2D_area_exited(area : Area2D):
-	if area.is_in_group("point_areas"):
+	if area.is_in_group("point_areas") and area.path != path:
 		overlapped_point_areas.erase(area)
 		emit_signal("point_area_exited", self, area)
 		if Engine.editor_hint:
 			update()
-#	elif area.is_in_group("path_areas") and entered_path_area:
-#		entered_path_area = null
-#		emit_signal("path_area_exited", self, area)
-#		if Engine.editor_hint:
-#			update()
 
 # clicking on the area
 func _on_Area2D_input_event(viewport : Node, event : InputEvent, 
