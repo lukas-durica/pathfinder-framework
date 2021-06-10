@@ -315,12 +315,8 @@ _global_script_class_icons={
 [application]
 
 config/name="pathfinder-framework"
-run/main_scene="res://src/tools/graph_based_ui/GraphBasedUI.tscn"
+run/main_scene="res://src/tests/TestPathAngle.tscn"
 config/icon="res://icon.png"
-
-[debug]
-
-settings/stdout/verbose_stdout=true
 
 [display]
 
@@ -329,7 +325,7 @@ window/size/height=960
 
 [editor_plugins]
 
-enabled=PoolStringArray(  )
+enabled=PoolStringArray( "res://addons/path_manager/plugin.cfg" )
 
 [mono]
 

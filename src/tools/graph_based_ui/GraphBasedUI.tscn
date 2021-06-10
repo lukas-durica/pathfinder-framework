@@ -44,21 +44,33 @@ script = ExtResource( 4 )
 self_modulate = Color( 0.75, 0.75, 0.75, 1 )
 curve = SubResource( 1 )
 script = ExtResource( 7 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="ConnectablePath2" type="Path2D" parent="Graph/Paths"]
 self_modulate = Color( 0.75, 0.75, 0.75, 1 )
 curve = SubResource( 2 )
 script = ExtResource( 7 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="ConnectablePath3" type="Path2D" parent="Graph/Paths"]
 self_modulate = Color( 0.75, 0.75, 0.75, 1 )
 curve = SubResource( 3 )
 script = ExtResource( 7 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="ConnectablePath4" type="Path2D" parent="Graph/Paths"]
 self_modulate = Color( 0.75, 0.75, 0.75, 1 )
 curve = SubResource( 4 )
 script = ExtResource( 7 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Connections" type="Node2D" parent="Graph"]
 

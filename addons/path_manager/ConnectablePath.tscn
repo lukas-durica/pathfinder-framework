@@ -1,15 +1,10 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://addons/path_manager/ConnectablePath.gd" type="Script" id=1]
 
-[sub_resource type="Curve2D" id=1]
-_data = {
-"points": PoolVector2Array(  )
-}
-
 [node name="EditablePath" type="Path2D"]
 self_modulate = Color( 0.75, 0.75, 0.75, 1 )
-curve = SubResource( 1 )
+curve = null
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_lock_": true

@@ -10,8 +10,11 @@ const MONTSERRAT_FONT : = preload("res://data/fonts/Montserrat-Medium.ttf")
 const DEFAULT_COLOR : = Color.gray
 const HIGHLIGHT_COLOR : = Color.green
 
-export(Array) var start_point_connections
-export(Array) var end_point_conections
+export(Dictionary) var start_point_connections setget set_start_point_connections
+export(Dictionary) var end_point_connections setget set_end_point_connections
+
+export var disconnect_start_connections : = false setget disconnect_start_connections
+export var disconnect_end_connections : = false setget disconnect_end_connections
 
 export var passable_angle_max_diff : = 10.0
 
@@ -25,16 +28,22 @@ var _name_font : = DynamicFont.new()
 onready var path_name : = name
 
 func _ready():
-	
-	
 	if Engine.editor_hint:
-		if not curve: 
+		if not curve:
 			curve = Curve2D.new()
 		self_modulate = DEFAULT_COLOR
 		load_font()
 		set_meta("_edit_lock_", true)
 		connect("renamed", self, "_renamed")
 	update_marginal_points()
+
+
+func disconnect_start_connections(value : bool):
+	start_point_area.disconnect_from_connections()
+
+func disconnect_end_connections(value : bool):
+	end_point_area.disconnect_from_connections()
+
 
 func _notification(what : int):
 	match what:
@@ -46,6 +55,28 @@ func _notification(what : int):
 
 func _to_string():
 	return name
+
+func set_start_point_connections(value : Dictionary):
+	
+
+	start_point_connections = process_point_connections(value, 
+			start_point_connections)
+	property_list_changed_notify()
+
+func set_end_point_connections(value : Dictionary):
+	end_point_connections = process_point_connections(value, 
+			end_point_connections)
+	property_list_changed_notify()
+
+func process_point_connections(new_connections : Dictionary, 
+		old_connections : Dictionary) -> Dictionary:
+	var connections : = {}
+	for path_name in new_connections:
+		if old_connections.has(path_name):
+			connections[path_name] = old_connections[path_name]
+		else:
+			connections[path_name] = true
+	return connections
 
 func _renamed():
 	push_error("needs to be implemented")
@@ -74,7 +105,8 @@ func update_marginal_points():
 func process_marginal_point(type : int):
 	var point_area = start_point_area if is_start(type) else end_point_area
 	point_area = create_point_area(type) if not point_area else point_area
-	point_area.position = get_start_point() if is_start(type) else get_end_point()
+	point_area.global_position = get_start_point() if is_start(type) \
+			else get_end_point()
 
 func create_point_area(type : int) -> MarginalPointArea:
 	var is_start = is_start(type)

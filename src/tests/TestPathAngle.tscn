@@ -1,5 +1,45 @@
-[gd_scene format=2]
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://addons/path_manager/ConnectablePath.tscn" type="PackedScene" id=1]
+
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 172.056, 104.988, 0, 0, 0, 0, 489.535, 148.619 )
+}
+
+[sub_resource type="Curve2D" id=2]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 116.2, 221.741, 0, 0, 0, 0, 355.585, 357.813, 0, 0, 0, 0, 467.639, 195.235 )
+}
 
 [node name="TestPathAngle" type="Node2D"]
 
 [node name="Paths" type="Node2D" parent="."]
+
+[node name="EditablePath" parent="Paths" instance=ExtResource( 1 )]
+curve = SubResource( 1 )
+start_point_connections = {
+}
+end_point_connections = {
+}
+
+[node name="EditablePath2" parent="Paths" instance=ExtResource( 1 )]
+curve = SubResource( 2 )
+start_point_connections = {
+}
+end_point_connections = {
+"EditablePath": true
+}
+
+[connection signal="area_entered" from="Paths/EditablePath/Start" to="Paths/EditablePath/Start" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="Paths/EditablePath/Start" to="Paths/EditablePath/Start" method="_on_Area2D_area_exited"]
+[connection signal="input_event" from="Paths/EditablePath/Start" to="Paths/EditablePath/Start" method="_on_Area2D_input_event"]
+[connection signal="area_entered" from="Paths/EditablePath/End" to="Paths/EditablePath/End" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="Paths/EditablePath/End" to="Paths/EditablePath/End" method="_on_Area2D_area_exited"]
+[connection signal="input_event" from="Paths/EditablePath/End" to="Paths/EditablePath/End" method="_on_Area2D_input_event"]
+[connection signal="area_entered" from="Paths/EditablePath2/Start" to="Paths/EditablePath2/Start" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="Paths/EditablePath2/Start" to="Paths/EditablePath2/Start" method="_on_Area2D_area_exited"]
+[connection signal="input_event" from="Paths/EditablePath2/Start" to="Paths/EditablePath2/Start" method="_on_Area2D_input_event"]
+[connection signal="area_entered" from="Paths/EditablePath2/End" to="Paths/EditablePath2/End" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="Paths/EditablePath2/End" to="Paths/EditablePath2/End" method="_on_Area2D_area_exited"]
+[connection signal="input_event" from="Paths/EditablePath2/End" to="Paths/EditablePath2/End" method="_on_Area2D_input_event"]
