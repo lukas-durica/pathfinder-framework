@@ -8,8 +8,6 @@
 "point_areas",
 ]]
 script = ExtResource( 1 )
-connections = {
-}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 modulate = Color( 1, 1, 1, 0 )

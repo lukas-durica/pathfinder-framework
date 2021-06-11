@@ -18,12 +18,20 @@ export var disconnect_end_connections : = false setget disconnect_end_connection
 
 export var passable_angle_max_diff : = 10.0
 
+export var delete_path : = false setget set_delete_path
+
 var start_point_area : MarginalPointArea = null
 var end_point_area : MarginalPointArea = null
 
 var _path_area : Area2D
-var _name_font : = DynamicFont.new()
+var _default_font : = DynamicFont.new()
 
+var _name_label : Label
+var _start_label : Label
+var _end_label : Label
+
+var _marginal_points_labeling : = false 
+var _is_path_highlighted : = false
 # used for updating connections with new name
 onready var path_name : = name
 
@@ -37,6 +45,38 @@ func _ready():
 		connect("renamed", self, "_renamed")
 	update_marginal_points()
 
+func _notification(what : int):
+	match what:
+		NOTIFICATION_DRAW:
+			if Engine.editor_hint:
+				update_marginal_points()
+				update_path_collision_shape()
+				print_name_label()
+				if _marginal_points_labeling:
+					print_marginal_point_name(MarginalPointArea.START)
+					print_marginal_point_name(MarginalPointArea.END)
+				
+					
+
+func _to_string():
+	return name
+
+func _renamed():
+	start_point_area.update_connections()
+	end_point_area.update_connections()
+	path_name = name
+
+func set_start_point_connections(value : Dictionary):
+	print(name, ": updating start connections: ", value)
+	start_point_connections = value
+	property_list_changed_notify()
+	color_passable_connections()
+
+func set_end_point_connections(value : Dictionary):
+	print(name, ": updating end connections: ", value)
+	end_point_connections = value
+	property_list_changed_notify()
+	color_passable_connections()
 
 func disconnect_start_connections(value : bool):
 	start_point_area.disconnect_from_connections()
@@ -44,45 +84,21 @@ func disconnect_start_connections(value : bool):
 func disconnect_end_connections(value : bool):
 	end_point_area.disconnect_from_connections()
 
-
-func _notification(what : int):
-	match what:
-		NOTIFICATION_DRAW:
-			if Engine.editor_hint:
-				draw_name()
-				update_marginal_points()
-				update_path_collision_shape()
-
-func _to_string():
-	return name
-
-func set_start_point_connections(value : Dictionary):
-	print(name, ": updating start connections: ", value)
-	start_point_connections = value
-	property_list_changed_notify()
-
-func set_end_point_connections(value : Dictionary):
-	print(name, ": updating end connections: ", value)
-	end_point_connections = value
-	property_list_changed_notify()
-
-func _renamed():
-	push_error("needs to be implemented")
-#	var connections : = get_connections()
-#	for connection in connections:
-#		connection.update_path_name(path_name, name)
-
-	path_name = name
-
-
+func set_delete_path(value : bool):
+	start_point_area.disconnect_from_connections()
+	end_point_area.disconnect_from_connections()
+	queue_free()
+	
 func _point_area_was_clicked(area : Area2D, button_type : int):
 	emit_signal("point_area_was_clicked", area, button_type)
 
 func load_font():
-	_name_font.font_data = MONTSERRAT_FONT
-	_name_font.size = 12
-	_name_font.use_mipmaps = true
-	_name_font.use_filter = true
+	_default_font.font_data = MONTSERRAT_FONT
+	_default_font.size = 10
+	_default_font.outline_color = Color.black
+	_default_font.outline_size = 1.0
+	_default_font.use_mipmaps = true
+	_default_font.use_filter = true
 
 func update_marginal_points():
 	if curve.get_point_count() > 0:
@@ -98,11 +114,12 @@ func process_marginal_point(type : int):
 
 func create_point_area(type : int) -> MarginalPointArea:
 	var is_start = is_start(type)
+	#PackedScene.GEN_EDIT_STATE_INSTANCE
 	var point_area = POINT_ARENA_SCENE.instance()
 	point_area.type = type
 	point_area.path = self
 	point_area.name = "Start" if is_start else "End"
-	point_area.is_initiated = true
+	#point_area.is_initiated = true
 	
 	# set its new position
 	if is_start:
@@ -131,9 +148,40 @@ func update_path_collision_shape():
 		prev_point = point
 	_path_area.collision_shape.shape.segments = vec2_pool
 
-func draw_name():
-	var string_pos = curve.interpolate_baked(curve.get_baked_length() / 2.0)
-	draw_string(_name_font, string_pos, name, Color.white)
+
+func print_name_label():
+	var name_label_pos = curve.interpolate_baked(curve.get_baked_length() / 2.0)
+	if not _name_label:
+		_name_label = create_label(name, self_modulate)
+	_name_label.rect_global_position = Vector2(
+			name_label_pos.x - _name_label.rect_size.x / 2.0, 
+			name_label_pos.y - _name_label.rect_size.y / 2.0)
+
+func print_marginal_point_name(type : int):
+	var label : = _start_label if is_start(type) else _end_label
+	var point_area = start_point_area if is_start(type) else end_point_area
+	if not label:
+		label = create_label(point_area.name, self_modulate)
+	label.rect_global_position = Vector2(
+			point_area.global_position.x - label.rect_size.x / 2.0, 
+			point_area.global_position.y - label.rect_size.y / 2.0)
+	
+	
+	if is_start(type):
+		_start_label = label
+	else:
+		_end_label = label
+
+func create_label(text : String, color : Color)-> Label:
+	var new_label : = Label.new()
+	new_label.name = text
+	new_label.text = text
+	new_label.set("custom_fonts/font", _default_font)
+	new_label.set("custom_colors/font_color", color)
+	add_child(new_label)
+	return new_label
+
+
 
 func get_start_point() -> Vector2:
 	return curve.get_point_position(0)
@@ -167,20 +215,45 @@ func alling_border_points_with_connection():
 func get_length() -> float:
 	return curve.get_baked_length()
 
-func color_path(color : Color):
-	self_modulate = color
+func color_path(highlight : = false):
+	_is_path_highlighted = highlight
+	self_modulate = get_highlight_color(highlight)
 
-#func color_passable_connections(highlight : = false):
-#	var color = HIGHLIGHT_COLOR if highlight else DEFAULT_COLOR
-#	color_path(color)
-#	color_connection(start_point_area, color)
-#	color_connection(end_point_area, color)
+func color_passable_connections():
+	var color = get_highlight_color(_is_path_highlighted)
+	color_connections(MarginalPointArea.START, color)
+	color_connections(MarginalPointArea.END, color)
 
-#func color_connection(area : MarginalPointArea, color : Color):
-#	if area and area.is_connection_valid():
-#		var passable_connections = area.connection.passable_connections
-#		for path_name in passable_connections[name]:
-#			get_parent().get_node(path_name).color_path(color)
+func color_connections(type : int, color : Color):
+	var point_connections = start_point_connections if is_start(type) \
+			else end_point_connections
+	var area = start_point_area if is_start(type) else end_point_area
+	if area:
+		for path_name in point_connections:
+			#if passable
+			if point_connections[path_name]:
+				area.connections[path_name].path.color_path(
+						_is_path_highlighted)
+			else:
+				area.connections[path_name].path.color_path(false)
+
+func set_marginal_points_labeling(is_visible : bool):
+	if is_visible:
+		if _start_label:
+			_start_label.show()
+		if _end_label:
+			_end_label.show()
+	else:
+		if _start_label:
+			_start_label.hide()
+		if _end_label:
+			_end_label.hide()
+		
+	_marginal_points_labeling = is_visible
+	update()
+
+func get_highlight_color(is_highlighted : bool) -> Color:
+	return HIGHLIGHT_COLOR if is_highlighted else DEFAULT_COLOR
 
 static func is_start(type) -> bool:
 	return type == MarginalPointArea.START

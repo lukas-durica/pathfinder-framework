@@ -10,11 +10,15 @@ signal point_area_was_clicked(area, button_type)
 enum {START, END}
 enum {NONE, MASTER, SLAVE}
 
-export(Dictionary) var connections
+#export(Dictionary) var connections
+# bug with Arrays and Dictionaries with initial value are shared 
+#https://github.com/godotengine/godot/issues/48038
+
+var connections = {}
 
 var path
 var type : = -1
-var is_initiated : = false
+#var is_initiated : = false
 
 # connections is dictionary with the key of path name and array of connected 
 # other path names as as value
@@ -41,6 +45,7 @@ class PointConnection extends Reference:
 	# updating position
 	var area : Area2D
 	# passing through
+	var path : Path2D
 	#var is_passable : = false
 	
 	#func _init(p_path_node_to_area : String, p_area : Area2D, p_is_passable : bool):
@@ -50,11 +55,11 @@ class PointConnection extends Reference:
 
 func _ready():
 	if Engine.editor_hint:
-		if is_initiated:
-			connections = connections.duplicate(true)
-			connections.clear()
-			is_initiated = true
-		#update_connections()
+		# wait for physics area initiation
+		#connections = {}
+		yield(get_tree(), "idle_frame")
+		update_connections()
+		
 
 func _draw():
 	#print("_entered_point_area: ", _entered_point_area)
@@ -112,7 +117,7 @@ func _to_string():
 func update_connections():
 	print(get_compound_name(), " updating connections: ", connections)
 	var overlapped_point_areas = find_overlapped_point_areas()
-	print(get_compound_name(), "overlapped_point_areas: ", overlapped_point_areas)
+	print(get_compound_name(), " overlapped_point_areas: ", overlapped_point_areas)
 	# keeping record of point areas for fast membership test
 	var point_areas : = {}
 	# area is leaving the connection
@@ -126,6 +131,7 @@ func update_connections():
 			if not point_area.connections.has(path.name):
 				point_area.update_connections()
 	
+	print(get_compound_name(), " connections: ", connections)
 	# find connections not occuring in overlapped point areas
 	# thus recently disconnected
 	for connection in connections.values():
@@ -147,8 +153,10 @@ func update_connections():
 
 func add_to_connections(area : Area2D):
 	var connection : = PointConnection.new()
+	print(get_compound_name(), " adding to connections: ", connection)
 	connection.path_to_area = String(get_path_to(area))
 	connection.area = area
+	connection.path = area.path
 	#connection.is_passable = true
 	connections[area.path.name] = connection
 
