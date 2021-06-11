@@ -57,26 +57,14 @@ func _to_string():
 	return name
 
 func set_start_point_connections(value : Dictionary):
-	
-
-	start_point_connections = process_point_connections(value, 
-			start_point_connections)
+	print(name, ": updating start connections: ", value)
+	start_point_connections = value
 	property_list_changed_notify()
 
 func set_end_point_connections(value : Dictionary):
-	end_point_connections = process_point_connections(value, 
-			end_point_connections)
+	print(name, ": updating end connections: ", value)
+	end_point_connections = value
 	property_list_changed_notify()
-
-func process_point_connections(new_connections : Dictionary, 
-		old_connections : Dictionary) -> Dictionary:
-	var connections : = {}
-	for path_name in new_connections:
-		if old_connections.has(path_name):
-			connections[path_name] = old_connections[path_name]
-		else:
-			connections[path_name] = true
-	return connections
 
 func _renamed():
 	push_error("needs to be implemented")

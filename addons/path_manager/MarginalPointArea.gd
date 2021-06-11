@@ -50,10 +50,11 @@ class PointConnection extends Reference:
 
 func _ready():
 	if Engine.editor_hint:
-		#change and try connections = []
-		connections = connections.duplicate(true)
-		connections.clear()
-		is_initiated = true
+		if is_initiated:
+			connections = connections.duplicate(true)
+			connections.clear()
+			is_initiated = true
+		#update_connections()
 
 func _draw():
 	#print("_entered_point_area: ", _entered_point_area)
@@ -105,11 +106,13 @@ func _notification(what):
 					# update positions of all point areas
 					#for point_area in find_overlapped_point_areas():
 						
-
+func _to_string():
+	return get_compound_name()
 
 func update_connections():
-	print(path.name, " updating connections: ", connections)
+	print(get_compound_name(), " updating connections: ", connections)
 	var overlapped_point_areas = find_overlapped_point_areas()
+	print(get_compound_name(), "overlapped_point_areas: ", overlapped_point_areas)
 	# keeping record of point areas for fast membership test
 	var point_areas : = {}
 	# area is leaving the connection
@@ -128,7 +131,6 @@ func update_connections():
 	for connection in connections.values():
 		# area was disconnected
 		if not point_areas.has(connection.area):
-			print("detected missing area: ", connection.area.get_compound_name())
 			#remove it from connections
 			connections.erase(connection.area.path.name)
 			# avoid redundant update of connections
@@ -136,14 +138,13 @@ func update_connections():
 			# to this area -> its area
 			if connection.area.connections.has(path.name):
 				connection.area.update_connections()
-				print("sending notification to update connections")
-				print("from {0} to {1}".format([path.name, connection.area.path.name]))
 	
 	# update color of point area
 	update_path_exported_connections()
 	update()
 # if point areas are empty that means all connections are disconnected
-	
+
+
 func add_to_connections(area : Area2D):
 	var connection : = PointConnection.new()
 	connection.path_to_area = String(get_path_to(area))
@@ -160,18 +161,41 @@ func set_dragging_type_to_connections(dragging_type : int):
 		connection.area._dragging_type = dragging_type
 
 func update_path_exported_connections():
-	var path_names : = {}
+	var new_connections : = {}
+	
+	var old_connections = path.start_point_connections if type == START \
+			else path.end_point_connections
+	
 	for path_name in connections:
-		path_names[path_name] = true
+		if old_connections.has(path_name):
+			new_connections[path_name] = old_connections[path_name]
+		else:
+			new_connections[path_name] = true
+	
+	# bug? with the setter it needs to be triggered this way
 	if type == START:
-		path.start_point_connections = path_names
+		path.start_point_connections = new_connections
 	else:
-		path.end_point_connections = path_names
-
+		path.end_point_connections = new_connections
+		
+	
 # to do notify counterparts
 func disconnect_from_connections():
 	print(path.name, ": disconnect_from_connections")
+	for connection in connections.values():
+		# area was disconnected
+		connections.erase(connection.area.path.name)
+		# avoid redundant update of connections
+		# change this area -> its area -> this area
+		# to this area -> its area
+		connection.area.disconnected_point_area(self)
 	connections.clear()
+	update_path_exported_connections()
+	update()
+
+func disconnected_point_area(point_area : Area2D):
+	connections.erase(point_area.path.name)
+	update_path_exported_connections()
 	update()
 
 func _on_Area2D_area_entered(area : Area2D):
