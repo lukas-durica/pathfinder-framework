@@ -47,23 +47,16 @@ class PointConnection extends Reference:
 	# passing through
 	var path : Path2D
 	#var is_passable : = false
-	
-	#func _init(p_path_node_to_area : String, p_area : Area2D, p_is_passable : bool):
-	#	path_to_area = p_path_node_to_area
-	#	area = p_area
-	#	is_passable = p_is_passable
+
 
 func _ready():
 	if Engine.editor_hint:
 		# wait for physics area initiation
-		#connections = {}
 		yield(get_tree(), "idle_frame")
 		update_connections()
 		
 
 func _draw():
-	#print("_entered_point_area: ", _entered_point_area)
-	#print("connections.empty(): ", connections.empty())
 	if not connections.empty():
 		var c = Color.blue
 		draw_circle(Vector2.ZERO, _size, Color(c.r, c.g, c.b, 0.5))
@@ -114,10 +107,14 @@ func _notification(what):
 func _to_string():
 	return get_compound_name()
 
-func update_connections():
-	print(get_compound_name(), " updating connections: ", connections)
+# e.g. when connectablepath is renamed
+func path_renamed(old_name : String, new_name : String):
 	var overlapped_point_areas = find_overlapped_point_areas()
-	print(get_compound_name(), " overlapped_point_areas: ", overlapped_point_areas)
+	for point_area in overlapped_point_areas:
+		point_area.rename_path_in_connections(old_name, new_name)
+
+func update_connections():
+	var overlapped_point_areas = find_overlapped_point_areas()
 	# keeping record of point areas for fast membership test
 	var point_areas : = {}
 	# area is leaving the connection
@@ -131,7 +128,6 @@ func update_connections():
 			if not point_area.connections.has(path.name):
 				point_area.update_connections()
 	
-	print(get_compound_name(), " connections: ", connections)
 	# find connections not occuring in overlapped point areas
 	# thus recently disconnected
 	for connection in connections.values():
@@ -151,9 +147,11 @@ func update_connections():
 # if point areas are empty that means all connections are disconnected
 
 
+	
+
+
 func add_to_connections(area : Area2D):
 	var connection : = PointConnection.new()
-	print(get_compound_name(), " adding to connections: ", connection)
 	connection.path_to_area = String(get_path_to(area))
 	connection.area = area
 	connection.path = area.path
@@ -169,14 +167,13 @@ func set_dragging_type_to_connections(dragging_type : int):
 		connection.area._dragging_type = dragging_type
 
 func update_path_exported_connections():
-	var new_connections : = {}
-	
-	var old_connections = path.start_point_connections if type == START \
-			else path.end_point_connections
-	
+	var new_connections : = {}	
+	var old_connections = get_path_exported_connections()
 	for path_name in connections:
+		#if connection is still valid, assing if it is passable
 		if old_connections.has(path_name):
 			new_connections[path_name] = old_connections[path_name]
+		#if connection is new, declare it as passable 
 		else:
 			new_connections[path_name] = true
 	
@@ -189,7 +186,6 @@ func update_path_exported_connections():
 	
 # to do notify counterparts
 func disconnect_from_connections():
-	print(path.name, ": disconnect_from_connections")
 	for connection in connections.values():
 		# area was disconnected
 		connections.erase(connection.area.path.name)
@@ -205,6 +201,18 @@ func disconnected_point_area(point_area : Area2D):
 	connections.erase(point_area.path.name)
 	update_path_exported_connections()
 	update()
+
+func rename_path_in_connections(old_name : String, new_name : String):
+	var connection = connections.get(old_name)
+	if connection:
+		connections.erase(old_name)
+		connections[new_name] = connection
+	# update path connections accordingly to save the pass state
+	var path_connections = get_path_exported_connections()
+	var passable = path_connections.get(old_name)
+	if not passable == null:
+		path_connections.erase(old_name)
+		path_connections[new_name] = passable
 
 func _on_Area2D_area_entered(area : Area2D):
 	if Engine.editor_hint and area.is_in_group("point_areas"):
@@ -251,3 +259,6 @@ func update_border_point(pos : Vector2):
 func is_in_area(local_pos : Vector2) -> bool:
 	return local_pos.length() <= _collision_shape.shape.radius
 
+func get_path_exported_connections() -> Dictionary:
+	return path.start_point_connections if type == START \
+			else path.end_point_connections

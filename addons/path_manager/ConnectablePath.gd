@@ -62,18 +62,18 @@ func _to_string():
 	return name
 
 func _renamed():
-	start_point_area.update_connections()
-	end_point_area.update_connections()
+	start_point_area.path_renamed(path_name, name)
+	end_point_area.path_renamed(path_name, name)
 	path_name = name
+	_name_label.text = name
+	update()
 
 func set_start_point_connections(value : Dictionary):
-	print(name, ": updating start connections: ", value)
 	start_point_connections = value
 	property_list_changed_notify()
 	color_passable_connections()
 
 func set_end_point_connections(value : Dictionary):
-	print(name, ": updating end connections: ", value)
 	end_point_connections = value
 	property_list_changed_notify()
 	color_passable_connections()
@@ -151,7 +151,7 @@ func update_path_collision_shape():
 
 func print_name_label():
 	var name_label_pos = curve.interpolate_baked(curve.get_baked_length() / 2.0)
-	if not _name_label:
+	if not is_instance_valid(_name_label):
 		_name_label = create_label(name, self_modulate)
 	_name_label.rect_global_position = Vector2(
 			name_label_pos.x - _name_label.rect_size.x / 2.0, 
@@ -160,6 +160,8 @@ func print_name_label():
 func print_marginal_point_name(type : int):
 	var label : = _start_label if is_start(type) else _end_label
 	var point_area = start_point_area if is_start(type) else end_point_area
+	if not point_area:
+		return
 	if not label:
 		label = create_label(point_area.name, self_modulate)
 	label.rect_global_position = Vector2(
@@ -231,7 +233,10 @@ func color_connections(type : int, color : Color):
 	if area:
 		for path_name in point_connections:
 			#if passable
+			if area.connections.empty():
+				continue
 			if point_connections[path_name]:
+				
 				area.connections[path_name].path.color_path(
 						_is_path_highlighted)
 			else:

@@ -1,18 +1,17 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://addons/path_manager/ConnectablePath.gd" type="Script" id=1]
 
-[node name="ConnectablePath" type="Path2D"]
-self_modulate = Color( 0.75, 0.75, 0.75, 1 )
-curve = null
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_lock_": true
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array(  )
 }
 
-[connection signal="area_entered" from="Start" to="Start" method="_on_Area2D_area_entered"]
-[connection signal="area_exited" from="Start" to="Start" method="_on_Area2D_area_exited"]
-[connection signal="input_event" from="Start" to="Start" method="_on_Area2D_input_event"]
-[connection signal="area_entered" from="End" to="End" method="_on_Area2D_area_entered"]
-[connection signal="area_exited" from="End" to="End" method="_on_Area2D_area_exited"]
-[connection signal="input_event" from="End" to="End" method="_on_Area2D_input_event"]
+[node name="ConnectablePath" type="Path2D"]
+self_modulate = Color( 0, 1, 0, 1 )
+curve = SubResource( 1 )
+script = ExtResource( 1 )
+start_point_connections = {
+}
+end_point_connections = {
+}

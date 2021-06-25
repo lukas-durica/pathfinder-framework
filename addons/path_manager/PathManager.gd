@@ -47,7 +47,8 @@ func _exit_tree():
 func handles(object : Object) -> bool:
 
 	#if the object is the same object as edited path change nothing
-	if edited_path:
+	if is_instance_valid(edited_path):
+		print("deselected eidted path")
 		deselect_edited_path()
 	return object is ConnectablePath
 
@@ -56,10 +57,13 @@ func edit(object : Object):
 
 func _on_selection_changed():
 	# if unclicked the edited path deselect edited_path
-	if edited_path and editor_selection.get_selected_nodes().empty():
+	print("selection changed!")
+	if is_instance_valid(edited_path) and editor_selection.get_selected_nodes().empty():
 		deselect_edited_path()
 
 func select_edited_path(object):
+	# wait one frame, if scene is open, one idle frame is needed
+	# for areas to detect overlaps
 	edited_path = object
 	edited_path.color_path(true)
 	edited_path.color_passable_connections()
@@ -67,8 +71,8 @@ func select_edited_path(object):
 	
 
 func deselect_edited_path():
+	print("deselecting")
 	edited_path.set_marginal_points_labeling(false)
 	edited_path.color_path(false)
 	edited_path.color_passable_connections()
-	
 	edited_path = null
