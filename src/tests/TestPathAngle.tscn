@@ -5,22 +5,22 @@
 
 [sub_resource type="Curve2D" id=1]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 149.681, 123.963, 0, 0, 0, 0, 254.793, 232.438, 0, 0, 0, 0, 492.89, 311.671, 0, 0, 0, 0, 581.492, 271.445 )
+"points": PoolVector2Array( 0, 0, 0, 0, 149.681, 123.963, 0, 0, 0, 0, 254.793, 232.438, 0, 0, 0, 0, 492.89, 311.671, 0, 0, 0, 0, 573, 268 )
 }
 
 [sub_resource type="Curve2D" id=2]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 189.963, 71.7481, 0, 0, 0, 0, 490.217, 152.497, 0, 0, 0, 0, 490.811, 152.794, 0, 0, 0, 0, 581.492, 271.445 )
+"points": PoolVector2Array( 0, 0, 0, 0, 189.963, 71.7481, 0, 0, 0, 0, 490.217, 152.497, 0, 0, 0, 0, 490.811, 152.794, 0, 0, 0, 0, 573, 268 )
 }
 
 [sub_resource type="Curve2D" id=3]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 899.352, 136.903, 0, 0, 0, 0, 790.876, 208.379, 0, 0, 0, 0, 581.492, 271.445 )
+"points": PoolVector2Array( 0, 0, 0, 0, 899.352, 136.903, 0, 0, 0, 0, 790.876, 208.379, 0, 0, 0, 0, 573, 268 )
 }
 
 [sub_resource type="Curve2D" id=4]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 741.263, 442.148, 0, 0, 0, 0, 581.492, 271.445 )
+"points": PoolVector2Array( 0, 0, 0, 0, 741.263, 442.148, 0, 0, 0, 0, 573, 268 )
 }
 
 [sub_resource type="Curve2D" id=5]
@@ -40,7 +40,7 @@ start_point_connections = {
 end_point_connections = {
 "ConnectablePath": true,
 "ConnectablePath2": true,
-"Test1": false
+"Test1": true
 }
 
 [node name="Test1" parent="Paths" instance=ExtResource( 1 )]
@@ -65,7 +65,7 @@ start_point_connections = {
 }
 end_point_connections = {
 "ConnectablePath2": true,
-"Test1": false,
+"Test1": true,
 "Test2": true
 }
 
