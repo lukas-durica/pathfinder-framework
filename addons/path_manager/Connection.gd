@@ -67,7 +67,6 @@ func update_areas_position():
 		connected_area.update_border_point(global_position)
 
 func add_to_connection(connected_area : MarginalPointArea):
-	print(name, ": passable_connections: ", passable_connections)
 	if connected_area.is_connection_valid():
 		push_error("connection already exists!")
 	

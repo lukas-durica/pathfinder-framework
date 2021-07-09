@@ -19,7 +19,11 @@ export var disconnect_end_connections : = false setget disconnect_end_connection
 export var is_smoothing_enabled : = true
 export(float, 0.0, 1.0) var smooth_scale : = 0.4
 
-export var passable_angle_max_diff : = 10.0
+# if the normalized vectors of two points closest to the connection 
+# called connection normals of both path differs less then the pass_angle_diff, 
+# connection will be passable
+
+export var pass_angle_diff : = 10.0
 
 export var delete_path : = false setget set_delete_path
 
@@ -86,7 +90,6 @@ func disconnect_start_connections(value : bool):
 	start_point_area.disconnect_from_connections()
 
 func disconnect_end_connections(value : bool):
-	print(name, "disconnected end connections")
 	end_point_area.disconnect_from_connections()
 
 func set_delete_path(value : bool):
@@ -207,8 +210,6 @@ func get_control_points(idx : int, t : = 3.0) -> Dictionary:
 	var dir = point0.direction_to(point2)
 	var cp0 = -dir * point1.distance_to(point0) / (1.0 / smooth_scale)
 	var cp1 = dir *  point2.distance_to(point1) / (1.0 / smooth_scale)
-	print("cp0: ", cp0)
-	print("cp1: ", cp1)
 	return {cp0 = cp0, cp1 = cp1};
 
 func get_start_point() -> Vector2:
@@ -225,9 +226,11 @@ func set_end_point(value : Vector2):
 	curve.set_point_position(curve.get_point_count() -1, value)
 	update()
 
-func get_connection_normal(is_start : bool) -> Vector2:
-	var point0_idx = 0 if is_start else curve.get_baked_points().size() - 1
-	var point1_idx = 1 if is_start else curve.get_baked_points().size() - 2 
+func get_connection_normal(type : int) -> Vector2:
+	var point0_idx = 0 if is_start(type) \
+			else curve.get_baked_points().size() - 1
+	var point1_idx = 1 if is_start(type) \
+			else curve.get_baked_points().size() - 2 
 	var point0 = curve.get_baked_points()[point0_idx]
 	var point1 = curve.get_baked_points()[point1_idx]
 	return point1.direction_to(point0)
@@ -244,7 +247,6 @@ func get_length() -> float:
 	return curve.get_baked_length()
 
 func color_path(highlight : = false):
-	print(name, " color_path: ", highlight)
 	_is_path_highlighted = highlight
 	self_modulate = get_highlight_color(highlight)
 
@@ -255,7 +257,6 @@ func color_passable_connections():
 	color_connections(MarginalPointArea.END, color)
 
 func color_connections(type : int, color : Color):
-	print(name, " color_connections" , color)
 	var point_connections = start_point_connections if is_start(type) \
 			else end_point_connections
 	var area = start_point_area if is_start(type) else end_point_area
@@ -267,10 +268,9 @@ func color_connections(type : int, color : Color):
 			if point_connections[path_name]:
 				area.connections[path_name].path.color_path(
 						_is_path_highlighted)
-				print("coloring path_name: ", path_name)
 			else:
 				area.connections[path_name].path.color_path(false)
-				print("coloring path_name: ", path_name)
+
 func set_marginal_points_labeling(is_visible : bool):
 	if is_visible:
 		if _start_label:
