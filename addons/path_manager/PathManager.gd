@@ -63,14 +63,12 @@ func _on_selection_changed():
 func select_edited_path(object):
 	# wait one frame, if scene is open, one idle frame is needed
 	# for areas to detect overlaps
+	print(name, " select_edited_path: ", object.name)
 	edited_path = object
-	edited_path.color_path(true)
-	edited_path.color_passable_connections()
-	edited_path.set_marginal_points_labeling(true)
+	edited_path.set_path_selected(true)
 	
-
 func deselect_edited_path():
-	edited_path.set_marginal_points_labeling(false)
-	edited_path.color_path(false)
-	edited_path.color_passable_connections()
+	print(name, " deselect_edited_path: ", edited_path.name)
+	edited_path.set_path_selected(false)
 	edited_path = null
+	print(name, " deselected!")

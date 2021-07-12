@@ -4,12 +4,12 @@
 
 [sub_resource type="Curve2D" id=1]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 223.412, 196.863, -168.368, -54.5263, 172.974, 56.0182, 541.27, 504.631, -181.043, 16.7743, 115.575, -10.7084, 991.99, 445.769, -98.1178, 62.0088, 66.9308, -42.2992, 1282, 436, 1.49364, 79.1627, -0.975982, -51.727, 1316, 241, 51.6881, 2.23114, -61.2488, -2.64383, 1276, 118, 0, 0, 0, 0, 1177, 235 )
+"points": PoolVector2Array( 0, 0, 0, 0, 856.758, 461.808, -74.1158, -16.4181, 70.0472, 15.5168, 1014.86, 566.794, 0, 0, 0, 0, 1191.55, 535.971 )
 }
 
 [sub_resource type="Curve2D" id=2]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 478.732, 130.889, -153.449, 18.477, 89.8896, -10.8238, 859.146, 63.1806, -90.4733, -3.4457, 55.1233, 2.09939, 1085.43, 57.8353, -25.3286, -49.0045, 30.1728, 58.3767, 1222, 77, 0, 0, 0, 0, 1177, 235 )
+"points": PoolVector2Array( 0, 0, 0, 0, 870.366, 355.115, -152.277, -85.7456, 46.4729, 26.1685, 1296.1, 453.225, 0, 0, 0, 0, 1191.55, 535.971 )
 }
 
 [node name="TestPathAngle" type="Node2D"]
@@ -26,7 +26,7 @@ __meta__ = {
 start_point_connections = {
 }
 end_point_connections = {
-"ConnectablePath2": false
+"ConnectablePath2": true
 }
 
 [node name="ConnectablePath2" type="Path2D" parent="Paths"]
@@ -41,6 +41,7 @@ start_point_connections = {
 end_point_connections = {
 "ConnectablePath": false
 }
+update_passes_enabled = false
 
 [connection signal="area_entered" from="Paths/ConnectablePath/Start" to="Paths/ConnectablePath/Start" method="_on_Area2D_area_entered"]
 [connection signal="area_exited" from="Paths/ConnectablePath/Start" to="Paths/ConnectablePath/Start" method="_on_Area2D_area_exited"]

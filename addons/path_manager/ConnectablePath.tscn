@@ -11,6 +11,9 @@ _data = {
 self_modulate = Color( 0, 1, 0, 1 )
 curve = SubResource( 1 )
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
 start_point_connections = {
 }
 end_point_connections = {

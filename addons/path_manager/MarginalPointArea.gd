@@ -52,7 +52,9 @@ class PointConnection extends Reference:
 func _ready():
 	if Engine.editor_hint:
 		# wait for physics area initiation
-		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "physics_frame")
+		yield(get_tree(), "physics_frame")
+		#yield(get_tree(), "idle_frame")
 		update_connections()
 		
 
@@ -114,6 +116,7 @@ func path_renamed(old_name : String, new_name : String):
 		point_area.rename_path_in_connections(old_name, new_name)
 
 func update_connections():
+	print(get_compound_name(), " updating connections")
 	var overlapped_point_areas = find_overlapped_point_areas()
 	# keeping record of point areas for fast membership test
 	var point_areas : = {}
@@ -166,13 +169,17 @@ func set_dragging_type_to_connections(dragging_type : int):
 func update_path_exported_connections():
 	var new_connections : = {}	
 	var old_connections = get_path_exported_connections()
+	print("old_connections: ", old_connections.size())
+	print("connections: ", connections.size())
 	for path_name in connections:
 		#if connection is still valid, assing the value of passable
 		if old_connections.has(path_name):
+			print("setting old connection to new connection: ", path_name)
 			new_connections[path_name] = old_connections[path_name]
 		#if connection is new, declare it as passable
 		else:
-			new_connections[path_name] = should_create_pass_to(path_name)
+			print("creating new connection: ", path_name)
+			new_connections[path_name] = false
 	
 	# bug? with the setter it needs to be triggered this way
 	if type == START:
@@ -192,25 +199,22 @@ func disconnect_from_connections():
 		connection.area.disconnected_point_area(self)
 	connections.clear()
 	update_path_exported_connections()
-	update()
+	#update()
 
 func disconnected_point_area(point_area : Area2D):
 	connections.erase(point_area.path.name)
 	update_path_exported_connections()
 	update()
 
-func should_create_pass_to(path_name : String) -> bool:
-	var my_normal : Vector2 = path.get_connection_normal(type)
-	var your_path = connections[path_name].path
-	var your_area = connections[path_name].area
-	var your_normal : Vector2 = your_path.get_connection_normal(your_area.type)
-	
-	print("normal angle: ", rad2deg(PI - abs(my_normal.angle_to(your_normal))))
-	
-	print("returning: ", PI - abs(my_normal.angle_to(your_normal)) <= path.pass_angle_diff)
-	var angle : = abs(my_normal.angle_to(your_normal))
-	#connected normals are opposite, thus PI - angle
-	return rad2deg(PI - angle) <= path.pass_angle_diff
+#func should_create_pass_to(path_name : String) -> bool:
+#	var my_normal : Vector2 = path.get_connection_normal(type)
+#	var your_path = connections[path_name].path
+#	var your_area = connections[path_name].area
+#	var your_normal : Vector2 = your_path.get_connection_normal(your_area.type)
+#	var angle : = abs(my_normal.angle_to(your_normal))
+#	#connected normals are opposite, thus PI - angle
+#	print("Connecting angle: ", rad2deg(PI - angle))
+#	return rad2deg(PI - angle) <= path.pass_angle_diff
 
 
 func rename_path_in_connections(old_name : String, new_name : String):
