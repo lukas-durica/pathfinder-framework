@@ -30,7 +30,7 @@ export var pass_angle_diff : = 10.0
 
 
 # will update connection passes everytime the path is modified
-export var update_passes_enabled : = true
+export var auto_passes_update : = true
 
 export var delete_path : = false setget set_delete_path
 
@@ -226,7 +226,7 @@ func apply_smoothing():
 	update()
 
 func update_passes():
-	if not update_passes_enabled:
+	if not auto_passes_update:
 		return
 	update_connection_passes(MarginalPointArea.START)
 	update_connection_passes(MarginalPointArea.END)

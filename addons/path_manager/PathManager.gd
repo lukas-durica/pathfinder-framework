@@ -2,16 +2,9 @@ tool
 
 extends EditorPlugin
 
-const CONNECTION_SCENE = preload("res://addons/path_manager/Connection.tscn")
-
 var editor_selection : = get_editor_interface().get_selection()
 
 var edited_path : ConnectablePath = null
-
-var point_area_entered_data : = {}
-#var path_area_entered_data : = {}
-
-var is_left_mouse_button_pressed : = false
 
 func _enter_tree():
 	print("---===PathManager enabled===---")
@@ -27,7 +20,6 @@ func _enter_tree():
 func apply_changes():
 	for point_area in get_tree().get_nodes_in_group("point_areas"):
 		point_area.update_connections()
-	
 
 func _exit_tree():
 	editor_selection.disconnect("selection_changed", self, 
@@ -39,11 +31,6 @@ func _exit_tree():
 	
 	print("---===PathManager disabled===---")
 
-#func get_root() -> Node:
-#	return get_tree().get_edited_scene_root()
-#
-# chceck the type of the object, if it will return true the edit(object) is 
-# called
 func handles(object : Object) -> bool:
 
 	#if the object is the same object as edited path change nothing

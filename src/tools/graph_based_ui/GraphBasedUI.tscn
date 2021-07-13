@@ -1,34 +1,12 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://src/ui/UI.tscn" type="PackedScene" id=1]
-[ext_resource path="res://addons/path_manager/Connection.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/tools/grid_based_ui/Start.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/tools/graph_based_ui/Graph.gd" type="Script" id=4]
 [ext_resource path="res://src/tools/Camera.tscn" type="PackedScene" id=5]
 [ext_resource path="res://src/tools/graph_based_ui/GraphBasedUI.gd" type="Script" id=6]
-[ext_resource path="res://addons/path_manager/ConnectablePath.gd" type="Script" id=7]
 [ext_resource path="res://src/tools/grid_based_ui/Goal.tscn" type="PackedScene" id=8]
 [ext_resource path="res://src/tools/agents/AgentGraph.tscn" type="PackedScene" id=9]
-
-[sub_resource type="Curve2D" id=1]
-_data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 265.361, 218.077, 0, 0, 0, 0, 278.83, 450.801, 0, 0, 0, 0, 830.333, 447.059, 0, 0, 0, 0, 801.897, 143.246, 0, 0, 0, 0, 328.967, 95.3547, 0, 0, 0, 0, 265.361, 218.077 )
-}
-
-[sub_resource type="Curve2D" id=2]
-_data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 237.673, 654.341, 0, 0, 0, 0, 395.566, 835.431, 0, 0, 0, 0, 845.299, 747.131, 0, 0, 0, 0, 709.856, 556.312, 0, 0, 0, 0, 412.029, 537.605, 0, 0, 0, 0, 237.673, 654.341 )
-}
-
-[sub_resource type="Curve2D" id=3]
-_data = {
-"points": PoolVector2Array( 0, 0, 0, 0, -123.011, 200.866, 0, 0, 0, 0, 265.361, 218.077 )
-}
-
-[sub_resource type="Curve2D" id=4]
-_data = {
-"points": PoolVector2Array( 0, 0, 0, 0, -106.548, 75.1503, 0, 0, 0, 0, 265.361, 218.077 )
-}
 
 [node name="GraphBasedUI" type="Node2D"]
 script = ExtResource( 6 )
@@ -37,58 +15,6 @@ script = ExtResource( 6 )
 
 [node name="Graph" type="Node2D" parent="."]
 script = ExtResource( 4 )
-
-[node name="Paths" type="Node2D" parent="Graph"]
-
-[node name="ConnectablePath" type="Path2D" parent="Graph/Paths"]
-self_modulate = Color( 0.75, 0.75, 0.75, 1 )
-curve = SubResource( 1 )
-script = ExtResource( 7 )
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="ConnectablePath2" type="Path2D" parent="Graph/Paths"]
-self_modulate = Color( 0.75, 0.75, 0.75, 1 )
-curve = SubResource( 2 )
-script = ExtResource( 7 )
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="ConnectablePath3" type="Path2D" parent="Graph/Paths"]
-self_modulate = Color( 0.75, 0.75, 0.75, 1 )
-curve = SubResource( 3 )
-script = ExtResource( 7 )
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="ConnectablePath4" type="Path2D" parent="Graph/Paths"]
-self_modulate = Color( 0.75, 0.75, 0.75, 1 )
-curve = SubResource( 4 )
-script = ExtResource( 7 )
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="Connections" type="Node2D" parent="Graph"]
-
-[node name="Connection" parent="Graph/Connections" instance=ExtResource( 2 )]
-position = Vector2( 265.361, 218.077 )
-passable_connections = {
-"ConnectablePath": [ "ConnectablePath3", "ConnectablePath4" ],
-"ConnectablePath3": [ "ConnectablePath" ],
-"ConnectablePath4": [ "ConnectablePath3", "ConnectablePath" ]
-}
-connected_area_paths = [ "../../Paths/ConnectablePath3/End", "../../Paths/ConnectablePath4/End", "../../Paths/ConnectablePath/End" ]
-
-[node name="Connection2" parent="Graph/Connections" instance=ExtResource( 2 )]
-position = Vector2( 237.673, 654.341 )
-passable_connections = {
-"ConnectablePath2": [ "ConnectablePath2" ]
-}
-connected_area_paths = [ "../../Paths/ConnectablePath2/End", "../../Paths/ConnectablePath2/Start" ]
 
 [node name="Camera" parent="." instance=ExtResource( 5 )]
 
@@ -102,32 +28,7 @@ visible = false
 
 [node name="AgentGraph" parent="Agents" instance=ExtResource( 9 )]
 position = Vector2( -16.3157, 205.594 )
-node_path_to_path = NodePath("../../Graph/Paths/ConnectablePath3")
 
 [connection signal="algorithms_id_pressed" from="UserInterface" to="." method="_on_UserInterface_algorithms_id_pressed"]
 [connection signal="button_pressed" from="UserInterface" to="." method="_on_UserInterface_button_pressed"]
 [connection signal="options_id_pressed" from="UserInterface" to="." method="_on_UserInterface_options_id_pressed"]
-[connection signal="area_entered" from="Graph/Paths/ConnectablePath/Start" to="Graph/Paths/ConnectablePath/Start" method="_on_Area2D_area_entered"]
-[connection signal="area_exited" from="Graph/Paths/ConnectablePath/Start" to="Graph/Paths/ConnectablePath/Start" method="_on_Area2D_area_exited"]
-[connection signal="input_event" from="Graph/Paths/ConnectablePath/Start" to="Graph/Paths/ConnectablePath/Start" method="_on_Area2D_input_event"]
-[connection signal="area_entered" from="Graph/Paths/ConnectablePath/End" to="Graph/Paths/ConnectablePath/End" method="_on_Area2D_area_entered"]
-[connection signal="area_exited" from="Graph/Paths/ConnectablePath/End" to="Graph/Paths/ConnectablePath/End" method="_on_Area2D_area_exited"]
-[connection signal="input_event" from="Graph/Paths/ConnectablePath/End" to="Graph/Paths/ConnectablePath/End" method="_on_Area2D_input_event"]
-[connection signal="area_entered" from="Graph/Paths/ConnectablePath2/Start" to="Graph/Paths/ConnectablePath2/Start" method="_on_Area2D_area_entered"]
-[connection signal="area_exited" from="Graph/Paths/ConnectablePath2/Start" to="Graph/Paths/ConnectablePath2/Start" method="_on_Area2D_area_exited"]
-[connection signal="input_event" from="Graph/Paths/ConnectablePath2/Start" to="Graph/Paths/ConnectablePath2/Start" method="_on_Area2D_input_event"]
-[connection signal="area_entered" from="Graph/Paths/ConnectablePath2/End" to="Graph/Paths/ConnectablePath2/End" method="_on_Area2D_area_entered"]
-[connection signal="area_exited" from="Graph/Paths/ConnectablePath2/End" to="Graph/Paths/ConnectablePath2/End" method="_on_Area2D_area_exited"]
-[connection signal="input_event" from="Graph/Paths/ConnectablePath2/End" to="Graph/Paths/ConnectablePath2/End" method="_on_Area2D_input_event"]
-[connection signal="area_entered" from="Graph/Paths/ConnectablePath3/Start" to="Graph/Paths/ConnectablePath3/Start" method="_on_Area2D_area_entered"]
-[connection signal="area_exited" from="Graph/Paths/ConnectablePath3/Start" to="Graph/Paths/ConnectablePath3/Start" method="_on_Area2D_area_exited"]
-[connection signal="input_event" from="Graph/Paths/ConnectablePath3/Start" to="Graph/Paths/ConnectablePath3/Start" method="_on_Area2D_input_event"]
-[connection signal="area_entered" from="Graph/Paths/ConnectablePath3/End" to="Graph/Paths/ConnectablePath3/End" method="_on_Area2D_area_entered"]
-[connection signal="area_exited" from="Graph/Paths/ConnectablePath3/End" to="Graph/Paths/ConnectablePath3/End" method="_on_Area2D_area_exited"]
-[connection signal="input_event" from="Graph/Paths/ConnectablePath3/End" to="Graph/Paths/ConnectablePath3/End" method="_on_Area2D_input_event"]
-[connection signal="area_entered" from="Graph/Paths/ConnectablePath4/Start" to="Graph/Paths/ConnectablePath4/Start" method="_on_Area2D_area_entered"]
-[connection signal="area_exited" from="Graph/Paths/ConnectablePath4/Start" to="Graph/Paths/ConnectablePath4/Start" method="_on_Area2D_area_exited"]
-[connection signal="input_event" from="Graph/Paths/ConnectablePath4/Start" to="Graph/Paths/ConnectablePath4/Start" method="_on_Area2D_input_event"]
-[connection signal="area_entered" from="Graph/Paths/ConnectablePath4/End" to="Graph/Paths/ConnectablePath4/End" method="_on_Area2D_area_entered"]
-[connection signal="area_exited" from="Graph/Paths/ConnectablePath4/End" to="Graph/Paths/ConnectablePath4/End" method="_on_Area2D_area_exited"]
-[connection signal="input_event" from="Graph/Paths/ConnectablePath4/End" to="Graph/Paths/ConnectablePath4/End" method="_on_Area2D_input_event"]

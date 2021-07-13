@@ -170,11 +170,6 @@ _global_script_classes=[ {
 "path": "res://addons/path_manager/ConnectablePath.gd"
 }, {
 "base": "Node2D",
-"class": "Connection",
-"language": "GDScript",
-"path": "res://addons/path_manager/Connection.gd"
-}, {
-"base": "Node2D",
 "class": "Graph",
 "language": "GDScript",
 "path": "res://src/tools/graph_based_ui/Graph.gd"
@@ -188,11 +183,6 @@ _global_script_classes=[ {
 "class": "GraphBasedUI",
 "language": "GDScript",
 "path": "res://src/tools/graph_based_ui/GraphBasedUI.gd"
-}, {
-"base": "Node2D",
-"class": "GraphBasedUITransition",
-"language": "GDScript",
-"path": "res://src/tools/graph_based_ui/GraphBasedUITransition.gd"
 }, {
 "base": "TileMap",
 "class": "Grid",
@@ -292,11 +282,9 @@ _global_script_class_icons={
 "BreadthFirstSearchDebug": "",
 "CBS": "",
 "ConnectablePath": "",
-"Connection": "",
 "Graph": "",
 "GraphBasedAlgorithm": "",
 "GraphBasedUI": "",
-"GraphBasedUITransition": "",
 "Grid": "",
 "GridBasedAlgorithm": "",
 "GridBasedUI": "",
