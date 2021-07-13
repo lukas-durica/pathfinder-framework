@@ -36,7 +36,7 @@ func _init(grph : Node2D):
 	graph = grph
 
 func find_solution(start_path : ConnectablePath, offset : float, 
-		goal_point : Node2D) -> Array:
+		goal_area : Node2D) -> Array:
 	
 	# The key idea for all of these algorithms is that we keep track of an 
 	# expanding cells called the frontier.
@@ -58,21 +58,16 @@ func find_solution(start_path : ConnectablePath, offset : float,
 	var start_path_data_1 = graph.paths_data[start_path][1]
 	
 	# add start position to came_from and add 0 as total movemenbt cost
-	#var start_point = start_path.get_connection_or_area(true)
-	#var end_point = start_path.get_connection_or_area(false)
+	
 	var length = start_path.get_length()
 	
 	#var frontier = MinBinaryHeap.new()
 	#frontier.insert_key({value = 0, vertex = start})
 	frontier.push(offset, start_path_data_0.id)
 	
-	#print("unreference start_path_data_0: ", start_path_data_0.unreference())
-	#print("start_path_data_0: ", start_path_data_0)
-	#print("length - offset: ", length - offset)
+	
 	frontier.push(length - offset, start_path_data_1.id)
 	
-	#print("start_path_data_1: ", start_path_data_1)
-	#print("start_path_data_1.unreference(): ",start_path_data_1.unreference())
 	
 	came_from[start_path_data_0] = null
 	came_from[start_path_data_1] = null
@@ -87,7 +82,7 @@ func find_solution(start_path : ConnectablePath, offset : float,
 		print("current: ", current)
 		#grid.set_cellv(current, Grid.CLOSED)
 		# if the goal is found reconstruct the path, i.e. early exit
-		if current.point == goal_point:
+		if current.area == goal_area:
 			return reconstruct_path(current, came_from)
 		#Expand it by looking at its neighbors
 		for neighbor in current.neighbors:
@@ -106,8 +101,8 @@ func find_solution(start_path : ConnectablePath, offset : float,
 				cost_so_far[neighbor] = new_cost
 				
 				# The location closest to the goal will be explored first.
-				var heuristic = neighbor.point.global_position.distance_to(
-						goal_point.global_position)
+				var heuristic = neighbor.area.global_position.distance_to(
+						goal_area.global_position)
 				
 				var priority = new_cost + heuristic
 						

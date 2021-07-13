@@ -77,14 +77,14 @@ func run(pths_data : Array):
 	paths_data = pths_data
 	# compute initial direction
 	var path : ConnectablePath = paths_data.front().path
-	var point : Node2D = paths_data.front().point
-	# the point is start
-	if point == path.get_connection_or_area(true):
+	var area : MarginalPointArea = paths_data.front().area
+	
+	if area == path.get_point_area(MarginalPointArea.START):
 		path_direction = -1
-	elif point == path.get_connection_or_area(false):
+	elif area == path.get_point_area(MarginalPointArea.END):
 		path_direction = 1
 	else:
-		push_error("Point does not match!")
+		push_error("Area does not match!")
 	
 	# agent is already alligned to this path, thus pop front it
 	paths_data.pop_front()

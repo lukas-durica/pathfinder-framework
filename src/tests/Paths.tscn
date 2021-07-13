@@ -1,3 +1,110 @@
-[gd_scene format=2]
+[gd_scene load_steps=6 format=2]
 
-[node name="TestMapGraph" type="Node2D"]
+[ext_resource path="res://addons/path_manager/ConnectablePath.gd" type="Script" id=1]
+
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 126, 299, 0, 0, 0, 0, 429, 305 )
+}
+
+[sub_resource type="Curve2D" id=2]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 429, 305, 0, 0, 0, 0, 783, 300 )
+}
+
+[sub_resource type="Curve2D" id=3]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 783, 300, 0, 0, 0, 0, 1035, 297 )
+}
+
+[sub_resource type="Curve2D" id=4]
+_data = {
+"points": PoolVector2Array( -83.9052, 0, 83.9052, 0, 429, 305, -76.9682, 1.08712, 94.9516, -1.34112, 577, 182, -92.8951, 0, 92.8951, 0, 783, 300 )
+}
+
+[node name="Paths" type="Node2D"]
+
+[node name="StartPath" type="Path2D" parent="."]
+self_modulate = Color( 0.75, 0.75, 0.75, 1 )
+curve = SubResource( 1 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+start_point_connections = {
+}
+end_point_connections = {
+"LongPath": true,
+"ShortPath": true
+}
+
+[node name="ShortPath" type="Path2D" parent="."]
+self_modulate = Color( 0.75, 0.75, 0.75, 1 )
+curve = SubResource( 2 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+start_point_connections = {
+"LongPath": false,
+"StartPath": true
+}
+end_point_connections = {
+"EndPath": true,
+"LongPath": false
+}
+
+[node name="EndPath" type="Path2D" parent="."]
+self_modulate = Color( 0.75, 0.75, 0.75, 1 )
+curve = SubResource( 3 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+start_point_connections = {
+"LongPath": true,
+"ShortPath": true
+}
+end_point_connections = {
+}
+
+[node name="LongPath" type="Path2D" parent="."]
+self_modulate = Color( 0.75, 0.75, 0.75, 1 )
+curve = SubResource( 4 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+start_point_connections = {
+"ShortPath": false,
+"StartPath": true
+}
+end_point_connections = {
+"EndPath": true,
+"ShortPath": false
+}
+
+[connection signal="area_entered" from="StartPath/Start" to="StartPath/Start" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="StartPath/Start" to="StartPath/Start" method="_on_Area2D_area_exited"]
+[connection signal="input_event" from="StartPath/Start" to="StartPath/Start" method="_on_Area2D_input_event"]
+[connection signal="area_entered" from="StartPath/End" to="StartPath/End" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="StartPath/End" to="StartPath/End" method="_on_Area2D_area_exited"]
+[connection signal="input_event" from="StartPath/End" to="StartPath/End" method="_on_Area2D_input_event"]
+[connection signal="area_entered" from="ShortPath/Start" to="ShortPath/Start" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="ShortPath/Start" to="ShortPath/Start" method="_on_Area2D_area_exited"]
+[connection signal="input_event" from="ShortPath/Start" to="ShortPath/Start" method="_on_Area2D_input_event"]
+[connection signal="area_entered" from="ShortPath/End" to="ShortPath/End" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="ShortPath/End" to="ShortPath/End" method="_on_Area2D_area_exited"]
+[connection signal="input_event" from="ShortPath/End" to="ShortPath/End" method="_on_Area2D_input_event"]
+[connection signal="area_entered" from="EndPath/Start" to="EndPath/Start" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="EndPath/Start" to="EndPath/Start" method="_on_Area2D_area_exited"]
+[connection signal="input_event" from="EndPath/Start" to="EndPath/Start" method="_on_Area2D_input_event"]
+[connection signal="area_entered" from="EndPath/End" to="EndPath/End" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="EndPath/End" to="EndPath/End" method="_on_Area2D_area_exited"]
+[connection signal="input_event" from="EndPath/End" to="EndPath/End" method="_on_Area2D_input_event"]
+[connection signal="area_entered" from="LongPath/Start" to="LongPath/Start" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="LongPath/Start" to="LongPath/Start" method="_on_Area2D_area_exited"]
+[connection signal="input_event" from="LongPath/Start" to="LongPath/Start" method="_on_Area2D_input_event"]
+[connection signal="area_entered" from="LongPath/End" to="LongPath/End" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="LongPath/End" to="LongPath/End" method="_on_Area2D_area_exited"]
+[connection signal="input_event" from="LongPath/End" to="LongPath/End" method="_on_Area2D_input_event"]

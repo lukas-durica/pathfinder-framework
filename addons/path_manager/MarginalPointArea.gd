@@ -27,35 +27,26 @@ var type : = -1
 # for simplicity only the names are stored, not a the whole path
 # https://github.com/godotengine/godot/issues/48038
 
-
 var _dragging_type : int = NONE
 
 var _is_mouse_button_pressed : = false
-#var _is_dragged : = false
 
 var _entered_point_area : Area2D
 var _size : = 10.0
 
 onready var _collision_shape : = $CollisionShape2D
 
-#change when Connection will be deleted
-class PointConnection extends Reference:
-	# for reconnecting, 
-	var path_to_area : = ""
-	# updating position
-	var area : Area2D
+class Connection extends Reference:
 	# passing through
 	var path : Path2D
-	#var is_passable : = false
-
-
+	# updating position
+	var area : Area2D
+	
 func _ready():
-	if Engine.editor_hint:
-		# wait for physics area initiation
-		yield(get_tree(), "physics_frame")
-		yield(get_tree(), "physics_frame")
-		#yield(get_tree(), "idle_frame")
-		update_connections()
+	# wait for physics area initiation
+	yield(get_tree(), "physics_frame")
+	yield(get_tree(), "physics_frame")
+	update_connections()
 		
 
 func _draw():
@@ -150,11 +141,9 @@ func update_connections():
 
 
 func add_to_connections(area : Area2D):
-	var connection : = PointConnection.new()
-	connection.path_to_area = String(get_path_to(area))
+	var connection : = Connection.new()
 	connection.area = area
 	connection.path = area.path
-	#connection.is_passable = true
 	connections[area.path.name] = connection
 
 func update_position_of_connections():
@@ -208,7 +197,6 @@ func disconnected_point_area(point_area : Area2D):
 #	var your_normal : Vector2 = your_path.get_connection_normal(your_area.type)
 #	var angle : = abs(my_normal.angle_to(your_normal))
 #	#connected normals are opposite, thus PI - angle
-#	print("Connecting angle: ", rad2deg(PI - angle))
 #	return rad2deg(PI - angle) <= path.pass_angle_diff
 
 
@@ -237,7 +225,7 @@ func _on_Area2D_area_exited(area : Area2D):
 # clicking on the area
 func _on_Area2D_input_event(viewport : Node, event : InputEvent, 
 		shape_idx : int):
-	# signal is not working in the editor
+	# signal _on_Area2D_input_event is not working in the editor
 	if not Engine.editor_hint and event is InputEventMouseButton \
 			and event.pressed:
 		match event.button_index:

@@ -152,6 +152,8 @@ func create_point_area(type : int) -> MarginalPointArea:
 	point_area.type = type
 	point_area.path = self
 	point_area.name = "Start" if is_start else "End"
+	point_area.connect("point_area_was_clicked", self, 
+			"_point_area_was_clicked")
 	
 	# set its new position
 	if is_start:
@@ -256,9 +258,9 @@ func update_connection_passes(type : int):
 		else:
 			self.end_point_connections[path_name] = passable
 		
-		if is_start(your_area.type) and your_path.update_passes_enabled:
+		if is_start(your_area.type) and your_path.auto_passes_update:
 			your_path.start_point_connections[name] = passable
-		elif your_path.update_passes_enabled:
+		elif your_path.auto_passes_update:
 			your_path.end_point_connections[name] = passable
 
 #http://scaledinnovation.com/analytics/splines/aboutSplines.html
@@ -326,8 +328,14 @@ func color_connections(type : int):
 
 		area.connections[path_name].path.color_path(shoud_highlight)
 		
-		
-
+func get_marginal_point_areas() -> Array:
+	var point_areas : = []
+	if is_instance_valid(start_point_area):
+		point_areas.push_back(start_point_area)
+	if is_instance_valid(end_point_area):
+		point_areas.push_back(end_point_area)
+	return point_areas
+	
 func set_marginal_points_labeling(is_visible : bool):
 	if is_visible:
 		if _start_label:
@@ -347,8 +355,29 @@ func get_highlight_color(is_highlighted : bool) -> Color:
 func get_point_area(type : int) -> MarginalPointArea:
 	return start_point_area if is_start(type) else end_point_area
 
+func get_opposite_point_area(type : int) -> MarginalPointArea:
+	return end_point_area if is_start(type) else start_point_area
+
 func get_connections(type : int) -> Dictionary:
 	return start_point_connections if is_start(type) else end_point_connections
 
+func get_passable_connections_data(type : int) -> Array:
+	#connections_data consists of the path and the opposite point area
+	
+	var connections : = get_connections(type)
+	var point_area : = get_point_area(type)
+	var connections_data : = []
+	for path_name in connections:
+		#if is passable
+		if connections[path_name]:
+			var connection = point_area.connections.get(path_name)
+			if connection:
+				var your_path = connection.path
+				var your_area_type : int = connection.area.type
+				var your_opposite_area : MarginalPointArea = \
+						 your_path.get_opposite_point_area(your_area_type)
+				connections_data.push_back({path = your_path,
+				area = your_opposite_area})
+	return connections_data
 static func is_start(type) -> bool:
 	return type == MarginalPointArea.START

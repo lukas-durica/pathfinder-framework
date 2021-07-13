@@ -45,11 +45,11 @@ func _ready():
 # button type is BUTTON_LEFT or BUTTON_RIGHT
 func area_was_clicked(area : MarginalPointArea, button_type : int):
 	
-	var target : Node2D = area if not area.connection else area.connection
+	# start or goal instance (sprite)
 	var border : Node2D = start if button_type == BUTTON_LEFT else goal
 
-	border.global_transform.origin = target.global_transform.origin
-	border.set_meta("point", target)
+	border.global_transform.origin = area.global_transform.origin
+	border.set_meta("point", area)
 	border.visible = true
 
 # run the pathfinder
@@ -62,13 +62,11 @@ func run():
 			push_error("Start has no target!")
 			return
 		var start_point = start.get_meta("point")
-		
-		if start_point is MarginalPointArea:
-			start_path = start_point.path
+		start_path = start_point.path
 		agent = AGENT_SCENE.instance()
 		$Agents.add_child(agent)
 		agent.align_to_path(start_path, start.global_position)
-		
+	# if the agent is set in the editor
 	else:
 		agent = $Agents.get_children()[0]
 		var path_follow_parent = agent.path_follow.get_parent()
@@ -81,11 +79,10 @@ func run():
 	var goal_point = goal.get_meta("point")
 	
 	var astar : = AStarGraph.new($Graph)
-	agent.run(astar.find_solution(start_path, agent.path_follow.offset, 
-			goal_point))
+	var solution : = astar.find_solution(start_path, agent.path_follow.offset, 
+			goal_point)
+	agent.run(solution)
 	
-	
-
 
 func add_agent(path):
 	var agent = AGENT_SCENE.instance()
