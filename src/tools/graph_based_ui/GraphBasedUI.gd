@@ -65,8 +65,6 @@ func run():
 		
 		if start_point is MarginalPointArea:
 			start_path = start_point.path
-		elif start_point is Connection:
-			start_path = start_point.connected_paths[0]
 		agent = AGENT_SCENE.instance()
 		$Agents.add_child(agent)
 		agent.align_to_path(start_path, start.global_position)

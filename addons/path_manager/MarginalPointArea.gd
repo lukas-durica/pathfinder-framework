@@ -116,7 +116,6 @@ func path_renamed(old_name : String, new_name : String):
 		point_area.rename_path_in_connections(old_name, new_name)
 
 func update_connections():
-	print(get_compound_name(), " updating connections")
 	var overlapped_point_areas = find_overlapped_point_areas()
 	# keeping record of point areas for fast membership test
 	var point_areas : = {}
@@ -169,16 +168,12 @@ func set_dragging_type_to_connections(dragging_type : int):
 func update_path_exported_connections():
 	var new_connections : = {}	
 	var old_connections = get_path_exported_connections()
-	print("old_connections: ", old_connections.size())
-	print("connections: ", connections.size())
 	for path_name in connections:
 		#if connection is still valid, assing the value of passable
 		if old_connections.has(path_name):
-			print("setting old connection to new connection: ", path_name)
 			new_connections[path_name] = old_connections[path_name]
 		#if connection is new, declare it as passable
 		else:
-			print("creating new connection: ", path_name)
 			new_connections[path_name] = false
 	
 	# bug? with the setter it needs to be triggered this way

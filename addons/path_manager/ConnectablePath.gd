@@ -249,7 +249,7 @@ func update_connection_passes(type : int):
 					your_area.type)
 		var angle : = abs(my_normal.angle_to(your_normal))
 		#connected normals are opposite, thus PI - angle
-		print("rad2deg(PI - angle): ", rad2deg(PI - angle))
+		print("Diff Angle: ", rad2deg(PI - angle))
 		var passable = rad2deg(PI - angle) <= pass_angle_diff
 		if is_start(point_area.type):
 			self.start_point_connections[path_name] = passable
@@ -323,7 +323,7 @@ func color_connections(type : int):
 		#if passable
 		var shoud_highlight : = true if point_connections[path_name] \
 				and _is_selected else false
-		print(name, " coloring: ", path_name, " with: ", shoud_highlight)
+
 		area.connections[path_name].path.color_path(shoud_highlight)
 		
 		

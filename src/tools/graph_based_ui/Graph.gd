@@ -61,15 +61,3 @@ func get_path_data(path, point) -> PathData:
 	push_error("Path data: {0} {1} was not found".format(
 			[path.name, point.name]))
 	return null
-	
-func create_ids():
-	var id = 0
-	for path in node_paths.get_children():
-		if path is ConnectablePath:
-			path.id = id
-			id += 1
-	id = 0
-	for connection in node_connections.get_children():
-		if connection is Connection:
-			connection.id = id
-			id += 1

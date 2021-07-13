@@ -30,7 +30,7 @@ end_point_connections = {
 }
 
 [node name="TestPath" type="Path2D" parent="Paths"]
-self_modulate = Color( 0, 1, 0, 1 )
+self_modulate = Color( 0.75, 0.75, 0.75, 1 )
 curve = SubResource( 2 )
 script = ExtResource( 1 )
 __meta__ = {
