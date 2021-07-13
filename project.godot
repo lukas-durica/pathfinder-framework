@@ -170,11 +170,6 @@ _global_script_classes=[ {
 "path": "res://addons/path_manager/ConnectablePath.gd"
 }, {
 "base": "Node2D",
-"class": "Connection",
-"language": "GDScript",
-"path": "res://addons/path_manager/Connection.gd"
-}, {
-"base": "Node2D",
 "class": "Graph",
 "language": "GDScript",
 "path": "res://src/tools/graph_based_ui/Graph.gd"
@@ -188,11 +183,6 @@ _global_script_classes=[ {
 "class": "GraphBasedUI",
 "language": "GDScript",
 "path": "res://src/tools/graph_based_ui/GraphBasedUI.gd"
-}, {
-"base": "Node2D",
-"class": "GraphBasedUITransition",
-"language": "GDScript",
-"path": "res://src/tools/graph_based_ui/GraphBasedUITransition.gd"
 }, {
 "base": "TileMap",
 "class": "Grid",
@@ -224,6 +214,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/tools/grid_based_ui/MapLoader.gd"
 }, {
+"base": "Area2D",
+"class": "MarginalPointArea",
+"language": "GDScript",
+"path": "res://addons/path_manager/MarginalPointArea.gd"
+}, {
 "base": "Reference",
 "class": "MinBinaryHeap",
 "language": "GDScript",
@@ -243,11 +238,6 @@ _global_script_classes=[ {
 "class": "PathArea",
 "language": "GDScript",
 "path": "res://addons/path_manager/PathArea.gd"
-}, {
-"base": "Area2D",
-"class": "PointArea",
-"language": "GDScript",
-"path": "res://addons/path_manager/PointArea.gd"
 }, {
 "base": "PathFollow2D",
 "class": "RemotePathFollow",
@@ -292,22 +282,20 @@ _global_script_class_icons={
 "BreadthFirstSearchDebug": "",
 "CBS": "",
 "ConnectablePath": "",
-"Connection": "",
 "Graph": "",
 "GraphBasedAlgorithm": "",
 "GraphBasedUI": "",
-"GraphBasedUITransition": "",
 "Grid": "",
 "GridBasedAlgorithm": "",
 "GridBasedUI": "",
 "HelperFunctions": "",
 "ICTS": "",
 "MapLoader": "",
+"MarginalPointArea": "",
 "MinBinaryHeap": "",
 "MinBinaryHeapDict": "",
 "MinPriorityQueueCpp": "",
 "PathArea": "",
-"PointArea": "",
 "RemotePathFollow": "",
 "UserInteraface": ""
 }
@@ -315,12 +303,8 @@ _global_script_class_icons={
 [application]
 
 config/name="pathfinder-framework"
-run/main_scene="res://src/tools/graph_based_ui/GraphBasedUI.tscn"
+run/main_scene="res://src/tests/TestPathAngle.tscn"
 config/icon="res://icon.png"
-
-[debug]
-
-settings/stdout/verbose_stdout=true
 
 [display]
 

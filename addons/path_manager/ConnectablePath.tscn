@@ -7,10 +7,14 @@ _data = {
 "points": PoolVector2Array(  )
 }
 
-[node name="EditablePath" type="Path2D"]
-self_modulate = Color( 0.75, 0.75, 0.75, 1 )
+[node name="ConnectablePath" type="Path2D"]
+self_modulate = Color( 0, 1, 0, 1 )
 curve = SubResource( 1 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_lock_": true
+}
+start_point_connections = {
+}
+end_point_connections = {
 }
