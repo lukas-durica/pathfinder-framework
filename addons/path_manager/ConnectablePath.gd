@@ -77,8 +77,10 @@ func _to_string():
 	return name
 
 func _renamed():
-	start_point_area.path_renamed(path_name, name)
-	end_point_area.path_renamed(path_name, name)
+	if is_instance_valid(start_point_area):
+		start_point_area.path_renamed(path_name, name)
+	if is_instance_valid(end_point_area): 
+		end_point_area.path_renamed(path_name, name)
 	path_name = name
 	_name_label.text = name
 	update()

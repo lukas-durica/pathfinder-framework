@@ -15,21 +15,25 @@ func _enter_tree():
 			preload("ConnectablePath.gd"),
 			preload("res://addons/path_manager/Path2D.svg"))
 	
+	#cannot use add_castom_type for PathfindingPath due to this bug/lack of
+	#feature
+	#https://github.com/godotengine/godot/issues/29548
+	
 	editor_selection.connect("selection_changed", self, "_on_selection_changed")
-
-func apply_changes():
-	for point_area in get_tree().get_nodes_in_group("point_areas"):
-		point_area.update_connections()
 
 func _exit_tree():
 	editor_selection.disconnect("selection_changed", self, 
 			"_on_selection_changed")
-			
+	
 	remove_custom_type("ConnectablePath")
 	
 	Physics2DServer.set_active(false)
 	
 	print("---===PathManager disabled===---")
+
+func apply_changes():
+	for point_area in get_tree().get_nodes_in_group("point_areas"):
+		point_area.update_connections()
 
 func handles(object : Object) -> bool:
 

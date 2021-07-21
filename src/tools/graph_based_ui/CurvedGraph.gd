@@ -1,4 +1,4 @@
-class_name Graph extends Node2D
+class_name CurvedGraph extends Node2D
 
 
 var paths_data : = {}
@@ -23,7 +23,7 @@ class PathData extends Reference:
 	
 	func _to_string():
 		return "path: {0} -> point: {1}".format(
-					[path, area.get_compound_name()])
+				[path, area.get_compound_name()])
 
 func _ready():
 	yield(get_tree(),"physics_frame")
@@ -51,14 +51,11 @@ func assign_neighbors():
 			path_data.neighbors = get_neighbors(path_data)
 
 func get_neighbors(path_data : PathData)  -> Array:
-	print("get_neighbors")
 	var neighbors : = []
 	
 	var connections_data = path_data.path.get_passable_connections_data(
 			path_data.area.type)
-	print("connections data size: ", connections_data.size())
 	for connection in connections_data:
-		print("connection: ", connection)
 		neighbors.push_back(get_path_data(connection.path, connection.area))
 	
 	

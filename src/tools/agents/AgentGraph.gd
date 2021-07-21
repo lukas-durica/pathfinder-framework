@@ -91,7 +91,6 @@ func run(pths_data : Array):
 	set_process(true)
 
 
-
 func is_in_area() -> bool:
 	if not collision_shape:
 		return false

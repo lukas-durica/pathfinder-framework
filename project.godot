@@ -44,6 +44,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/algorithms/AstarGodot.gd"
 }, {
+"base": "Node",
+"class": "AStarGodotGraph",
+"language": "GDScript",
+"path": "res://src/algorithms/AStarGodotGraph.gd"
+}, {
 "base": "Reference",
 "class": "AStarGraph",
 "language": "GDScript",
@@ -170,9 +175,9 @@ _global_script_classes=[ {
 "path": "res://addons/path_manager/ConnectablePath.gd"
 }, {
 "base": "Node2D",
-"class": "Graph",
+"class": "CurvedGraph",
 "language": "GDScript",
-"path": "res://src/tools/graph_based_ui/Graph.gd"
+"path": "res://src/tools/graph_based_ui/CurvedGraph.gd"
 }, {
 "base": "Reference",
 "class": "GraphBasedAlgorithm",
@@ -239,6 +244,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/path_manager/PathArea.gd"
 }, {
+"base": "ConnectablePath",
+"class": "PathfindingPath",
+"language": "GDScript",
+"path": "res://addons/path_manager/PathfindingPath.gd"
+}, {
 "base": "PathFollow2D",
 "class": "RemotePathFollow",
 "language": "GDScript",
@@ -257,6 +267,7 @@ _global_script_class_icons={
 "AStarCBS": "",
 "AStarDefault": "",
 "AStarGodot": "",
+"AStarGodotGraph": "",
 "AStarGraph": "",
 "AStarMAPDCpp": "",
 "AStarMAPDCppWrapper": "",
@@ -282,7 +293,7 @@ _global_script_class_icons={
 "BreadthFirstSearchDebug": "",
 "CBS": "",
 "ConnectablePath": "",
-"Graph": "",
+"CurvedGraph": "",
 "GraphBasedAlgorithm": "",
 "GraphBasedUI": "",
 "Grid": "",
@@ -296,6 +307,7 @@ _global_script_class_icons={
 "MinBinaryHeapDict": "",
 "MinPriorityQueueCpp": "",
 "PathArea": "",
+"PathfindingPath": "",
 "RemotePathFollow": "",
 "UserInteraface": ""
 }

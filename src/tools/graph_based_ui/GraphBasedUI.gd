@@ -17,7 +17,7 @@ var algorithm
 onready var camera : BasicCamera = $Camera
 
 # the playground
-onready var graph = $Graph
+onready var graph = $CurvedGraph
 
 # reference to user interface 
 onready var user_interface = $UserInterface
@@ -78,7 +78,7 @@ func run():
 		return
 	var goal_point = goal.get_meta("point")
 	
-	var astar : = AStarGraph.new($Graph)
+	var astar : = AStarGodotGraph.new($CurvedGraph)
 	var solution : = astar.find_solution(start_path, agent.path_follow.offset, 
 			goal_point)
 	agent.run(solution)

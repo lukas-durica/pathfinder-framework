@@ -3,7 +3,7 @@
 [ext_resource path="res://src/ui/UI.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/tests/Paths.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/tools/grid_based_ui/Start.tscn" type="PackedScene" id=3]
-[ext_resource path="res://src/tools/graph_based_ui/Graph.gd" type="Script" id=4]
+[ext_resource path="res://src/tools/graph_based_ui/CurvedGraph.gd" type="Script" id=4]
 [ext_resource path="res://src/tools/Camera.tscn" type="PackedScene" id=5]
 [ext_resource path="res://src/tools/graph_based_ui/GraphBasedUI.gd" type="Script" id=6]
 [ext_resource path="res://src/tools/grid_based_ui/Goal.tscn" type="PackedScene" id=8]
@@ -14,10 +14,10 @@ script = ExtResource( 6 )
 
 [node name="UserInterface" parent="." instance=ExtResource( 1 )]
 
-[node name="Graph" type="Node2D" parent="."]
+[node name="CurvedGraph" type="Node2D" parent="."]
 script = ExtResource( 4 )
 
-[node name="Paths" parent="Graph" instance=ExtResource( 2 )]
+[node name="Paths" parent="CurvedGraph" instance=ExtResource( 2 )]
 
 [node name="Camera" parent="." instance=ExtResource( 5 )]
 
@@ -30,8 +30,8 @@ visible = false
 [node name="Agents" type="Node2D" parent="."]
 
 [node name="AgentGraph" parent="Agents" instance=ExtResource( 9 )]
-position = Vector2( 206.777, 300.6 )
-node_path_to_path = NodePath("../../Graph/Paths/StartPath")
+position = Vector2( 227.959, 301.019 )
+node_path_to_path = NodePath("../../CurvedGraph/Paths/StartPath")
 
 [connection signal="algorithms_id_pressed" from="UserInterface" to="." method="_on_UserInterface_algorithms_id_pressed"]
 [connection signal="button_pressed" from="UserInterface" to="." method="_on_UserInterface_button_pressed"]
