@@ -79,8 +79,9 @@ func run():
 	var goal_point = goal.get_meta("point")
 	
 	var astar : = AStarGodotGraph.new($CurvedGraph)
-	var solution : = astar.find_solution(start_path, agent.path_follow.offset, 
-			goal_point)
+	var position_on_path : = start_path.curve.get_closest_point(
+				start_path.to_local(agent.global_position))
+	var solution : = astar.find_solution(start_path, position_on_path, goal_point)
 	agent.run(solution)
 	
 

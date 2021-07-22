@@ -39,7 +39,6 @@ func create_path_data():
 			var areas = path.get_marginal_point_areas()
 			for area in areas:
 				var new_path_data = PathData.new(id, path, area)
-				print("new_path_data: ", new_path_data)
 				paths_data[path] += [new_path_data]
 				paths_data_by_id[id] = new_path_data
 				id += 1
@@ -56,6 +55,7 @@ func get_neighbors(path_data : PathData)  -> Array:
 	var connections_data = path_data.path.get_passable_connections_data(
 			path_data.area.type)
 	for connection in connections_data:
+		print(get_path_data(connection.path, connection.area))
 		neighbors.push_back(get_path_data(connection.path, connection.area))
 	
 	
@@ -68,3 +68,6 @@ func get_path_data(path, area) -> PathData:
 	push_error("Path data: {0} {1} was not found".format(
 			[path.name, area.name]))
 	return null
+
+
+
