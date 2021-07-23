@@ -32,6 +32,7 @@ visible = false
 [node name="AgentGraph" parent="Agents" instance=ExtResource( 9 )]
 position = Vector2( 227.959, 301.019 )
 node_path_to_path = NodePath("../../CurvedGraph/Paths/StartPath")
+path_direction = 1
 
 [connection signal="algorithms_id_pressed" from="UserInterface" to="." method="_on_UserInterface_algorithms_id_pressed"]
 [connection signal="button_pressed" from="UserInterface" to="." method="_on_UserInterface_button_pressed"]

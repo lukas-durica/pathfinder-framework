@@ -4,7 +4,7 @@ class_name AgentGraph extends Node2D
 
 var _is_left_button_down : = false
 var _is_agent_dragged : = false
-var paths_data : = []
+var paths : = []
 
 export (NodePath) var node_path_to_path
 export var speed : = 150.0
@@ -50,10 +50,10 @@ func _process(delta):
 	path_follow.offset += delta * speed * path_direction
 	
 	if can_update_path():
-		var path_data = paths_data.pop_front()
-		if path_data:
+		var path = paths.pop_front()
+		if path:
 			var old_unit_offset = path_follow.unit_offset
-			align_to_path(path_data.path, global_position)
+			align_to_path(path, global_position)
 			var new_unit_offset = path_follow.unit_offset
 			if can_invert_direction(old_unit_offset, new_unit_offset):
 				invert_direction()
@@ -70,24 +70,13 @@ func _notification(what):
 				if _is_agent_dragged:
 					path_follow.global_position = global_position
 
-func run(pths_data : Array):
-	if pths_data.empty():
+func run(p_paths : Array):
+	if p_paths.empty():
 		push_error(name + "paths data is empty!")
 		return
-	paths_data = pths_data
-	# compute initial direction
-	var path : ConnectablePath = paths_data.front().path
-	var area : MarginalPointArea = paths_data.front().area
-	
-	if area == path.get_point_area(MarginalPointArea.START):
-		path_direction = -1
-	elif area == path.get_point_area(MarginalPointArea.END):
-		path_direction = 1
-	else:
-		push_error("Area does not match!")
-	
+	paths = p_paths
 	# agent is already alligned to this path, thus pop front it
-	paths_data.pop_front()
+	paths.pop_front()
 	set_process(true)
 
 

@@ -76,12 +76,13 @@ func run():
 	if not goal.has_meta("point") or not goal.get_meta("point"):
 		push_error("Goal Point is invalid")
 		return
-	var goal_point = goal.get_meta("point")
+
+	var goal_area = goal.get_meta("point")
 	
-	var astar : = AStarGodotGraph.new($CurvedGraph)
-	var position_on_path : = start_path.curve.get_closest_point(
-				start_path.to_local(agent.global_position))
-	var solution : = astar.find_solution(start_path, position_on_path, goal_point)
+	var a_star : = AStarGodotGraph.new($CurvedGraph)
+	var solution : = a_star.find_solution(start_path, agent.global_position,
+			goal_area.path, goal_area.global_position)
+	
 	agent.run(solution)
 	
 
@@ -116,10 +117,6 @@ func _on_UserInterface_button_pressed(id : int):
 #			next_step()
 		_:
 			push_warning("ButtonId is not valid!")
-
-
-	
-
 
 func _on_UserInterface_algorithms_id_pressed(id):
 	set_algorithm(id)
