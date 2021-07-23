@@ -44,7 +44,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/algorithms/AstarGodot.gd"
 }, {
-"base": "Node",
+"base": "AStar2D",
 "class": "AStarGodotGraph",
 "language": "GDScript",
 "path": "res://src/algorithms/AStarGodotGraph.gd"

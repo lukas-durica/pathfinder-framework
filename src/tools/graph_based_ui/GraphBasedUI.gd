@@ -79,7 +79,8 @@ func run():
 
 	var goal_area = goal.get_meta("point")
 	
-	var a_star : = AStarGodotGraph.new($CurvedGraph)
+	var a_star : = AStarGodotGraph.new()
+	a_star.initialize($CurvedGraph)
 	var solution : = a_star.find_solution(start_path, agent.global_position,
 			goal_area.path, goal_area.global_position)
 	
