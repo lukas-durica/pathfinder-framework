@@ -6,10 +6,7 @@ var ids_by_areas : = {}
 var areas_by_ids : = {}
 var start_id : int
 var goal_id : int
-var start_to_0_area_length : float
-var start_to_1_area_length : float
-var goal_to_0_area_length : float
-var goal_to_1_area_length : float
+var start_goal_connections : = {}
 
 func initialize(grph : CurvedGraph):
 	clear()
@@ -61,49 +58,33 @@ func create_or_get_point_id(point_area : MarginalPointArea) -> int:
 	return area_id
 
 
-func _compute_cost(from_id, to_id):
+func _compute_cost(from_id : int, to_id : int) -> float:
 	print("from_id: ", from_id)
 	print("to_id: ", to_id)
 	
-	if from_id == start_id:
-		pass
+	if from_id == start_id || to_id == start_id \
+			|| from_id == goal_id || to_id == goal_id:
+		print("is start or goal: ", start_goal_connections[Vector2(from_id, 
+				to_id)])
+		return start_goal_connections[Vector2(from_id, to_id)]
 	
-	#start_to_0_area_length
-	#start_to_1_area_length
-	#goal_to_0_area_length
-	#goal_to_1_area_length
 	
 	var area_from_path = areas_by_ids[from_id].path
 	if area_from_path == areas_by_ids[to_id].path:
+		print("path match: ", area_from_path.get_length())
 		return area_from_path.get_length()
-	return 0
+	print("not match returning zero")
+	return 0.0
 
 func find_solution(start_path : ConnectablePath, start_point : Vector2,
 			goal_path : ConnectablePath, goal_point : Vector2) -> Array:
 	
 	var local_start_point : = start_path.to_local(start_point)
 	var local_goal_point : = goal_path.to_local(goal_point)
-#
-#	var closest_start_point : = start_path.curve.get_closest_point(
-#			local_start_point)
-#	var closest_goal_point : = goal_path.curve.get_closest_point(
-#			local_goal_point)
 
 	var start_offset : = start_path.curve.get_closest_offset(local_start_point)
 	var goal_offset : = goal_path.curve.get_closest_offset(local_goal_point)
 
-#
-#	var global_start_point : = start_path.to_global(closest_start_point)
-#	var global_goal_point : = goal_path.to_global(closest_goal_point)
-#
-#	print("closest_start_point: ", closest_start_point)
-#	print("closest_goal_point: ", closest_goal_point)
-	
-	#offset
-	#length - offset
-	
-	
-	
 	start_id = get_available_point_id()
 	add_point(start_id, start_point)
 	
@@ -116,17 +97,37 @@ func find_solution(start_path : ConnectablePath, start_point : Vector2,
 	var start_path_areas : =  start_path.get_marginal_point_areas()
 	var goal_path_areas : =  goal_path.get_marginal_point_areas()
 	
-	start_to_0_area_length = start_offset
-	start_to_1_area_length = start_path.get_length() - start_offset
-	
-	goal_to_0_area_length = goal_offset
-	goal_to_1_area_length = start_path.get_length() - goal_offset
-	
 	connect_points(start_id, ids_by_areas[start_path_areas[0]])
 	connect_points(start_id, ids_by_areas[start_path_areas[1]])
 	
 	connect_points(goal_id, ids_by_areas[goal_path_areas[0]])
 	connect_points(goal_id, ids_by_areas[goal_path_areas[1]])
+	
+	var id_area = ids_by_areas[start_path_areas[0]]
+	
+	#needs refactor
+	start_goal_connections[Vector2(start_id, id_area)] = start_offset
+	start_goal_connections[Vector2(id_area, start_id)] = start_offset
+	
+	id_area = ids_by_areas[start_path_areas[1]]
+	
+	start_goal_connections[Vector2(start_id, id_area)] \
+			 = start_path.get_length() - start_offset
+	start_goal_connections[Vector2(id_area, start_id)] \
+			 = start_path.get_length() - start_offset
+	
+	id_area = ids_by_areas[goal_path_areas[0]]
+	
+	start_goal_connections[Vector2(goal_id, id_area)] = goal_offset
+	start_goal_connections[Vector2(id_area, goal_id)] = goal_offset
+	
+	id_area = ids_by_areas[goal_path_areas[1]]
+	
+	start_goal_connections[Vector2(goal_id, id_area)] \
+			= goal_path.get_length() - goal_offset
+	start_goal_connections[Vector2(id_area, goal_id)] \
+			= goal_path.get_length() - goal_offset
+		
 	
 	#cast PoolArrayInt to Array for function pop_front and pop_back
 	var id_path : Array = get_id_path(start_id, goal_id)
