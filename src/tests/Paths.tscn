@@ -32,6 +32,7 @@ __meta__ = {
 "_edit_lock_": true
 }
 start_point_connections = {
+
 }
 end_point_connections = {
 "LongPath": true,
@@ -66,6 +67,7 @@ start_point_connections = {
 "ShortPath": true
 }
 end_point_connections = {
+
 }
 
 [node name="LongPath" type="Path2D" parent="."]
@@ -83,7 +85,6 @@ end_point_connections = {
 "EndPath": true,
 "ShortPath": false
 }
-
 [connection signal="area_entered" from="StartPath/Start" to="StartPath/Start" method="_on_Area2D_area_entered"]
 [connection signal="area_exited" from="StartPath/Start" to="StartPath/Start" method="_on_Area2D_area_exited"]
 [connection signal="input_event" from="StartPath/Start" to="StartPath/Start" method="_on_Area2D_input_event"]

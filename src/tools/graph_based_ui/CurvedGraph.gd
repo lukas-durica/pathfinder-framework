@@ -55,7 +55,7 @@ func get_neighbors(path_data : PathData)  -> Array:
 	var connections_data = path_data.path.get_passable_connections_data(
 			path_data.area.type)
 	for connection in connections_data:
-		print(get_path_data(connection.path, connection.area))
+		#print(get_path_data(connection.path, connection.area))
 		neighbors.push_back(get_path_data(connection.path, connection.area))
 	
 	

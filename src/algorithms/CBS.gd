@@ -111,9 +111,9 @@ func find_solution(starts_and_goals : Array):
 		
 		# if there is no conflict we have solution
 		if conflict.type == ConflictType.NONE:
-			print("cost: ", current.cost)
-			print("closed nodes: ", closed_nodes)
-			print("open_nodes: ", open.size() + 1)
+			#print("cost: ", current.cost)
+			#print("closed nodes: ", closed_nodes)
+			#print("open_nodes: ", open.size() + 1)
 			return current.solution
 		
 		# 2 is number of agents in the any conflict

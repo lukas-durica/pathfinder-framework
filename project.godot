@@ -74,7 +74,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/algorithms/AStarMAPDOrientedCppWrapper.gd"
 }, {
-"base": "",
+"base": "Reference",
 "class": "AStarMAPFCpp",
 "language": "NativeScript",
 "path": "res://bin/AStarMAPF.gdns"
@@ -234,7 +234,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/data_strunctures/MinBinaryHeapDict.gd"
 }, {
-"base": "",
+"base": "Reference",
 "class": "MinPriorityQueueCpp",
 "language": "NativeScript",
 "path": "res://bin/MinPriorityQueue.gdns"
@@ -325,7 +325,7 @@ window/size/height=960
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/path_manager/plugin.cfg" )
+enabled=PoolStringArray( "path_manager" )
 
 [mono]
 

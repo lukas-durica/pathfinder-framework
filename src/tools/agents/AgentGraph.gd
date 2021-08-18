@@ -127,13 +127,13 @@ func invert_direction():
 	path_direction *= -1
 
 func _exit_tree():
-	print("agent exiting tree")
-	print("path_follow: ", path_follow)
-	print("is_instance_valid(path_follow): ", is_instance_valid(path_follow))
-	if is_instance_valid(path_follow):
-		print("path_follow.is_inside_tree(): ", 
-				path_follow.is_inside_tree())
+	#print("agent exiting tree")
+	#print("path_follow: ", path_follow)
+	#print("is_instance_valid(path_follow): ", is_instance_valid(path_follow))
+	#if is_instance_valid(path_follow):
+	#	print("path_follow.is_inside_tree(): ", 
+	#			path_follow.is_inside_tree())
 	if is_instance_valid(path_follow) and not path_follow.is_inside_tree():
-		print("pathfollow queue_free")
+	#	print("pathfollow queue_free")
 		path_follow.free()
 

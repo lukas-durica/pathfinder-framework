@@ -27,6 +27,7 @@ start_point_connections = {
 "TestPath": false
 }
 end_point_connections = {
+
 }
 
 [node name="TestPath" type="Path2D" parent="Paths"]
@@ -40,8 +41,8 @@ start_point_connections = {
 "ConnectablePath": false
 }
 end_point_connections = {
-}
 
+}
 [connection signal="area_entered" from="Paths/ConnectablePath/Start" to="Paths/ConnectablePath/Start" method="_on_Area2D_area_entered"]
 [connection signal="area_exited" from="Paths/ConnectablePath/Start" to="Paths/ConnectablePath/Start" method="_on_Area2D_area_exited"]
 [connection signal="input_event" from="Paths/ConnectablePath/Start" to="Paths/ConnectablePath/Start" method="_on_Area2D_input_event"]

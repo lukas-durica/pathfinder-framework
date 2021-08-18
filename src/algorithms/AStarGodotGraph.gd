@@ -16,15 +16,15 @@ func initialize(grph : CurvedGraph):
 	for path in paths.get_children():
 		path = path as ConnectablePath
 		if path:
-			print("path: ", path.name)
+			#print("path: ", path.name)
 			var point_areas : Array = path.get_marginal_point_areas()
 			for point_area in point_areas:
 				point_area = point_area as MarginalPointArea
 				
 				var area_id = create_or_get_point_id(point_area)
-				print("point_area: {0} id: {1}".format(
-						[point_area.get_compound_name(), area_id]))
-				print("position: ", point_area.global_position)
+				#print("point_area: {0} id: {1}".format(
+				#		[point_area.get_compound_name(), area_id]))
+				#print("position: ", point_area.global_position)
 				var interconnected_areas : Array = \
 						path.get_passable_connection_areas(point_area.type)
 				
@@ -33,16 +33,16 @@ func initialize(grph : CurvedGraph):
 					
 					conn_area = conn_area as MarginalPointArea
 					var conn_area_id : = create_or_get_point_id(conn_area)
-					print("conn_area: {0} id: {1}".format(
-						[conn_area.get_compound_name(), conn_area_id]))
-					print("position: ", conn_area.global_position)
+					#print("conn_area: {0} id: {1}".format(
+					#	[conn_area.get_compound_name(), conn_area_id]))
+					#print("position: ", conn_area.global_position)
 					
 					if not are_points_connected(area_id, conn_area_id):
-						print("connecting: ", area_id, " and ", conn_area_id)
+						#print("connecting: ", area_id, " and ", conn_area_id)
 						connect_points(area_id, conn_area_id)
 			
-			print("connecting: ", ids_by_areas[point_areas[0]], " and ", 
-					ids_by_areas[point_areas[1]])
+			#print("connecting: ", ids_by_areas[point_areas[0]], " and ", 
+			#		ids_by_areas[point_areas[1]])
 			connect_points(ids_by_areas[point_areas[0]], 
 					ids_by_areas[point_areas[1]])
 				
@@ -59,21 +59,21 @@ func create_or_get_point_id(point_area : MarginalPointArea) -> int:
 
 
 func _compute_cost(from_id : int, to_id : int) -> float:
-	print("from_id: ", from_id)
-	print("to_id: ", to_id)
+	#print("from_id: ", from_id)
+	#print("to_id: ", to_id)
 	
 	if from_id == start_id || to_id == start_id \
 			|| from_id == goal_id || to_id == goal_id:
-		print("is start or goal: ", start_goal_connections[Vector2(from_id, 
-				to_id)])
+		#print("is start or goal: ", start_goal_connections[Vector2(from_id, 
+		#		to_id)])
 		return start_goal_connections[Vector2(from_id, to_id)]
 	
 	
 	var area_from_path = areas_by_ids[from_id].path
 	if area_from_path == areas_by_ids[to_id].path:
-		print("path match: ", area_from_path.get_length())
+		#print("path match: ", area_from_path.get_length())
 		return area_from_path.get_length()
-	print("not match returning zero")
+	#print("not match returning zero")
 	return 0.0
 
 func find_solution(start_path : ConnectablePath, start_point : Vector2,
@@ -91,8 +91,8 @@ func find_solution(start_path : ConnectablePath, start_point : Vector2,
 	goal_id = get_available_point_id()
 	add_point(goal_id, goal_point)
 	
-	print("start_id: ", start_id)
-	print("goal_id: ", goal_id)
+	#print("start_id: ", start_id)
+	#print("goal_id: ", goal_id)
 	
 	var start_path_areas : =  start_path.get_marginal_point_areas()
 	var goal_path_areas : =  goal_path.get_marginal_point_areas()
@@ -132,8 +132,8 @@ func find_solution(start_path : ConnectablePath, start_point : Vector2,
 	#cast PoolArrayInt to Array for function pop_front and pop_back
 	var id_path : Array = get_id_path(start_id, goal_id)
 	
-	print("solution id: ", id_path)
-	print("solution pn: ", get_point_path(start_id, goal_id))
+	#print("solution id: ", id_path)
+	#print("solution pn: ", get_point_path(start_id, goal_id))
 	
 	remove_point(start_id)
 	remove_point(goal_id)
