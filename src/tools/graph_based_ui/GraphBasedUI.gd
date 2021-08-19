@@ -10,6 +10,9 @@ const START_SCENE = preload("res://src/tools/grid_based_ui/Start.tscn")
 const GOAL_SCENE = preload("res://src/tools/grid_based_ui/Goal.tscn")
 const AGENT_SCENE = preload("res://src/tools/agents/AgentGraph.tscn")
 
+
+export(NodePath) var path_test_node
+
 # the pathfinding algorithm 
 var algorithm
 
@@ -78,6 +81,8 @@ func run():
 		return
 
 	var goal_area = goal.get_meta("point")
+	
+	print("goal_area.path: ", goal_area.path.name)
 	
 	var a_star : = AStarGodotGraph.new()
 	a_star.initialize($CurvedGraph)

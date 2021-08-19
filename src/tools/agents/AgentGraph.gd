@@ -65,7 +65,7 @@ func _notification(what):
 		match what:
 			NOTIFICATION_TRANSFORM_CHANGED:
 				if _is_left_button_down and not _is_agent_dragged \
-						and is_in_area():
+						and is_mouse_in_area():
 					_is_agent_dragged = true
 				if _is_agent_dragged:
 					path_follow.global_position = global_position
@@ -74,13 +74,13 @@ func run(p_paths : Array):
 	if p_paths.empty():
 		push_error(name + "paths data is empty!")
 		return
+	print("p_paths: ", p_paths)
 	paths = p_paths
 	# agent is already alligned to this path, thus pop front it
 	paths.pop_front()
 	set_process(true)
 
-
-func is_in_area() -> bool:
+func is_mouse_in_area() -> bool:
 	if not collision_shape:
 		return false
 	var extents = collision_shape.shape.extents

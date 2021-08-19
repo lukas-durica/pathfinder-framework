@@ -1,19 +1,9 @@
-extends Node2D
+tool
 
-var astar : = AStar2D.new()
+class_name TestNode extends Node2D
 
-func _ready():
-	astar.add_point(0, Vector2.ZERO)
-	astar.add_point(1, Vector2.ZERO)
-	astar.add_point(2, Vector2.ZERO)
-	astar.connect_points(0, 1)
-	astar.connect_points(1, 2)
-	for point_id in astar.get_points():
-		#print(point_id, ": ", astar.get_point_position(point_id))
-		print(point_id ,": conn: ", astar.get_point_connections(point_id))
-	print(astar.get_points())
-	
-	
-	
+export(NodePath) parent_path : Node setget set_parent_path
 
 
+func set_parent_path(value : NodePath):
+	pass

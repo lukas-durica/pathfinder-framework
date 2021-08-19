@@ -25,7 +25,7 @@ script = ExtResource( 4 )
 visible = false
 
 [node name="Goal" parent="." instance=ExtResource( 8 )]
-visible = false
+position = Vector2( 377.069, 103.133 )
 
 [node name="Agents" type="Node2D" parent="."]
 
@@ -33,6 +33,7 @@ visible = false
 position = Vector2( 227.959, 301.019 )
 node_path_to_path = NodePath("../../CurvedGraph/Paths/StartPath")
 path_direction = 1
+
 [connection signal="algorithms_id_pressed" from="UserInterface" to="." method="_on_UserInterface_algorithms_id_pressed"]
 [connection signal="button_pressed" from="UserInterface" to="." method="_on_UserInterface_button_pressed"]
 [connection signal="options_id_pressed" from="UserInterface" to="." method="_on_UserInterface_options_id_pressed"]
