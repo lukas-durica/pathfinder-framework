@@ -22,10 +22,10 @@ script = ExtResource( 4 )
 [node name="Camera" parent="." instance=ExtResource( 5 )]
 
 [node name="Start" parent="." instance=ExtResource( 3 )]
-visible = false
+position = Vector2( 425.464, 149.942 )
 
 [node name="Goal" parent="." instance=ExtResource( 8 )]
-position = Vector2( 377.069, 103.133 )
+position = Vector2( 656.132, 301.792 )
 
 [node name="Agents" type="Node2D" parent="."]
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://data/textures/actors/squares/target.png" type="Texture" id=1]
-[ext_resource path="res://src/tools/grid_based_ui/Goal.gd" type="Script" id=2]
+[ext_resource path="res://PathAligner2D.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/tools/DragNotifier2D.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
@@ -9,10 +9,6 @@ extents = Vector2( 23, 23 )
 
 [node name="Goal" type="Sprite"]
 texture = ExtResource( 1 )
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="Area2D" type="Area2D" parent="."]
 
@@ -20,3 +16,8 @@ __meta__ = {
 shape = SubResource( 1 )
 
 [node name="DragNotifier2D" parent="." instance=ExtResource( 3 )]
+sprite_node_path = NodePath("..")
+
+[node name="PathAligner2D" parent="." instance=ExtResource( 2 )]
+area_node_path = NodePath("../Area2D")
+drag_notifier_node_path = NodePath("../DragNotifier2D")
