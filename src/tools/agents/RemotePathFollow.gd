@@ -1,3 +1,5 @@
+tool
+
 class_name RemotePathFollow extends PathFollow2D
 
 onready var remote_transform : = $RemoteTransform2D

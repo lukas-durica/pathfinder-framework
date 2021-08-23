@@ -2,11 +2,14 @@ tool
 
 class_name PathAligner2D extends Node2D
 
+signal aligned_to_path(path)
+signal unaligned_to_path()
+
 export(NodePath) var area_node_path : NodePath setget _set_area_node_path
+export(NodePath) var node_to_align_node_path : NodePath
 export(NodePath) var drag_notifier_node_path : NodePath setget \
 		_set_drag_notifier_path_node
 
-var _aligned_path : Path2D
 
 onready var _area : Area2D
 onready var _drag_notifier : DragNotifier2D
@@ -15,12 +18,12 @@ func _set_area_node_path(value : NodePath):
 	area_node_path = value
 	call_deferred("process_area")
 
+
 func _set_drag_notifier_path_node(value : NodePath):
 	drag_notifier_node_path = value
 	# call deferred function due to the bug? setters are triggered before
 	# the node is added to the tree
 	call_deferred("process_drag_notifier")
-	
 
 func process_area():
 	if has_node(area_node_path):
@@ -38,7 +41,9 @@ func align_to_overlapped_path(node : Node2D):
 	var path : = find_first_overlapped_path()
 	if is_instance_valid(path):
 		align_to_path_editor(path, node)
-		_aligned_path = path
+		emit_signal("aligned_to_path", path)
+	else:
+		emit_signal("unaligned_to_path")
 	
 func find_first_overlapped_path() -> ConnectablePath:
 	if is_instance_valid(_area):

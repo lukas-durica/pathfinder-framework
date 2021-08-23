@@ -2,8 +2,8 @@ tool
 
 class_name DragNotifier2D extends Node2D
 
-signal dragging_started(node)
-signal dragging_ended(node)
+signal dragging_started()
+signal dragging_ended()
 
 export(NodePath) var sprite_node_path : NodePath setget _set_sprite_node_path
 
@@ -32,7 +32,7 @@ func _process(delta : float):
 			_is_left_button_down = true
 		elif was_left_button_just_released():
 			if _is_object_dragged:
-				emit_signal("dragging_ended", _sprite)
+				emit_signal("dragging_ended")
 				_is_object_dragged = false
 				print("dragging ended")
 			
@@ -43,7 +43,7 @@ func _process(delta : float):
 			if is_instance_valid(_sprite):
 				if is_mouse_on_sprite():
 					_is_object_dragged = true
-					emit_signal("dragging_started", _sprite)
+					emit_signal("dragging_started")
 					print("dragging_started")
 			else:
 				push_error(name + " : Assign Sprite Node Path!")
