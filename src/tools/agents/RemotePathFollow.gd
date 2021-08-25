@@ -7,6 +7,9 @@ onready var remote_transform : = $RemoteTransform2D
 func set_remote_node(node : Node):
 	remote_transform.remote_path = remote_transform.get_path_to(node)
 
+func clear_remote_node():
+	remote_transform.remote_path = ""
+
 #func get_closest_area() -> MarginalPointArea:
 #	var parent : = get_parent()
 #	print(parent.name)

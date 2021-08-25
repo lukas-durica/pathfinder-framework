@@ -20,4 +20,5 @@ sprite_node_path = NodePath("..")
 
 [node name="PathAligner2D" parent="." instance=ExtResource( 2 )]
 area_node_path = NodePath("../Area2D")
+node_to_align_node_path = NodePath("..")
 drag_notifier_node_path = NodePath("../DragNotifier2D")

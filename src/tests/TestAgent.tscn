@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://icon.png" type="Texture" id=1]
 [ext_resource path="res://src/tools/common/DragNotifier2D.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/tools/common/PathAligner2D.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/tools/common/PathConnector2D.tscn" type="PackedScene" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 30, 30 )
@@ -22,4 +23,8 @@ sprite_node_path = NodePath("../Sprite")
 
 [node name="PathAligner2D" parent="." instance=ExtResource( 3 )]
 area_node_path = NodePath("../Area2D")
+node_to_align_node_path = NodePath("..")
 drag_notifier_node_path = NodePath("../DragNotifier2D")
+
+[node name="PathConnector2D" parent="." instance=ExtResource( 4 )]
+path_aligner_node_path = NodePath("../PathAligner2D")
