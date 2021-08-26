@@ -141,14 +141,27 @@ func find_solution(start_path : ConnectablePath, start_point : Vector2,
 	id_path.pop_front()
 	id_path.pop_back()
 	
+#	var solution : = []
+#	solution.push_back(areas_by_ids[id_path[0]].path)
+#	var idx : = 0
+#	for point_id in id_path:
+#		if idx % 2 != 0:
+#			solution.push_back(areas_by_ids[point_id].path)
+#		idx += 1
+	
+	var last_path
 	var solution : = []
-	solution.push_back(areas_by_ids[id_path[0]].path)
-	var idx : = 0
 	for point_id in id_path:
-		if idx % 2 != 0:
-			solution.push_back(areas_by_ids[point_id].path)
-		idx += 1
+		
+		
+		if last_path != areas_by_ids[point_id].path:
+			solution.push_back(areas_by_ids[point_id])
+			last_path = areas_by_ids[point_id].path
+			print(areas_by_ids[point_id].get_compound_name())
+		
 	
-	
+
+#
 	return solution
+	#return solution
 

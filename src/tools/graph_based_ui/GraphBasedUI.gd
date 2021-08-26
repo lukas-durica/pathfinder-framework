@@ -76,18 +76,19 @@ func run():
 		if path_follow_parent and path_follow_parent is ConnectablePath:
 			start_path = path_follow_parent
 	
-	if not goal.has_meta("point") or not goal.get_meta("point"):
-		push_error("Goal Point is invalid")
-		return
+	#if not goal.has_meta("point") or not goal.get_meta("point"):
+	#	push_error("Goal Point is invalid")
+	#	return
 
-	var goal_area = goal.get_meta("point")
+	#var goal_area = goal.get_meta("point")
 	
-	print("goal_area.path: ", goal_area.path.name)
+	#print("goal_area.path: ", goal_area.path.name)
 	
 	var a_star : = AStarGodotGraph.new()
 	a_star.initialize($CurvedGraph)
+	print("goal.path: ", goal.aligned_path)
 	var solution : = a_star.find_solution(start_path, agent.global_position,
-			goal_area.path, goal_area.global_position)
+			goal.aligned_path, goal.global_position)
 	
 	agent.run(solution)
 	

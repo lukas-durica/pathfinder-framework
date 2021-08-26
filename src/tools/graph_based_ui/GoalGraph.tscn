@@ -1,14 +1,16 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://data/textures/actors/squares/target.png" type="Texture" id=1]
 [ext_resource path="res://src/tools/common/PathAligner2D.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/tools/common/DragNotifier2D.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/tools/graph_based_ui/GoalGraph.gd" type="Script" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 23, 23 )
 
 [node name="GoalGraph" type="Sprite"]
 texture = ExtResource( 1 )
+script = ExtResource( 4 )
 
 [node name="Area2D" type="Area2D" parent="."]
 
@@ -22,3 +24,7 @@ sprite_node_path = NodePath("..")
 area_node_path = NodePath("../Area2D")
 node_to_align_node_path = NodePath("..")
 drag_notifier_node_path = NodePath("../DragNotifier2D")
+blah = "jebnutost"
+
+[connection signal="aligned_to_path" from="PathAligner2D" to="." method="_on_PathAligner2D_aligned_to_path"]
+[connection signal="unaligned_to_path" from="PathAligner2D" to="." method="_on_PathAligner2D_unaligned_to_path"]

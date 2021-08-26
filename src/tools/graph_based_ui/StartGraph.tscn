@@ -10,14 +10,16 @@ extents = Vector2( 23, 23 )
 [node name="Start" type="Sprite"]
 texture = ExtResource( 1 )
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area3D" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area3D"]
 shape = SubResource( 1 )
 
 [node name="DragNotifier2D" parent="." instance=ExtResource( 2 )]
 sprite_node_path = NodePath("..")
 
 [node name="PathAligner2D" parent="." instance=ExtResource( 3 )]
-area_node_path = NodePath("../Area2D")
+area_node_path = NodePath("../Area3D")
+node_to_align_node_path = NodePath("..")
 drag_notifier_node_path = NodePath("../DragNotifier2D")
+blah = "kokocina"

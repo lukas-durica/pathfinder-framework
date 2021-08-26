@@ -6,4 +6,10 @@
 position = Vector2( 22.6667, 7.33333 )
 script = ExtResource( 1 )
 
-[node name="Test" type="Node2D" parent="."]
+[node name="Position1" type="Position2D" parent="."]
+position = Vector2( 5.0484, 15.1453 )
+__meta__ = {
+"_gizmo_extents_": 70.3
+}
+
+[node name="Position2" type="Position2D" parent="."]

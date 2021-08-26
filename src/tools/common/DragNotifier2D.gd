@@ -16,6 +16,7 @@ onready var _sprite : Sprite
 func _set_sprite_node_path(value : NodePath):
 	sprite_node_path = value
 	call_deferred("process_sprite")
+	
 
 func process_sprite():
 	if has_node(sprite_node_path):

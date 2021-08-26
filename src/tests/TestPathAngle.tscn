@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://addons/path_manager/ConnectablePath.gd" type="Script" id=1]
 [ext_resource path="res://src/tests/TestAgent.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/tools/graph_based_ui/GoalGraph.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/tools/agents/AgentGraph.tscn" type="PackedScene" id=4]
 
 [sub_resource type="Curve2D" id=1]
 _data = {
@@ -45,10 +46,13 @@ end_point_connections = {
 }
 
 [node name="TestAgent2" parent="." instance=ExtResource( 2 )]
-position = Vector2( 712.001, 661.794 )
+position = Vector2( 915.027, 251.167 )
 
 [node name="GoalGraph" parent="." instance=ExtResource( 3 )]
-position = Vector2( 649.914, 400.535 )
+position = Vector2( 513.825, 178.451 )
+
+[node name="AgentGraph" parent="." instance=ExtResource( 4 )]
+position = Vector2( 401.342, 494.78 )
 
 [connection signal="area_entered" from="Paths/ConnectablePath/Start" to="Paths/ConnectablePath/Start" method="_on_Area2D_area_entered"]
 [connection signal="area_exited" from="Paths/ConnectablePath/Start" to="Paths/ConnectablePath/Start" method="_on_Area2D_area_exited"]

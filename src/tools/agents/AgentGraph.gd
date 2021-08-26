@@ -2,24 +2,21 @@ tool
 
 class_name AgentGraph extends Node2D
 
-var _is_left_button_down : = false
-var _is_agent_dragged : = false
-var paths : = []
-
+# to remember the path for runtime
 export (NodePath) var node_path_to_path
 export var speed : = 150.0
 export (int, -1, 1, 1) var path_direction : = 1
 
-onready var path_follow : = $ResetTransform/RemotePathFollow
-#var path_follow
-onready var visualization : = $Visualization/AnimatedSprite
-onready var collision_shape : = $Area2D/CollisionShape2D
-onready var area : = $Area2D
+var paths : = []
+var points : = []
+var path_follow : RemotePathFollow
+
+onready var visualization : = $Visualization/Sprite
+onready var path_connector : = $PathConnector2D
 
 func _ready():
-	if Engine.editor_hint:
-		set_notify_transform(true)
-	else:
+	if not Engine.editor_hint:
+		path_follow = path_connector.find_remote_path_follow()
 		if not node_path_to_path.is_empty():
 			var path = get_node(node_path_to_path)
 			align_to_path(path, global_position)
@@ -29,29 +26,18 @@ func _ready():
 	$Visualization/Label.text = name
 
 func _process(delta):
-	if Engine.editor_hint:
-		if Input.is_mouse_button_pressed(BUTTON_LEFT) \
-				and not _is_left_button_down:
-			_is_left_button_down = true
-		elif not Input.is_mouse_button_pressed(BUTTON_LEFT) \
-				and _is_left_button_down:
-			if _is_agent_dragged:
-				var entered_path = find_overlapped_path()
-				if entered_path:
-					align_to_path_editor(entered_path, global_position)
-				else:
-					node_path_to_path = ""
-			_is_left_button_down = false
-			#entered_path = null
-			_is_agent_dragged = false
-		return
 	# update_position
+	
+	if Engine.editor_hint:
+		return
 	
 	path_follow.offset += delta * speed * path_direction
 	
 	if can_update_path():
-		var path = paths.pop_front()
-		if path:
+		var point = points.pop_front()
+		
+		if point:
+			var path = point.path
 			var old_unit_offset = path_follow.unit_offset
 			align_to_path(path, global_position)
 			var new_unit_offset = path_follow.unit_offset
@@ -59,40 +45,35 @@ func _process(delta):
 				invert_direction()
 		else:
 			set_process(false)
+	
 
-func _notification(what):
-	if Engine.editor_hint:
-		match what:
-			NOTIFICATION_TRANSFORM_CHANGED:
-				if _is_left_button_down and not _is_agent_dragged \
-						and is_mouse_in_area():
-					_is_agent_dragged = true
-				if _is_agent_dragged:
-					path_follow.global_position = global_position
-
-func run(p_paths : Array):
-	if p_paths.empty():
+func run(p_points : Array):
+	if p_points.empty():
 		push_error(name + "paths data is empty!")
 		return
-	print("p_paths: ", p_paths)
-	paths = p_paths
+	
+	points = p_points
 	# agent is already alligned to this path, thus pop front it
-	paths.pop_front()
+	var point : MarginalPointArea = points[0]
+	path_direction = -1 if point.type == MarginalPointArea.START else 1
+	points.pop_front()
 	set_process(true)
 
-func is_mouse_in_area() -> bool:
-	if not collision_shape:
-		return false
-	var extents = collision_shape.shape.extents
-	var rect = Rect2(-extents.x, -extents.y, extents.x * 2, extents.y * 2)
-	return rect.has_point(to_local(get_global_mouse_position()))
-		
-func find_overlapped_path() -> ConnectablePath:
-	# find last overlapped path
-	for area_idx in range(area.get_overlapping_areas().size()):
-		if area.get_overlapping_areas()[area_idx] is PathArea:
-			return area.get_overlapping_areas()[area_idx].path
-	return null
+
+
+#func align_to_path(path : Path2D, align_to : Vector2):
+#	if path_follow.get_parent():
+#		HelperFunctions.reparent(path_follow, path)
+#	else:
+#		path.add_child(path_follow)
+#		# set the remote node at the beginning when aligning to path
+#		# and path follow has no parent
+#
+#	path_follow.set_remote_node(self)
+#
+#	var local_origin = path.to_local(align_to)
+#	var closest_offset = path.curve.get_closest_offset(local_origin)
+#	path_follow.offset = closest_offset
 
 func align_to_path(path : Path2D, align_to : Vector2):
 	if path_follow.get_parent():
@@ -107,12 +88,8 @@ func align_to_path(path : Path2D, align_to : Vector2):
 	var local_origin = path.to_local(align_to)
 	var closest_offset = path.curve.get_closest_offset(local_origin)
 	path_follow.offset = closest_offset
-	
-func align_to_path_editor(path : Path2D, align_to : Vector2):
-	var local_origin = path.to_local(align_to)
-	var closest_point = path.curve.get_closest_point(local_origin)
-	global_position = path.to_global(closest_point)
-	node_path_to_path = get_path_to(path)
+
+
 	
 func can_update_path() -> bool:
 	return path_direction == 1 and path_follow.unit_offset >= 1.0 \
@@ -126,14 +103,13 @@ func invert_direction():
 	visualization.rotate(PI)
 	path_direction *= -1
 
-func _exit_tree():
-	#print("agent exiting tree")
-	#print("path_follow: ", path_follow)
-	#print("is_instance_valid(path_follow): ", is_instance_valid(path_follow))
-	#if is_instance_valid(path_follow):
-	#	print("path_follow.is_inside_tree(): ", 
-	#			path_follow.is_inside_tree())
-	if is_instance_valid(path_follow) and not path_follow.is_inside_tree():
-	#	print("pathfollow queue_free")
-		path_follow.free()
+func is_on_target() -> bool:
+	print("doplnit")
+	
+	return false
 
+func _on_PathConnector2D_connected_to_path(path):
+	node_path_to_path = get_path_to(path)
+
+func _on_PathConnector2D_disconnected_from_path():
+	node_path_to_path = ""

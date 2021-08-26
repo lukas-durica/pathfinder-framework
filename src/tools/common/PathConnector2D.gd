@@ -2,6 +2,9 @@ tool
 
 class_name PathConnector2D extends Node2D
 
+signal connected_to_path(path)
+signal disconnected_from_path()
+
 export(NodePath) var path_aligner_node_path setget _set_path_aligner_node_path
 export(NodePath) var remote_path_follow_node_path : = "RemotePathFollow"
 
@@ -29,6 +32,7 @@ func connect_to_path(path : Path2D, node : Node2D):
 	remote_path_follow.offset = closest_offset
 	remote_path_follow_node_path = get_path_to(remote_path_follow)
 	remote_path_follow.set_remote_node(node)
+	emit_signal("connected_to_path", path)
 
 func disconnect_from_path(node : Node2D):
 	print("disconnecting from path")
@@ -38,6 +42,7 @@ func disconnect_from_path(node : Node2D):
 	HelperFunctions.reparent(remote_path_follow, self)
 	remote_path_follow.global_position = node.global_position
 	remote_path_follow_node_path = get_path_to(remote_path_follow)
+	emit_signal("disconnected_from_path")
 
 func find_remote_path_follow() -> RemotePathFollow:
 	if has_node(remote_path_follow_node_path):
