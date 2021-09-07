@@ -22,8 +22,8 @@ script = ExtResource( 4 )
 [node name="Camera" parent="." instance=ExtResource( 5 )]
 
 [node name="Goal" parent="." instance=ExtResource( 3 )]
-position = Vector2( 901.648, 298.587 )
-aligned_path_node_path = NodePath("../CurvedGraph/Paths/EndPath")
+position = Vector2( 349.666, 303.429 )
+aligned_path_node_path = NodePath("../CurvedGraph/Paths/StartPath")
 
 [node name="Start" parent="." instance=ExtResource( 7 )]
 position = Vector2( 219.992, 231.303 )
@@ -31,9 +31,9 @@ position = Vector2( 219.992, 231.303 )
 [node name="Agents" type="Node2D" parent="."]
 
 [node name="AgentGraph" parent="Agents" instance=ExtResource( 8 )]
-position = Vector2( 271.919, 301.889 )
-rotation = 0.0195574
-node_path_to_path = NodePath("../../CurvedGraph/Paths/StartPath")
+position = Vector2( 670.284, 229.509 )
+rotation = 0.799566
+node_path_to_path = NodePath("../../CurvedGraph/Paths/LongPath")
 path_direction = 1
 
 [connection signal="algorithms_id_pressed" from="UserInterface" to="." method="_on_UserInterface_algorithms_id_pressed"]

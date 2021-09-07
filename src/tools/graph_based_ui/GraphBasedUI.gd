@@ -57,40 +57,16 @@ func area_was_clicked(area : MarginalPointArea, button_type : int):
 
 # run the pathfinder
 func run():
-	var start_path : ConnectablePath
-	var agent : AgentGraph
-	# if the agent is set runtime
-	if $Agents.get_children().empty():
-		if not start.has_meta("point") or not start.get_meta("point"):
-			push_error("Start has no target!")
-			return
-		var start_point = start.get_meta("point")
-		start_path = start_point.path
-		agent = AGENT_SCENE.instance()
-		$Agents.add_child(agent)
-		agent.align_to_path(start_path, start.global_position)
-	# if the agent is set in the editor
-	else:
-		agent = $Agents.get_children()[0]
-		var path_follow_parent = agent.path_follow.get_parent()
-		if path_follow_parent and path_follow_parent is ConnectablePath:
-			start_path = path_follow_parent
-	
-	#if not goal.has_meta("point") or not goal.get_meta("point"):
-	#	push_error("Goal Point is invalid")
-	#	return
-
-	#var goal_area = goal.get_meta("point")
-	
-	#print("goal_area.path: ", goal_area.path.name)
+	var agent : AgentGraph = $Agents.get_children()[0]
+	var start_path : ConnectablePath = agent.actual_path
 	
 	var a_star : = AStarGodotGraph.new()
 	a_star.initialize($CurvedGraph)
-	print("goal.path: ", goal.aligned_path)
-	var solution : = a_star.find_solution(start_path, agent.global_position,
-			goal.aligned_path, goal.global_position)
 	
-	agent.run(solution)
+	var solution : = a_star.find_solution(start_path, agent.global_position,
+			goal.path, goal.global_position)
+	solution.push_back(goal)
+	agent.run(solution, goal)
 	
 
 func add_agent(path):

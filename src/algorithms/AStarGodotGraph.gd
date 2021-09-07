@@ -6,7 +6,10 @@ var ids_by_areas : = {}
 var areas_by_ids : = {}
 var start_id : int
 var goal_id : int
-var start_goal_connections : = {}
+
+# start and goal are added, creating connections to their neighbors and
+# computing distance to them storing in this dictionary
+var additional_connection_lengths : = {}
 
 func initialize(grph : CurvedGraph):
 	clear()
@@ -66,7 +69,7 @@ func _compute_cost(from_id : int, to_id : int) -> float:
 			|| from_id == goal_id || to_id == goal_id:
 		#print("is start or goal: ", start_goal_connections[Vector2(from_id, 
 		#		to_id)])
-		return start_goal_connections[Vector2(from_id, to_id)]
+		return additional_connection_lengths[Vector2(from_id, to_id)]
 	
 	
 	var area_from_path = areas_by_ids[from_id].path
@@ -79,89 +82,85 @@ func _compute_cost(from_id : int, to_id : int) -> float:
 func find_solution(start_path : ConnectablePath, start_point : Vector2,
 			goal_path : ConnectablePath, goal_point : Vector2) -> Array:
 	
-	var local_start_point : = start_path.to_local(start_point)
-	var local_goal_point : = goal_path.to_local(goal_point)
-
-	var start_offset : = start_path.curve.get_closest_offset(local_start_point)
-	var goal_offset : = goal_path.curve.get_closest_offset(local_goal_point)
-
-	start_id = get_available_point_id()
-	add_point(start_id, start_point)
+	start_id = insert_point_to_graph(start_path, start_point)
+	goal_id = insert_point_to_graph(goal_path, goal_point)
 	
-	goal_id = get_available_point_id()
-	add_point(goal_id, goal_point)
+	# start and goal are situated on the same path, but distance between them
+	# on this path is not necessarily the shortest
+	if start_path == goal_path:
+		connect_points(start_id, goal_id)
+		store_distance_between_start_and_goal(start_path, start_point, 
+				goal_path, goal_point)
 	
-	#print("start_id: ", start_id)
-	#print("goal_id: ", goal_id)
-	
-	var start_path_areas : =  start_path.get_marginal_point_areas()
-	var goal_path_areas : =  goal_path.get_marginal_point_areas()
-	
-	connect_points(start_id, ids_by_areas[start_path_areas[0]])
-	connect_points(start_id, ids_by_areas[start_path_areas[1]])
-	
-	connect_points(goal_id, ids_by_areas[goal_path_areas[0]])
-	connect_points(goal_id, ids_by_areas[goal_path_areas[1]])
-	
-	var id_area = ids_by_areas[start_path_areas[0]]
-	
-	#needs refactor
-	start_goal_connections[Vector2(start_id, id_area)] = start_offset
-	start_goal_connections[Vector2(id_area, start_id)] = start_offset
-	
-	id_area = ids_by_areas[start_path_areas[1]]
-	
-	start_goal_connections[Vector2(start_id, id_area)] \
-			 = start_path.get_length() - start_offset
-	start_goal_connections[Vector2(id_area, start_id)] \
-			 = start_path.get_length() - start_offset
-	
-	id_area = ids_by_areas[goal_path_areas[0]]
-	
-	start_goal_connections[Vector2(goal_id, id_area)] = goal_offset
-	start_goal_connections[Vector2(id_area, goal_id)] = goal_offset
-	
-	id_area = ids_by_areas[goal_path_areas[1]]
-	
-	start_goal_connections[Vector2(goal_id, id_area)] \
-			= goal_path.get_length() - goal_offset
-	start_goal_connections[Vector2(id_area, goal_id)] \
-			= goal_path.get_length() - goal_offset
-		
-	
-	#cast PoolArrayInt to Array for function pop_front and pop_back
 	var id_path : Array = get_id_path(start_id, goal_id)
-	
-	#print("solution id: ", id_path)
-	#print("solution pn: ", get_point_path(start_id, goal_id))
-	
+	print("id_path: ", id_path)
+	# remove temporary points start and goal
 	remove_point(start_id)
 	remove_point(goal_id)
 	
 	id_path.pop_front()
 	id_path.pop_back()
 	
-#	var solution : = []
-#	solution.push_back(areas_by_ids[id_path[0]].path)
-#	var idx : = 0
-#	for point_id in id_path:
-#		if idx % 2 != 0:
-#			solution.push_back(areas_by_ids[point_id].path)
-#		idx += 1
+	return reconstruct_solution(id_path)
 	
-	var last_path
+	
+
+func reconstruct_solution(id_path : Array) -> Array:
 	var solution : = []
+	var last_path
 	for point_id in id_path:
-		
-		
 		if last_path != areas_by_ids[point_id].path:
 			solution.push_back(areas_by_ids[point_id])
 			last_path = areas_by_ids[point_id].path
 			print(areas_by_ids[point_id].get_compound_name())
-		
-	
-
-#
 	return solution
-	#return solution
+
+# add, connect point to its neighbors and compute and store distance to them
+func insert_point_to_graph(path : ConnectablePath, point : Vector2) -> int:
+	var point_id = add_point_to_graph(point)
+	connect_point_to_neighbors(path, point_id)
+	store_distance_to_neighbors(path, point_id)
+	return point_id
+
+func connect_point_to_neighbors(path : ConnectablePath, point_id : int):
+	var path_areas : =  path.get_marginal_point_areas()
+	connect_points(point_id, ids_by_areas[path_areas[0]])
+	connect_points(point_id, ids_by_areas[path_areas[1]])
+
+# usually for start point and goal point, added point needs to be manually
+# removed after search
+func add_point_to_graph(point : Vector2) -> int:
+	var point_id = get_available_point_id()
+	add_point(point_id, point)
+	return point_id
+
+func store_distance_to_neighbors(path : ConnectablePath, point_id : int):
+	
+	var point_position = get_point_position(point_id)
+	var offset : = HelperFunctions.get_closest_path_offset(
+			path, point_position)
+	
+	var id_start_area = ids_by_areas[path.start_point_area]
+	# add their combination to make lookup easier
+	additional_connection_lengths[Vector2(point_id, id_start_area)] = offset
+	additional_connection_lengths[Vector2(id_start_area, point_id)] = offset
+	
+	var id_end_area = ids_by_areas[path.end_point_area]
+	additional_connection_lengths[Vector2(point_id, id_end_area)] \
+			= path.get_length() - offset
+	additional_connection_lengths[Vector2(id_end_area, point_id)] \
+			= path.get_length() - offset
+	
+func store_distance_between_start_and_goal(
+			start_path : ConnectablePath, start_point : Vector2,
+			goal_path : ConnectablePath, goal_point : Vector2):
+		var start_offset = HelperFunctions.get_closest_path_offset(
+				start_path, start_point)
+		var goal_offset = HelperFunctions.get_closest_path_offset(
+				goal_path, goal_point)
+		var distance = abs(start_offset - goal_offset)
+		additional_connection_lengths[Vector2(start_id, goal_id)] = distance
+		additional_connection_lengths[Vector2(goal_id, start_id)] = distance
+
+
 

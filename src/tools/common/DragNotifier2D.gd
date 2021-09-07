@@ -27,7 +27,7 @@ func _ready():
 		set_notify_transform(true)
 		_last_global_pos = global_position
 
-func _process(delta : float):
+func _process(_delta : float):
 	if Engine.editor_hint:
 		if was_left_button_just_pressed():
 			_is_left_button_down = true

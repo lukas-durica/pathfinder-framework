@@ -93,7 +93,7 @@ func find_solution(starts_and_goals : Array):
 	open.push(root.cost, root)
 	
 	# just helper variable
-	var closed_nodes : = 0
+	var _closed_nodes : = 0
 	
 	# while open list is not empty
 	while not open.empty():
@@ -161,7 +161,7 @@ func find_solution(starts_and_goals : Array):
 			# if solution is feasible
 			if new_node.cost != INF:
 				open.push(new_node.cost, new_node)
-		closed_nodes += 1
+		_closed_nodes += 1
 	return []
 
 # for every pair of start and goal create states Vector3 and add it to the 
