@@ -371,6 +371,14 @@ func get_opposite_point_area(type : int) -> MarginalPointArea:
 func get_connections(type : int) -> Dictionary:
 	return start_point_connections if is_start(type) else end_point_connections
 
+func get_connected_areas(type : int) -> Array:
+	var connections : = get_connections(type)
+	var point_area : = get_point_area(type)
+	var areas : = []
+	for connection in point_area.connections.values():
+		areas.push_back(connection.area)
+	return areas
+
 func get_passable_connection_areas(type : int) -> Array:
 	var connections : = get_connections(type)
 	var point_area : = get_point_area(type)

@@ -28,11 +28,11 @@ func initialize(grph : CurvedGraph):
 				#print("point_area: {0} id: {1}".format(
 				#		[point_area.get_compound_name(), area_id]))
 				#print("position: ", point_area.global_position)
-				var interconnected_areas : Array = \
-						path.get_passable_connection_areas(point_area.type)
+				var connected_areas : Array = \
+						path.get_connected_areas(point_area.type)
 				
 				# inter_area is at the same position as point_area
-				for conn_area in interconnected_areas:
+				for conn_area in connected_areas:
 					
 					conn_area = conn_area as MarginalPointArea
 					var conn_area_id : = create_or_get_point_id(conn_area)
