@@ -23,17 +23,10 @@ onready var user_interface = $UserInterface
 
 onready var goal : = $Goal
 
-# for setting from the editor
-# x -> start.x
-# y -> start.y
-# z -> goal.x
-# w -> goal.y
-
-
 # run the pathfinder
 func run():
 	var agent : AgentGraph = $Agents.get_children()[0]
-	var a_star : = AStarGodotGraph.new()
+	var a_star : = AStarGodotGraphBiDirectional.new()
 	a_star.initialize($CurvedGraph)
 	
 	var solution : = a_star.find_solution(

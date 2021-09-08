@@ -45,9 +45,9 @@ _global_script_classes=[ {
 "path": "res://src/algorithms/AstarGodot.gd"
 }, {
 "base": "AStar2D",
-"class": "AStarGodotGraph",
+"class": "AStarGodotGraphBiDirectional",
 "language": "GDScript",
-"path": "res://src/algorithms/AStarGodotGraph.gd"
+"path": "res://src/algorithms/AStarGodotGraphBiDirectional.gd"
 }, {
 "base": "Reference",
 "class": "AStarGraph",
@@ -292,7 +292,7 @@ _global_script_class_icons={
 "AStarCBS": "",
 "AStarDefault": "",
 "AStarGodot": "",
-"AStarGodotGraph": "",
+"AStarGodotGraphBiDirectional": "",
 "AStarGraph": "",
 "AStarMAPDCpp": "",
 "AStarMAPDCppWrapper": "",

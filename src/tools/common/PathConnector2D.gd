@@ -22,7 +22,7 @@ func process_path_aligner():
 					"disconnect_from_path")
 
 func connect_to_path(path : Path2D, node : Node2D):
-	print("connecting to path")
+	disconnect_from_path(node)
 	var remote_path_follow : = find_remote_path_follow()
 	if not remote_path_follow:
 		return
@@ -34,7 +34,6 @@ func connect_to_path(path : Path2D, node : Node2D):
 	emit_signal("connected_to_path", path)
 
 func disconnect_from_path(node : Node2D):
-	print("disconnecting from path")
 	var remote_path_follow = find_remote_path_follow()
 	remote_path_follow.parent = self
 	remote_path_follow.remote_node = null

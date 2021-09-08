@@ -17,7 +17,6 @@ func _set_sprite_node_path(value : NodePath):
 	sprite_node_path = value
 	call_deferred("process_sprite")
 	
-
 func process_sprite():
 	if has_node(sprite_node_path):
 		_sprite = get_node(sprite_node_path)
@@ -35,7 +34,6 @@ func _process(_delta : float):
 			if _is_object_dragged:
 				emit_signal("dragging_ended")
 				_is_object_dragged = false
-				print("dragging ended")
 			
 			_is_left_button_down = false
 			_last_global_pos = global_position
@@ -45,7 +43,6 @@ func _process(_delta : float):
 				if is_mouse_on_sprite():
 					_is_object_dragged = true
 					emit_signal("dragging_started")
-					print("dragging_started")
 			else:
 				push_error(name + " : Assign Sprite Node Path!")
 			_last_global_pos = global_position

@@ -56,13 +56,9 @@ position = Vector2( 401.342, 494.78 )
 
 [connection signal="area_entered" from="Paths/ConnectablePath/Start" to="Paths/ConnectablePath/Start" method="_on_Area2D_area_entered"]
 [connection signal="area_exited" from="Paths/ConnectablePath/Start" to="Paths/ConnectablePath/Start" method="_on_Area2D_area_exited"]
-[connection signal="input_event" from="Paths/ConnectablePath/Start" to="Paths/ConnectablePath/Start" method="_on_Area2D_input_event"]
 [connection signal="area_entered" from="Paths/ConnectablePath/End" to="Paths/ConnectablePath/End" method="_on_Area2D_area_entered"]
 [connection signal="area_exited" from="Paths/ConnectablePath/End" to="Paths/ConnectablePath/End" method="_on_Area2D_area_exited"]
-[connection signal="input_event" from="Paths/ConnectablePath/End" to="Paths/ConnectablePath/End" method="_on_Area2D_input_event"]
 [connection signal="area_entered" from="Paths/TestPath/Start" to="Paths/TestPath/Start" method="_on_Area2D_area_entered"]
 [connection signal="area_exited" from="Paths/TestPath/Start" to="Paths/TestPath/Start" method="_on_Area2D_area_exited"]
-[connection signal="input_event" from="Paths/TestPath/Start" to="Paths/TestPath/Start" method="_on_Area2D_input_event"]
 [connection signal="area_entered" from="Paths/TestPath/End" to="Paths/TestPath/End" method="_on_Area2D_area_entered"]
 [connection signal="area_exited" from="Paths/TestPath/End" to="Paths/TestPath/End" method="_on_Area2D_area_exited"]
-[connection signal="input_event" from="Paths/TestPath/End" to="Paths/TestPath/End" method="_on_Area2D_input_event"]

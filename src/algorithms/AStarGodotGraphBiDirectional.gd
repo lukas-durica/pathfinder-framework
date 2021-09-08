@@ -1,4 +1,4 @@
-class_name AStarGodotGraph extends AStar2D
+class_name AStarGodotGraphBiDirectional extends AStar2D
 
 #var a_star : = AStar2D.new()
 var graph 
