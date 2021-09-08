@@ -2,8 +2,6 @@ tool
 
 class_name ConnectablePath extends Path2D
 
-signal point_area_was_clicked(area, button_type)
-								  
 const POINT_ARENA_SCENE = preload(\
 		"res://addons/path_manager/MarginalPointArea.tscn")
 const PATH_AREA_SCENE = preload("res://addons/path_manager/PathArea.tscn")
@@ -52,6 +50,7 @@ onready var path_name : = name
 
 func _ready():
 	if Engine.editor_hint:
+		Physics2DServer.set_active(true)
 		if not curve:
 			curve = Curve2D.new()
 		self_modulate = DEFAULT_COLOR
@@ -124,9 +123,6 @@ func set_path_selected(selected : bool):
 	set_marginal_points_labeling(selected)
 
 
-func _point_area_was_clicked(area : Area2D, button_type : int):
-	emit_signal("point_area_was_clicked", area, button_type)
-
 func load_font():
 	_default_font.font_data = MONTSERRAT_FONT
 	_default_font.size = 10
@@ -154,8 +150,6 @@ func create_point_area(type : int) -> MarginalPointArea:
 	point_area.type = type
 	point_area.path = self
 	point_area.name = "Start" if is_start else "End"
-	point_area.connect("point_area_was_clicked", self, 
-			"_point_area_was_clicked")
 	
 	# set its new position
 	if is_start:
@@ -319,17 +313,28 @@ func color_passable_connections():
 func color_connections(type : int):
 	var point_connections = get_connections(type)
 	var area = get_point_area(type)
-	if not is_instance_valid(area):
+	if not is_area_valid_with_connections(area):
 		return
 	for path_name in point_connections:
-		if area.connections.empty():
-			continue
-		#if passable
-		var shoud_highlight : = true if point_connections[path_name] \
+		var should_highlight : = true if is_passable(path_name) \
 				and _is_selected else false
+		area.connections[path_name].path.color_path(should_highlight)
 
-		area.connections[path_name].path.color_path(shoud_highlight)
-		
+func is_area_valid_with_connections(area):
+	return is_instance_valid(area) and not area.connections.empty()
+
+# whether if in start or end connection is path passable
+func is_passable(path_name : String):
+	return is_passable_in_connections_type(path_name, MarginalPointArea.START) \
+			or is_passable_in_connections_type(path_name, MarginalPointArea.END)
+	
+
+func is_passable_in_connections_type(path_name, type):
+	var point_connections = get_connections(type)
+	return  path_name in point_connections and point_connections[path_name]
+
+
+
 func get_marginal_point_areas() -> Array:
 	var point_areas : = []
 	if is_instance_valid(start_point_area):
@@ -356,6 +361,9 @@ func get_highlight_color(is_highlighted : bool) -> Color:
 
 func get_point_area(type : int) -> MarginalPointArea:
 	return start_point_area if is_start(type) else end_point_area
+
+static func get_opposite_point_area_type(type : int) -> int:
+	return MarginalPointArea.END if is_start(type) else MarginalPointArea.START
 
 func get_opposite_point_area(type : int) -> MarginalPointArea:
 	return end_point_area if is_start(type) else start_point_area

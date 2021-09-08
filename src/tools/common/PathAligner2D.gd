@@ -9,7 +9,6 @@ export(NodePath) var area_node_path : NodePath
 export(NodePath) var node_to_align_node_path : NodePath
 export(NodePath) var drag_notifier_node_path : NodePath setget \
 		_set_drag_notifier_path_node
-export(String) var blah = "x"
 
 var elapsed_time : = 0.0
 
@@ -37,8 +36,6 @@ func align_to_overlapped_path():
 	var node = get_node(node_to_align_node_path)
 	var path : = find_first_overlapped_path()
 	if is_instance_valid(path):
-		blah = "wah"
-		print("blah: ", blah)
 		align_to_path_editor(path, node)
 		emit_signal("aligned_to_path", path, node)
 	else:

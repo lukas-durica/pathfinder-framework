@@ -14,15 +14,16 @@ var path_follow : RemotePathFollow
 var actual_path : Path2D
 var goal_node : Node2D
 
-onready var visualization : = $Visualization/Sprite
+onready var visualization : = $Visualization
 onready var path_connector : = $PathConnector2D
 
 func _ready():
 	if not Engine.editor_hint:
+		actual_path = get_node(node_path_to_path)
 		initialize_path_folow()
-		align_to_path(get_node(node_path_to_path))
-		set_actual_path_from_path_follow()
-	
+		align_path_follow_to_path(actual_path)
+		
+
 	set_name_to_visualization()
 	set_process(false)
 
@@ -33,7 +34,6 @@ func _process(delta):
 	update_path_follow_offset(delta)
 	
 	if is_on_goal():
-		print("is on goal")
 		set_process(false)
 	
 	if can_update_path():
@@ -45,10 +45,7 @@ func _process(delta):
 
 func initialize_path_folow():
 	path_follow = path_connector.find_remote_path_follow()
-	path_follow.set_remote_node(self)
-	
-func set_actual_path_from_path_follow():
-	actual_path = path_follow.get_parent() as Path2D
+	path_follow.remote_node = self
 
 func set_name_to_visualization():
 	$Visualization/Label.text = name
@@ -60,10 +57,9 @@ func run(p_points : Array, goal : Node2D):
 
 	pathfinding_points = p_points
 	goal_node = goal
-	
 	set_initial_direction()
 	update_actual_path()
-	align_to_actual_path()
+	align_path_follow_to_path(actual_path)
 	set_process(true)
 
 func update_path_follow_offset(delta : float):
@@ -83,9 +79,8 @@ func update_actual_path():
 	actual_path = point.path
 
 func align_to_actual_path():
-	print("align_to_actual_path: ", actual_path.name)
 	var old_unit_offset = path_follow.unit_offset
-	align_to_path(actual_path)
+	align_path_follow_to_path(actual_path)
 	var new_unit_offset = path_follow.unit_offset
 	if can_invert_direction(old_unit_offset, new_unit_offset):
 		invert_direction()
@@ -95,25 +90,15 @@ func set_initial_direction():
 	var point_offset = HelperFunctions.get_closest_path_offset(actual_path, 
 			point_position)
 	
-	print("set_initial_direction: ", actual_path)
-	
-	if point_offset < path_follow.offset:
-		path_direction = Direction.BACKWARD
-		print("SETTING BACKWARD")
-	elif point_offset > path_follow.offset:
-		print("SETTING FORWARD")
+	if point_offset > path_follow.offset:
 		path_direction = Direction.FORWARD
+	elif point_offset < path_follow.offset:
+		path_direction = Direction.BACKWARD
 	else:
 		push_error(name + "Point offset == path_follow.offset")
 
-func align_to_path(path : Path2D):
-	if not is_instance_valid(path):
-		push_error(name + ": Path is not valid!")
-		return
-
-	HelperFunctions.reparent(path_follow, path)
-	path_follow.offset = HelperFunctions.get_closest_path_offset(path, 
-			global_position)
+func align_path_follow_to_path(path : Path2D):
+	path_follow.align_to_path(path)
 
 func can_invert_direction(old_unit_offset : float, 
 		new_unit_offset : float) -> bool:

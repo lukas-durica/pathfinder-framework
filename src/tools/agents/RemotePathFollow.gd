@@ -2,43 +2,35 @@ tool
 
 class_name RemotePathFollow extends PathFollow2D
 
+var parent : Node2D setget set_parent
+var remote_node : Node2D setget set_remote_node, get_remote_node
+
 onready var remote_transform : = $RemoteTransform2D
 
-func set_remote_node(node : Node):
-	remote_transform.remote_path = remote_transform.get_path_to(node)
+# parent can be set either Node2D or Path2D
+func set_parent(value : Node2D):
+	if not is_instance_valid(value):
+		return
+	parent = value
+	var node : Node2D
+	if remote_transform.has_node(remote_transform.remote_path):
+		 node = get_remote_node()
+	HelperFunctions.reparent(self, parent)
+	if is_instance_valid(node):
+		set_remote_node(node)
 
-func clear_remote_node():
-	remote_transform.remote_path = ""
-
-#func get_closest_area() -> MarginalPointArea:
-#	var parent : = get_parent()
-#	print(parent.name)
-#	if not parent is ConnectablePath:
-#		push_error(name + ": Invalid Path")
-#		return null
-#
-#	var start : Vector2 = parent.start_point_area.global_position
-#	var end : Vector2 = parent.end_point_area.global_position
-#
-#	var dist_to_start = global_position.distance_squared_to(start)
-#	var dist_to_end = global_position.distance_squared_to(end)
-#
-#	return parent.start_point_area if dist_to_start < dist_to_end \
-#			else parent.end_point_area
-
-#func get_next_path() -> ConnectablePath:
-#	var closest_area : MarginalPointArea = get_closest_area()
-#	if not closest_area:
-#		return null 
-#
-#	var connection : Connection = closest_area.connection
-#	if not connection:
-#		return null
-#
-#	if connection.passable_paths[get_parent()].empty():
-#		return null
-#
-#	return connection.passable_paths[get_parent()][0]
-
+func set_remote_node(node : Node2D):
+	var remote_path = remote_transform.get_path_to(node) \
+			 if is_instance_valid(node) else NodePath("")
+	remote_transform.remote_path = remote_path
 	
+func get_remote_node() -> Node2D:
+	return remote_transform.get_node(remote_transform.remote_path) as Node2D
+
+func is_parent_path() -> bool:
+	return parent is Path2D
+
+func align_to_path(path : Path2D):
+	self.parent = path
+	offset = HelperFunctions.get_closest_path_offset(path, global_position)
 	

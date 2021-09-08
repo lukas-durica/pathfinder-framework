@@ -10,12 +10,8 @@ const START_SCENE = preload("res://src/tools/grid_based_ui/Start.tscn")
 const GOAL_SCENE = preload("res://src/tools/grid_based_ui/Goal.tscn")
 const AGENT_SCENE = preload("res://src/tools/agents/AgentGraph.tscn")
 
-
-export(NodePath) var path_test_node
-
 # the pathfinding algorithm 
 var algorithm
-
 
 onready var camera : BasicCamera = $Camera
 
@@ -25,8 +21,6 @@ onready var graph = $CurvedGraph
 # reference to user interface 
 onready var user_interface = $UserInterface
 
-onready var start : = $Start
-
 onready var goal : = $Goal
 
 # for setting from the editor
@@ -35,41 +29,22 @@ onready var goal : = $Goal
 # z -> goal.x
 # w -> goal.y
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	
-	for path in graph.node_paths.get_children():
-		path = path as ConnectablePath
-		path.connect("point_area_was_clicked", self, "area_was_clicked")
-
-	#set_algorithm(default_algorithm, true)
-	
-	
-# button type is BUTTON_LEFT or BUTTON_RIGHT
-func area_was_clicked(area : MarginalPointArea, button_type : int):
-	
-	# start or goal instance (sprite)
-	var border : Node2D = start if button_type == BUTTON_LEFT else goal
-
-	border.global_transform.origin = area.global_transform.origin
-	border.set_meta("point", area)
-	border.visible = true
 
 # run the pathfinder
 func run():
 	var agent : AgentGraph = $Agents.get_children()[0]
-	var start_path : ConnectablePath = agent.actual_path
-	
 	var a_star : = AStarGodotGraph.new()
 	a_star.initialize($CurvedGraph)
 	
-	var solution : = a_star.find_solution(start_path, agent.global_position,
+	var solution : = a_star.find_solution(
+			agent.actual_path, agent.global_position,
 			goal.path, goal.global_position)
+	
 	solution.push_back(goal)
 	agent.run(solution, goal)
 	
 
-func add_agent(path):
+func add_agent_to_path(path):
 	var agent = AGENT_SCENE.instance()
 	$Agents.add_child(agent)
 	agent.graph = graph
@@ -83,7 +58,6 @@ func remove_agents():
 # returns global mouse position converted to grid/vertex position
 func get_mouse_vertex():
 	return graph.to_vertex(get_global_mouse_position())
-
 
 # chceck which button was pressed and run the appropriate method
 func _on_UserInterface_button_pressed(id : int):
@@ -103,7 +77,6 @@ func _on_UserInterface_button_pressed(id : int):
 
 func _on_UserInterface_algorithms_id_pressed(id):
 	set_algorithm(id)
-
 
 func _on_UserInterface_options_id_pressed(id):
 	print(id)
@@ -133,9 +106,6 @@ func set_algorithm(algorithm_enum_value, update_ui : = false):
 	print("Grid Initialized: {0} microseconds".format(
 				[OS.get_ticks_usec() - start_time]))
 			
-			
-
-
 func _on_Timer_timeout():
 	if algorithm.has_method("update_actual_time_step"):
 		algorithm.update_actual_time_step()

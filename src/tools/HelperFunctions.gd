@@ -6,6 +6,7 @@ static func reparent(node : Node, new_parent : Node):
 	if old_parent:
 		old_parent.remove_child(node)
 	new_parent.add_child(node)
+	node.owner = new_parent
 	node.global_transform = transform
 
 

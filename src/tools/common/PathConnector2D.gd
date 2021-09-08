@@ -26,20 +26,19 @@ func connect_to_path(path : Path2D, node : Node2D):
 	var remote_path_follow : = find_remote_path_follow()
 	if not remote_path_follow:
 		return
-	HelperFunctions.reparent(remote_path_follow, path)
-	var local_origin = path.to_local(node.global_position)
-	var closest_offset = path.curve.get_closest_offset(local_origin)
-	remote_path_follow.offset = closest_offset
+	remote_path_follow.parent = path
+	remote_path_follow.remote_node = node
+	remote_path_follow.offset = HelperFunctions.get_closest_path_offset(
+			path, node.global_position)
 	remote_path_follow_node_path = get_path_to(remote_path_follow)
-	remote_path_follow.set_remote_node(node)
 	emit_signal("connected_to_path", path)
 
 func disconnect_from_path(node : Node2D):
 	print("disconnecting from path")
 	var remote_path_follow = find_remote_path_follow()
-	remote_path_follow.clear_remote_node()
+	remote_path_follow.parent = self
+	remote_path_follow.remote_node = null
 	node.global_rotation = 0.0
-	HelperFunctions.reparent(remote_path_follow, self)
 	remote_path_follow.global_position = node.global_position
 	remote_path_follow_node_path = get_path_to(remote_path_follow)
 	emit_signal("disconnected_from_path")

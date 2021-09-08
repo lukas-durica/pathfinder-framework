@@ -19,15 +19,15 @@ func initialize(grph : CurvedGraph):
 	for path in paths.get_children():
 		path = path as ConnectablePath
 		if path:
-			#print("path: ", path.name)
+			print("path: ", path.name)
 			var point_areas : Array = path.get_marginal_point_areas()
 			for point_area in point_areas:
 				point_area = point_area as MarginalPointArea
 				
 				var area_id = create_or_get_point_id(point_area)
-				#print("point_area: {0} id: {1}".format(
-				#		[point_area.get_compound_name(), area_id]))
-				#print("position: ", point_area.global_position)
+				print("point_area: {0} id: {1}".format(
+						[point_area.get_compound_name(), area_id]))
+				print("position: ", point_area.global_position)
 				var interconnected_areas : Array = \
 						path.get_passable_connection_areas(point_area.type)
 				
@@ -36,16 +36,16 @@ func initialize(grph : CurvedGraph):
 					
 					conn_area = conn_area as MarginalPointArea
 					var conn_area_id : = create_or_get_point_id(conn_area)
-					#print("conn_area: {0} id: {1}".format(
-					#	[conn_area.get_compound_name(), conn_area_id]))
-					#print("position: ", conn_area.global_position)
+					print("conn_area: {0} id: {1}".format(
+						[conn_area.get_compound_name(), conn_area_id]))
+					print("position: ", conn_area.global_position)
 					
 					if not are_points_connected(area_id, conn_area_id):
-						#print("connecting: ", area_id, " and ", conn_area_id)
+						print("connecting: ", area_id, " and ", conn_area_id)
 						connect_points(area_id, conn_area_id)
 			
-			#print("connecting: ", ids_by_areas[point_areas[0]], " and ", 
-			#		ids_by_areas[point_areas[1]])
+			print("connecting: ", ids_by_areas[point_areas[0]], " and ", 
+					ids_by_areas[point_areas[1]])
 			connect_points(ids_by_areas[point_areas[0]], 
 					ids_by_areas[point_areas[1]])
 				

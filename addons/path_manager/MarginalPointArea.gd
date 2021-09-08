@@ -1,21 +1,15 @@
 tool
 class_name MarginalPointArea extends Area2D
 
-# should be in Connectable path but due to cyclic reference it is placed here
-
-
-#signal connection_state_changed(area, overlapped_point_areas)
-signal point_area_was_clicked(area, button_type)
-
 enum {START, END}
 enum {NONE, MASTER, SLAVE}
 
 #export(Dictionary) var connections
 # bug with Arrays and Dictionaries with initial value are shared 
 #https://github.com/godotengine/godot/issues/48038
-
 var connections = {}
 
+# should be in Connectable path but due to cyclic reference it is placed here
 var path
 var type : = -1
 #var is_initiated : = false
@@ -183,22 +177,11 @@ func disconnect_from_connections():
 		connection.area.disconnected_point_area(self)
 	connections.clear()
 	update_path_exported_connections()
-	#update()
 
 func disconnected_point_area(point_area : Area2D):
 	connections.erase(point_area.path.name)
 	update_path_exported_connections()
 	update()
-
-#func should_create_pass_to(path_name : String) -> bool:
-#	var my_normal : Vector2 = path.get_connection_normal(type)
-#	var your_path = connections[path_name].path
-#	var your_area = connections[path_name].area
-#	var your_normal : Vector2 = your_path.get_connection_normal(your_area.type)
-#	var angle : = abs(my_normal.angle_to(your_normal))
-#	#connected normals are opposite, thus PI - angle
-#	return rad2deg(PI - angle) <= path.pass_angle_diff
-
 
 func rename_path_in_connections(old_name : String, new_name : String):
 	var connection = connections.get(old_name)
@@ -221,16 +204,6 @@ func _on_Area2D_area_exited(area : Area2D):
 	if Engine.editor_hint and area == _entered_point_area:
 		_entered_point_area = null
 		update()
-
-# clicking on the area
-func _on_Area2D_input_event(viewport : Node, event : InputEvent, 
-		shape_idx : int):
-	# signal _on_Area2D_input_event is not working in the editor
-	if not Engine.editor_hint and event is InputEventMouseButton \
-			and event.pressed:
-		match event.button_index:
-			BUTTON_LEFT, BUTTON_RIGHT:
-				emit_signal("point_area_was_clicked", self, event.button_index)
 
 func find_overlapped_point_areas() -> Array:
 	var overlapped_point_areas : = []
