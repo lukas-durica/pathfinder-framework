@@ -10,7 +10,7 @@
 script = ExtResource( 6 )
 load_path = true
 map_path = "res://data/maps/dao-map/lak506d.map"
-default_algorithm = 2
+default_algorithm = 4
 
 [node name="UserInterface" parent="." instance=ExtResource( 1 )]
 
