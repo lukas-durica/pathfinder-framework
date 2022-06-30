@@ -40,9 +40,8 @@ func find_solution(starts_and_goals : Array):
 	while not frontier.empty():
 		
 		#Pick and remove a cell with minimal value from the frontier.
-		var min_value = frontier.top()
+		var current = frontier.top()
 		frontier.pop()
-		var current = min_value.vertex
 		#graph.set_cellv(current, Grid.CLOSED)
 		
 		# if the goal is found reconstruct the path, i.e. early exit

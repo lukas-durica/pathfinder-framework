@@ -1,15 +1,15 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://addons/path_manager/ConnectablePath.gd" type="Script" id=1]
 
 [sub_resource type="Curve2D" id=1]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 122.075, 308.317, 0, 0, 0, 0, 429, 305 )
+"points": PoolVector2Array( 0, 0, 0, 0, 122.075, 308.317, 0, 0, 0, 0, 428.28, 305.079 )
 }
 
 [sub_resource type="Curve2D" id=2]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 429, 305, 0, 0, 0, 0, 783, 300 )
+"points": PoolVector2Array( 0, 0, 0, 0, 428.28, 305.079, 0, 0, 0, 0, 783, 300 )
 }
 
 [sub_resource type="Curve2D" id=3]
@@ -19,27 +19,42 @@ _data = {
 
 [sub_resource type="Curve2D" id=4]
 _data = {
-"points": PoolVector2Array( -83.9052, 0, 83.9052, 0, 429, 305, -76.9682, 1.08712, 94.9516, -1.34112, 577, 182, -92.8951, 0, 92.8951, 0, 783, 300 )
+"points": PoolVector2Array( -83.9052, 0, 83.9052, 0, 428.28, 305.079, -77.2098, 1.10546, 94.9513, -1.35948, 577, 182, -92.8951, 0, 92.8951, 0, 783, 300 )
 }
 
 [sub_resource type="Curve2D" id=5]
 _data = {
-"points": PoolVector2Array( 65.3327, 1.7818, -65.3327, -1.7818, 429, 305, 82.9994, -0.896987, -71.4798, 0.772494, 258.68, 423.54, -10.4763, 59.1163, 10.4763, -59.1163, 122.075, 308.317 )
+"points": PoolVector2Array( 65.3327, 1.7818, -65.3327, -1.7818, 428.28, 305.079, 82.7452, -0.875059, -71.48, 0.755926, 258.68, 423.54, -10.4763, 59.1163, 10.4763, -59.1163, 122.075, 308.317 )
 }
 
 [sub_resource type="Curve2D" id=6]
 _data = {
-"points": PoolVector2Array( 2.43711, 91.9611, -2.43711, -91.9611, 122.075, 308.317, -77.0928, 0.833154, 81.8685, -0.884766, 266.445, 180.617, -78.5723, 3.74154, 78.5723, -3.74154, 429, 305 )
+"points": PoolVector2Array( 2.43711, 91.9611, -2.43711, -91.9611, 122.075, 308.317, -77.093, 0.815286, 81.6593, -0.863575, 266.445, 180.617, -78.5723, 3.74154, 78.5723, -3.74154, 428.28, 305.079 )
 }
 
 [sub_resource type="Curve2D" id=7]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 302.142, 642.058, -148.281, -18.0361, 122.593, 14.9116, 675.475, 633.391, 125.333, -138.667, -125.333, 138.667, 970.808, 723.391 )
+"points": PoolVector2Array( 0, 0, 0, 0, 783, 300, 48.5911, -31.6248, -87.6098, 57.0194, 680.994, 402.968, 125.333, -138.667, -125.333, 138.667, 446.759, 518.837 )
 }
 
 [sub_resource type="Curve2D" id=8]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 277.475, 715.391, -194.146, -2.24015, 122.609, 1.41472, 724.142, 905.391, 0, 0, 0, 0, 970.808, 723.391 )
+"points": PoolVector2Array( 0, 0, 0, 0, 122.075, 308.317, -87.2348, -112.442, 38.2353, 49.2835, 207.529, 653.685, -54.3384, 30.6291, 44.93, -25.3259, 357.859, 612.232, 0, 0, 0, 0, 446.759, 518.837 )
+}
+
+[sub_resource type="Curve2D" id=9]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 428.28, 305.079, -4.89949, -56.6752, 3.14499, 36.3799, 395.317, 443.422, 0, 0, 0, 0, 446.759, 518.837 )
+}
+
+[sub_resource type="Curve2D" id=10]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 1035, 297, 153.861, -58.0239, -102.808, 38.7708, 718.452, 559.292, 0, 0, 0, 0, 446.759, 518.837 )
+}
+
+[sub_resource type="Curve2D" id=11]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 428.28, 305.079, -104.958, 21.5444, 203.756, -41.8243, 562.628, 73.3406, -187.996, -89.0124, 46.986, 22.247, 1073.05, 172.728, 0, 0, 0, 0, 1035, 297 )
 }
 
 [node name="Paths" type="Node2D"]
@@ -52,10 +67,13 @@ __meta__ = {
 "_edit_lock_": true
 }
 start_point_connections = {
+"ConnectablePath2": false,
 "DetourPath": false,
 "Invertedpath": false
 }
 end_point_connections = {
+"ConnectablePath3": false,
+"ConnectablePath5": false,
 "DetourPath": false,
 "Invertedpath": false,
 "LongPath": true,
@@ -70,12 +88,15 @@ __meta__ = {
 "_edit_lock_": true
 }
 start_point_connections = {
+"ConnectablePath3": false,
+"ConnectablePath5": false,
 "DetourPath": true,
 "Invertedpath": true,
 "LongPath": false,
 "StartPath": true
 }
 end_point_connections = {
+"ConnectablePath": false,
 "EndPath": true,
 "LongPath": false
 }
@@ -88,10 +109,13 @@ __meta__ = {
 "_edit_lock_": true
 }
 start_point_connections = {
+"ConnectablePath": false,
 "LongPath": true,
 "ShortPath": true
 }
 end_point_connections = {
+"ConnectablePath4": false,
+"ConnectablePath5": false
 }
 
 [node name="LongPath" type="Path2D" parent="."]
@@ -102,12 +126,15 @@ __meta__ = {
 "_edit_lock_": true
 }
 start_point_connections = {
+"ConnectablePath3": false,
+"ConnectablePath5": false,
 "DetourPath": true,
 "Invertedpath": true,
 "ShortPath": false,
 "StartPath": true
 }
 end_point_connections = {
+"ConnectablePath": false,
 "EndPath": true,
 "ShortPath": false
 }
@@ -120,12 +147,15 @@ __meta__ = {
 "_edit_lock_": true
 }
 start_point_connections = {
+"ConnectablePath3": false,
+"ConnectablePath5": false,
 "DetourPath": false,
 "LongPath": true,
 "ShortPath": true,
 "StartPath": false
 }
 end_point_connections = {
+"ConnectablePath2": false,
 "DetourPath": true,
 "StartPath": false
 }
@@ -138,10 +168,13 @@ __meta__ = {
 "_edit_lock_": true
 }
 start_point_connections = {
+"ConnectablePath2": true,
 "Invertedpath": true,
 "StartPath": false
 }
 end_point_connections = {
+"ConnectablePath3": false,
+"ConnectablePath5": false,
 "Invertedpath": false,
 "LongPath": true,
 "ShortPath": true,
@@ -156,9 +189,14 @@ __meta__ = {
 "_edit_lock_": true
 }
 start_point_connections = {
+"EndPath": false,
+"LongPath": false,
+"ShortPath": false
 }
 end_point_connections = {
-"ConnectablePath2": true
+"ConnectablePath2": true,
+"ConnectablePath3": false,
+"ConnectablePath4": false
 }
 
 [node name="ConnectablePath2" type="Path2D" parent="."]
@@ -169,9 +207,72 @@ __meta__ = {
 "_edit_lock_": true
 }
 start_point_connections = {
+"DetourPath": true,
+"Invertedpath": false,
+"StartPath": false
 }
 end_point_connections = {
-"ConnectablePath": true
+"ConnectablePath": true,
+"ConnectablePath3": false,
+"ConnectablePath4": false
+}
+
+[node name="ConnectablePath3" type="Path2D" parent="."]
+self_modulate = Color( 0.75, 0.75, 0.75, 1 )
+curve = SubResource( 9 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+start_point_connections = {
+"ConnectablePath5": false,
+"DetourPath": false,
+"Invertedpath": false,
+"LongPath": false,
+"ShortPath": false,
+"StartPath": false
+}
+end_point_connections = {
+"ConnectablePath": false,
+"ConnectablePath2": false,
+"ConnectablePath4": false
+}
+
+[node name="ConnectablePath4" type="Path2D" parent="."]
+self_modulate = Color( 0.75, 0.75, 0.75, 1 )
+curve = SubResource( 10 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+start_point_connections = {
+"ConnectablePath5": true,
+"EndPath": false
+}
+end_point_connections = {
+"ConnectablePath": false,
+"ConnectablePath2": false,
+"ConnectablePath3": false
+}
+
+[node name="ConnectablePath5" type="Path2D" parent="."]
+self_modulate = Color( 0.75, 0.75, 0.75, 1 )
+curve = SubResource( 11 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+start_point_connections = {
+"ConnectablePath3": false,
+"DetourPath": false,
+"Invertedpath": false,
+"LongPath": false,
+"ShortPath": false,
+"StartPath": false
+}
+end_point_connections = {
+"ConnectablePath4": true,
+"EndPath": false
 }
 
 [connection signal="area_entered" from="StartPath/Start" to="StartPath/Start" method="_on_Area2D_area_entered"]
@@ -206,3 +307,15 @@ end_point_connections = {
 [connection signal="area_exited" from="ConnectablePath2/Start" to="ConnectablePath2/Start" method="_on_Area2D_area_exited"]
 [connection signal="area_entered" from="ConnectablePath2/End" to="ConnectablePath2/End" method="_on_Area2D_area_entered"]
 [connection signal="area_exited" from="ConnectablePath2/End" to="ConnectablePath2/End" method="_on_Area2D_area_exited"]
+[connection signal="area_entered" from="ConnectablePath3/Start" to="ConnectablePath3/Start" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="ConnectablePath3/Start" to="ConnectablePath3/Start" method="_on_Area2D_area_exited"]
+[connection signal="area_entered" from="ConnectablePath3/End" to="ConnectablePath3/End" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="ConnectablePath3/End" to="ConnectablePath3/End" method="_on_Area2D_area_exited"]
+[connection signal="area_entered" from="ConnectablePath4/Start" to="ConnectablePath4/Start" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="ConnectablePath4/Start" to="ConnectablePath4/Start" method="_on_Area2D_area_exited"]
+[connection signal="area_entered" from="ConnectablePath4/End" to="ConnectablePath4/End" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="ConnectablePath4/End" to="ConnectablePath4/End" method="_on_Area2D_area_exited"]
+[connection signal="area_entered" from="ConnectablePath5/Start" to="ConnectablePath5/Start" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="ConnectablePath5/Start" to="ConnectablePath5/Start" method="_on_Area2D_area_exited"]
+[connection signal="area_entered" from="ConnectablePath5/End" to="ConnectablePath5/End" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="ConnectablePath5/End" to="ConnectablePath5/End" method="_on_Area2D_area_exited"]

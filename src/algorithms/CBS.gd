@@ -99,7 +99,7 @@ func find_solution(starts_and_goals : Array):
 	while not open.empty():
 		
 		# get the node with the lowest value
-		var current = open.top().node
+		var current = open.top()
 		open.pop()
 		# the length of the paths in the solution needs to be of the same 
 		# size during searching for conflict even if they (agents) are 
